@@ -649,7 +649,7 @@ This typically indicates that your device does not have a healthy Internet conne
 <script>
 (function(){"use strict";
 var TARGET="web";
-var BUILD_ID="web 1.0 · 2026-10-26 13:35 UTC";
+var BUILD_ID="web 1.0 · 2026-10-26 14:13 UTC";
 var WHERE_DB="Datele tale stau în contul tău Google, într-un proiect Firebase (Google Cloud, regiunea Frankfurt). Pe telefon rămâne doar o copie temporară, ca să meargă și fără net.";
 var MONTHS=["ianuarie","februarie","martie","aprilie","mai","iunie","iulie","august","septembrie","octombrie","noiembrie","decembrie"];
 var GROUPS=["Casă","Firmă"], KINDS=["Plată","Încasare","Transfer","Memento"];
@@ -702,6 +702,8 @@ function label(ym){var p=ym.split("-");return MONTHS[+p[1]-1]+" "+p[0]}
 function money(n){if(n==null||isNaN(n))return "—";var neg=n<0;n=Math.abs(n);var r=Math.round(n*100)/100;var s=r.toLocaleString("ro-RO",{minimumFractionDigits:r%1?2:0,maximumFractionDigits:2});return (neg?"−":"")+s}
 function money0(n){return money(n==null||isNaN(n)?n:Math.round(n))}
 function parseAmt(s){s=String(s).trim().replace(/\s/g,"").replace(/lei|ron/i,"");if(!s)return null;if(/,\d{1,2}$/.test(s))s=s.replace(/\./g,"").replace(",",".");else s=s.replace(/,/g,"");var v=Number(s);return isFinite(v)?v:null}
+/* curs: acceptă 5,2584 sau 5.2584 (parseAmt ar citi virgula cu 4 zecimale drept separator de mii) */
+function parseRate(s){s=String(s).trim().replace(/\s/g,"");if(!s)return null;var c=s.lastIndexOf(","),d=s.lastIndexOf(".");if(c>=0&&d>=0)s=c>d?s.replace(/\./g,"").replace(",","."):s.replace(/,/g,"");else s=s.replace(",",".");var v=Number(s);return isFinite(v)?v:null}
 function rid(){return Math.random().toString(36).slice(2,8)}
 function shortD(iso){var p=iso.split("-");return +p[2]+" "+MONTHS[+p[1]-1].slice(0,3)}
 
@@ -1484,7 +1486,7 @@ $("#sumRow").addEventListener("click",function(e){var b=e.target.closest("[data-
 window.addEventListener("hashchange",function(){var t=(location.hash||"").replace("#","");t=TAB_ALIAS[t]||t;if(TABS.indexOf(t)>=0&&t!==tab)setTab(t,true)});
 
 /* curs, EUR schimbați, sold de pornire */
-$("#rate").addEventListener("change",function(){var v=parseAmt(this.value);if(v>0)putRate(ym,v);else{if(meta[ym]&&meta[ym].rate>0)putMeta(ym,{rate:0})}});
+$("#rate").addEventListener("change",function(){var v=parseRate(this.value);if(v>0)putRate(ym,v);else{if(meta[ym]&&meta[ym].rate>0)putMeta(ym,{rate:0})}});
 $("#exch").addEventListener("change",function(){var v=parseAmt(this.value);if(v!=null&&v>=0)putMeta(ym,{exch:v});else if(meta[ym]&&meta[ym].exch!=null)putMeta(ym,{exch:null})});
 $("#seur").addEventListener("change",function(){var v=parseAmt(this.value);putStart({eur:v==null?0:v})});
 $("#sron").addEventListener("change",function(){var v=parseAmt(this.value);putStart({ron:v==null?0:v})});
