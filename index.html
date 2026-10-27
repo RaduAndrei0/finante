@@ -377,6 +377,13 @@ details.fold[open]>summary{margin-bottom:10px}
 .xpform .wide{grid-column:1 / -1}
 .xpbtns{grid-column:1 / -1;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
 .xpmsg{color:var(--bad);font-size:13px}
+.xsrc{display:flex;flex-wrap:wrap;gap:6px 14px;margin:-2px 0 10px;font-size:12.5px;color:var(--muted)}
+.xsrc b{font-weight:500;color:var(--fg)}
+.xsrc .c::before,.xsrc .f::before{content:"";display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:6px;background:var(--casa)}
+.xsrc .f::before{background:var(--firma)}
+.xtag{font-style:normal;font-weight:600;font-size:10.5px;letter-spacing:.03em;text-transform:uppercase;border-radius:6px;padding:1px 6px;margin-left:8px;vertical-align:2px}
+.xtag.c{color:var(--casa);background:color-mix(in srgb,var(--casa) 14%,transparent)}
+.xtag.f{color:var(--firma);background:color-mix(in srgb,var(--firma) 14%,transparent)}
 @media (max-width:899px){
   .car-h{display:none}
   .car-r{grid-template-columns:minmax(0,1fr) minmax(0,1fr);row-gap:6px;padding:12px 0}
@@ -403,12 +410,12 @@ details.fold[open]>summary{margin-bottom:10px}
 .mod .mt{display:flex;flex-direction:column;gap:2px;min-width:0}
 .mod .mt b{font-weight:600}
 .mod .mt small{color:var(--muted);font-size:12.5px}
-.sw{flex:none;width:44px;height:26px;border-radius:13px;background:var(--surface2);border:1px solid var(--line);position:relative;transition:background .15s}
-.sw::after{content:"";position:absolute;top:2px;left:2px;width:20px;height:20px;border-radius:50%;background:var(--muted);transition:transform .15s,background .15s}
-.mod input:checked+.sw{background:var(--ok);border-color:var(--ok)}
-.mod input:checked+.sw::after{transform:translateX(18px);background:var(--surface)}
-.mod input:focus-visible+.sw{outline:2px solid var(--fg);outline-offset:2px}
-.mod input:disabled+.sw{opacity:.5}
+.tgl{flex:none;width:44px;height:26px;border-radius:13px;background:var(--surface2);border:1px solid var(--line);position:relative;transition:background .15s}
+.tgl::after{content:"";position:absolute;top:2px;left:2px;width:20px;height:20px;border-radius:50%;background:var(--muted);transition:transform .15s,background .15s}
+.mod input:checked+.tgl{background:var(--ok);border-color:var(--ok)}
+.mod input:checked+.tgl::after{transform:translateX(18px);background:var(--surface)}
+.mod input:focus-visible+.tgl{outline:2px solid var(--fg);outline-offset:2px}
+.mod input:disabled+.tgl{opacity:.5}
 .drop{border:1.5px dashed var(--line);border-radius:12px;padding:18px;display:flex;flex-direction:column;align-items:center;gap:10px;text-align:center}
 .drop.over{border-color:var(--auto);background:var(--neutralbg)}
 .drop p{margin:0;color:var(--muted);font-size:13px;max-width:46ch}
@@ -634,6 +641,7 @@ details.fold[open]>summary{margin-bottom:10px}
           <label>Ce <select id="xpCat"><option value="fuel">Combustibil</option><option value="ride">Taxi / Uber / Bolt</option><option value="pub">Transport public</option><option value="park">Parcare</option><option value="toll">Taxe de drum, peaj</option><option value="wash">Spălătorie</option><option value="serv">Service și piese</option><option value="other">Altele</option></select></label>
           <label>Data <input id="xpDate" type="date"></label>
           <label id="xpVehL">Vehicul <select id="xpVeh"></select></label>
+          <label id="xpFromL">Plătit din <select id="xpFrom"><option value="casa">Casă</option><option value="firma">Firmă</option></select></label>
           <label class="wide">Notă <input id="xpNote" placeholder="opțional, de ex. plin la OMV" autocomplete="off"></label>
           <div class="xpbtns"><button class="btn auto" type="submit" id="xpSave">Salvează</button><button class="btn" type="button" id="xpCancel">Renunță</button><span class="xpmsg" id="xpMsg" role="status"></span></div>
         </form>
@@ -656,8 +664,8 @@ details.fold[open]>summary{margin-bottom:10px}
         <h2 id="hset">Setări · ce urmărești</h2>
         <div class="hint">Casă e mereu pornită. Când oprești un modul, datele lui nu se șterg: doar se ascund, și revin când îl pornești din nou.</div>
         <div class="mods">
-          <label class="mod"><input type="checkbox" class="vh" id="modFirma"><span class="sw" aria-hidden="true"></span><span class="mt"><b>Firmă / PFA</b><small>facturi, taxe, curs EUR, extrase de cont, sold reportat</small></span></label>
-          <label class="mod"><input type="checkbox" class="vh" id="modTransport"><span class="sw" aria-hidden="true"></span><span class="mt"><b>Transport</b><small>mașina: scadențe, revizii, kilometraj</small></span></label>
+          <label class="mod"><input type="checkbox" class="vh" id="modFirma"><span class="tgl" aria-hidden="true"></span><span class="mt"><b>Firmă / PFA</b><small>facturi, taxe, curs EUR, extrase de cont, sold reportat</small></span></label>
+          <label class="mod"><input type="checkbox" class="vh" id="modTransport"><span class="tgl" aria-hidden="true"></span><span class="mt"><b>Transport</b><small>mașina: scadențe, revizii, kilometraj</small></span></label>
         </div>
       </section>
       <section class="panel">
@@ -720,7 +728,7 @@ This typically indicates that your device does not have a healthy Internet conne
 <script>
 (function(){"use strict";
 var TARGET="web";
-var BUILD_ID="web 1.0 · 2026-10-27 13:49 UTC";
+var BUILD_ID="web 1.0 · 2026-10-27 14:07 UTC";
 var WHERE_DB="Datele tale stau în contul tău Google, într-un proiect Firebase (Google Cloud, regiunea Frankfurt). Pe telefon rămâne doar o copie temporară, ca să meargă și fără net.";
 var MONTHS=["ianuarie","februarie","martie","aprilie","mai","iunie","iulie","august","septembrie","octombrie","noiembrie","decembrie"];
 var GROUPS=["Casă","Firmă"], KINDS=["Plată","Încasare","Transfer","Memento"];
@@ -1688,7 +1696,7 @@ var VKIND=[["auto","Mașină"],["moto","Motocicletă"],["alt","Alt vehicul"]];
 var carChg=false,car=CARDEF.map(function(d){return Object.assign({},d)}),carKm=null,carKmAt=null,carSeeded=false,pendingCar=false,vehs=[],carLoaded=false,vdelArm=null,vdelT=null;
 try{var lc=JSON.parse(localStorage.getItem("fin_car")||"null");if(lc&&lc.items){if(lc.items.length||Array.isArray(lc.vehs)){car=lc.items;carKm=lc.km||null;carKmAt=lc.at||null;vehs=Array.isArray(lc.vehs)?lc.vehs:[]}}}catch(e){}
 function cleanCar(it){var o={};["name","kind","due","dueKm","every","everyKm","remind","season","order","veh"].forEach(function(k){o[k]=it[k]==null?null:it[k]});return o}
-function cleanVeh(v){var o={};["name","kind","km","at","order","deleted"].forEach(function(k){o[k]=v[k]==null?null:v[k]});return o}
+function cleanVeh(v){var o={};["name","kind","km","at","order","deleted","pay"].forEach(function(k){o[k]=v[k]==null?null:v[k]});return o}
 function persistCar(){try{localStorage.setItem("fin_car",JSON.stringify({items:car,km:carKm,at:carKmAt,vehs:vehs,xps:xps}))}catch(e){}}
 function carSaveMsg(t){var el=$("#carsave");if(el)el.textContent=t}
 function carWrite(fn){
@@ -1705,8 +1713,8 @@ function vehOf(it){return it.veh||"veh_main"}
 function vehicles(){
   var out=[],md=vehMainDoc();
   if(!(md&&md.deleted)&&(md||car.some(function(it){return !it.veh})))
-    out.push({id:"veh_main",name:(md&&md.name)||"",kind:(md&&md.kind)||"auto",order:md&&md.order!=null?md.order:0,km:carKm,at:carKmAt});
-  vehs.forEach(function(v){if(v.id!=="veh_main"&&!v.deleted)out.push({id:v.id,name:v.name||"",kind:v.kind||"auto",order:v.order||0,km:v.km>0?v.km:null,at:v.at||null})});
+    out.push({id:"veh_main",name:(md&&md.name)||"",kind:(md&&md.kind)||"auto",order:md&&md.order!=null?md.order:0,km:carKm,at:carKmAt,pay:(md&&md.pay)||null});
+  vehs.forEach(function(v){if(v.id!=="veh_main"&&!v.deleted)out.push({id:v.id,name:v.name||"",kind:v.kind||"auto",order:v.order||0,km:v.km>0?v.km:null,at:v.at||null,pay:v.pay||null})});
   return out.sort(function(a,b){return (a.order||0)-(b.order||0)});
 }
 function vehById(id){return vehicles().find(function(v){return v.id===id})||null}
@@ -1811,7 +1819,8 @@ function renderCarList(){
     h+='<section class="panel veh" data-v="'+esc(v.id)+'">'+
       '<div class="carh">'+
         '<div class="vhead"><i aria-hidden="true"></i><input class="vname" data-vf="name" value="'+esc(v.name)+'" placeholder="Nume, de ex. Audi Q5" aria-label="Numele vehiculului">'+
-        '<select class="vkind" data-vf="kind" aria-label="Tipul vehiculului">'+VKIND.map(function(k){return '<option value="'+k[0]+'"'+(v.kind===k[0]?" selected":"")+'>'+k[1]+'</option>'}).join("")+'</select></div>'+
+        '<select class="vkind" data-vf="kind" aria-label="Tipul vehiculului">'+VKIND.map(function(k){return '<option value="'+k[0]+'"'+(v.kind===k[0]?" selected":"")+'>'+k[1]+'</option>'}).join("")+'</select>'+
+        (mods.firma!==false?'<select class="vkind vpay" data-vf="pay" aria-label="De obicei plătit din"><option value="casa"'+(v.pay!=="firma"?" selected":"")+'>plătit din Casă</option><option value="firma"'+(v.pay==="firma"?" selected":"")+'>plătit din Firmă</option></select>':'')+'</div>'+
         '<div class="carkm"><label>Kilometraj acum <input class="num" data-vf="km" inputmode="numeric" placeholder="ex. 128000" value="'+(v.km>0?v.km:"")+'" aria-label="Kilometraj actual: '+esc(vehName(v))+'"></label><span>'+(v.at?"actualizat "+fmtD(v.at):"")+'</span></div>'+
       '</div>'+
       '<div class="car-h"><span>Stare</span><span>Ce</span><span>Scadent la</span><span style="text-align:right">La km</span><span style="text-align:right">La câte luni</span><span style="text-align:right">La câți km</span><span></span><span></span></div>'+
@@ -1857,7 +1866,7 @@ function onVehChange(e){
     pendingCar=false;
     if(vf==="km"){var a=parseAmt(t.value);if(a>0)putKm(vid,Math.round(a));return}
     var b=vehBase(vid);if(!b)return;
-    var nv=Object.assign({},b);if(vf==="name")nv.name=t.value.trim();else nv.kind=t.value;
+    var nv=Object.assign({},b);if(vf==="name")nv.name=t.value.trim();else if(vf==="pay")nv.pay=t.value==="firma"?"firma":"casa";else nv.kind=t.value;
     putVeh(nv);return;
   }
   var row=t.closest(".car-r");if(!row)return;
@@ -1891,9 +1900,12 @@ $("#vehs").addEventListener("focusout",function(){setTimeout(function(){if(pendi
    Stau în colecția „car”, ca documente „x_…” {date, amount, cur, cat, note, veh}.
    Sunt separate de rândurile Casă/Firmă: nu se copiază în luna următoare și nu apar în „Urmează”. */
 var XCAT=[["fuel","Combustibil"],["ride","Taxi / Uber / Bolt"],["pub","Transport public"],["park","Parcare"],["toll","Taxe de drum, peaj"],["wash","Spălătorie"],["serv","Service și piese"],["other","Altele"]];
-var xps=[],xpEdit=null,xpDelArm=null,xpDelT=null,xpLastCat="fuel";
+var xps=[],xpEdit=null,xpDelArm=null,xpDelT=null,xpLastCat="fuel",xpLastFrom="casa";
 try{var lx=JSON.parse(localStorage.getItem("fin_car")||"null");if(lx&&Array.isArray(lx.xps))xps=lx.xps}catch(e){}
-function cleanX(x){return {date:x.date,amount:x.amount,cur:x.cur==="EUR"?"EUR":"RON",cat:x.cat||"other",note:x.note||"",veh:x.veh||null}}
+function cleanX(x){return {date:x.date,amount:x.amount,cur:x.cur==="EUR"?"EUR":"RON",cat:x.cat||"other",note:x.note||"",veh:x.veh||null,from:x.from==="firma"?"firma":"casa"}}
+/* „plătit din”: informativ (nu schimbă totalurile Casă/Firmă, ca să nu se numere de două ori cu extrasele) */
+function xFrom(x){return x.from==="firma"?"firma":"casa"}
+function vehPay(id){var v=id?vehById(id):null;return v&&v.pay==="firma"?"firma":v&&v.pay==="casa"?"casa":null}
 function catName(c){var f=XCAT.find(function(k){return k[0]===c});return f?f[1]:"Altele"}
 function xpOfMonth(m){return xps.filter(function(x){return isoOk(x.date)&&x.date.slice(0,7)===m}).sort(function(a,b){return b.date.localeCompare(a.date)||String(b.id).localeCompare(String(a.id))})}
 function putX(x){
@@ -1903,22 +1915,25 @@ function putX(x){
 function delX(id){xps=xps.filter(function(o){return o.id!==id});xpDelArm=null;render();carWrite(function(){return ccol.doc(id).delete()})}
 function renderXp(){
   $("#xpTitle").textContent="Cheltuieli · "+label(ym);
-  var list=xpOfMonth(ym),rt=rateFor(ym),tr=0,te=0,by={},noRate=false;
+  var list=xpOfMonth(ym),rt=rateFor(ym),tr=0,te=0,by={},noRate=false,fo=mods.firma!==false,src={casa:0,firma:0};
   list.forEach(function(x){
-    var a=+x.amount||0;
-    if(x.cur==="EUR"){te+=a;if(rt)by[x.cat]=(by[x.cat]||0)+a*rt;else noRate=true}
-    else{tr+=a;by[x.cat]=(by[x.cat]||0)+a}
+    var a=+x.amount||0,r=x.cur==="EUR"?(rt?a*rt:0):a;
+    if(x.cur==="EUR"){te+=a;if(!rt)noRate=true}else tr+=a;
+    if(r)by[x.cat]=(by[x.cat]||0)+r;
+    src[xFrom(x)]+=r;
   });
   var tot=tr+(rt?te*rt:0);
   $("#xpSum").innerHTML=list.length
     ?'<div class="xptot"><b class="num">'+lei(tot)+'</b>'+(noRate?' <span>+ '+eur(te)+' (pune cursul lunii la Firmă ca să-i socotesc în lei)</span>':te>0?' <span>din care '+eur(te)+' la cursul '+String(rt).replace(".",",")+'</span>':'')+'<small>'+list.length+(list.length===1?' cheltuială':' cheltuieli')+' în '+esc(label(ym))+'</small></div>'+
+     (fo&&src.firma>0?'<div class="xsrc"><span class="c">din Casă <b class="num">'+lei(src.casa)+'</b></span><span class="f">din Firmă <b class="num">'+lei(src.firma)+'</b></span></div>':'')+
      '<div class="xchips">'+Object.keys(by).sort(function(a,b){return by[b]-by[a]}).map(function(k){return '<span class="xchip">'+esc(catName(k))+' <b class="num">'+money0(by[k])+'</b></span>'}).join("")+'</div>'
     :'';
   var vs=vehicles(),vn={};vs.forEach(function(v){vn[v.id]=vehName(v)});
   $("#xpList").innerHTML=list.length?list.map(function(x){
     var sub=[x.veh&&vn[x.veh]?vn[x.veh]:"",x.note||""].filter(Boolean).join(" · ");
     var armed=xpDelArm===x.id;
-    return '<li class="xr" data-x="'+esc(x.id)+'" tabindex="0"><span class="xd">'+esc(shortD(x.date))+'</span><span class="xt"><b>'+esc(catName(x.cat))+'</b>'+(sub?'<small>'+esc(sub)+'</small>':'')+'</span><span class="xa num">'+money(x.amount)+(x.cur==="EUR"?" €":" lei")+'</span><button class="x'+(armed?" armed":"")+'" type="button" data-xdel="1" aria-label="Șterge cheltuiala">'+(armed?"Sigur?":"×")+'</button></li>';
+    var tag=fo?'<i class="xtag '+(xFrom(x)==="firma"?"f":"c")+'">'+(xFrom(x)==="firma"?"Firmă":"Casă")+'</i>':'';
+    return '<li class="xr" data-x="'+esc(x.id)+'" tabindex="0"><span class="xd">'+esc(shortD(x.date))+'</span><span class="xt"><b>'+esc(catName(x.cat))+tag+'</b>'+(sub?'<small>'+esc(sub)+'</small>':'')+'</span><span class="xa num">'+money(x.amount)+(x.cur==="EUR"?" €":" lei")+'</span><button class="x'+(armed?" armed":"")+'" type="button" data-xdel="1" aria-label="Șterge cheltuiala">'+(armed?"Sigur?":"×")+'</button></li>';
   }).join(""):'<li class="empty">Nicio cheltuială în '+esc(label(ym))+'. Apasă „+ Cheltuială” când alimentezi sau iei un Uber.</li>';
   $("#xpAdd").disabled=!canWrite;
 }
@@ -1934,6 +1949,8 @@ function openXp(x){
   $("#xpDate").value=x?x.date:(ym===ymNow()?iso(new Date()):ym+"-01");
   $("#xpVeh").value=x?(x.veh||""):(vs.length===1&&$("#xpCat").value!=="ride"&&$("#xpCat").value!=="pub"?vs[0].id:"");
   $("#xpNote").value=x?(x.note||""):"";
+  $("#xpFromL").hidden=mods.firma===false;
+  $("#xpFrom").value=x?xFrom(x):(vehPay($("#xpVeh").value)||xpLastFrom);
   $("#xpSave").textContent=x?"Salvează modificarea":"Salvează";
   xpMsg("");f.hidden=false;
   try{f.scrollIntoView({block:"nearest"})}catch(e){}
@@ -1942,15 +1959,21 @@ function openXp(x){
 function closeXp(){xpEdit=null;$("#xpForm").hidden=true;xpMsg("")}
 $("#xpAdd").addEventListener("click",function(){if(canWrite)openXp(null)});
 $("#xpCancel").addEventListener("click",closeXp);
-$("#xpCat").addEventListener("change",function(){var c=this.value;if((c==="ride"||c==="pub")&&!xpEdit)$("#xpVeh").value=""});
+$("#xpCat").addEventListener("change",function(){
+  if(xpEdit)return;
+  var c=this.value,vs=vehicles();
+  if(c==="ride"||c==="pub"){$("#xpVeh").value="";$("#xpFrom").value=xpLastFrom}
+  else if(!$("#xpVeh").value&&vs.length===1){$("#xpVeh").value=vs[0].id;$("#xpFrom").value=vehPay(vs[0].id)||xpLastFrom}
+});
+$("#xpVeh").addEventListener("change",function(){var p=vehPay(this.value);if(p)$("#xpFrom").value=p});
 $("#xpForm").addEventListener("submit",function(e){
   e.preventDefault();
   if(!canWrite)return;
   var a=parseAmt($("#xpAmt").value),d=$("#xpDate").value;
   if(!(a>0)){xpMsg("Scrie suma (de ex. 250).");$("#xpAmt").focus();return}
   if(!isoOk(d)){xpMsg("Alege data.");$("#xpDate").focus();return}
-  var x={id:xpEdit?xpEdit.id:"x_"+rid()+rid(),date:d,amount:Math.round(a*100)/100,cur:$("#xpCur").value==="EUR"?"EUR":"RON",cat:$("#xpCat").value,note:$("#xpNote").value.trim(),veh:$("#xpVeh").value||null};
-  xpLastCat=x.cat;
+  var x={id:xpEdit?xpEdit.id:"x_"+rid()+rid(),date:d,amount:Math.round(a*100)/100,cur:$("#xpCur").value==="EUR"?"EUR":"RON",cat:$("#xpCat").value,note:$("#xpNote").value.trim(),veh:$("#xpVeh").value||null,from:mods.firma===false?"casa":($("#xpFrom").value==="firma"?"firma":"casa")};
+  xpLastCat=x.cat;if(!vehPay(x.veh))xpLastFrom=x.from;
   closeXp();putX(x);
   if(x.date.slice(0,7)!==ym)toast("Am pus cheltuiala în "+label(x.date.slice(0,7))+".");
 });
