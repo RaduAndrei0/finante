@@ -352,6 +352,31 @@ details.fold[open]>summary{margin-bottom:10px}
 .pill.ok{background:var(--okbg);color:var(--ok)} .pill.warn{background:var(--warnbg);color:var(--warn)} .pill.bad{background:var(--badbg);color:var(--bad)} .pill.none{background:var(--neutralbg);color:var(--muted)}
 .car-r .x{background:transparent;border:0;color:var(--muted);border-radius:7px;font-size:18px;line-height:1;padding:5px}
 .car-r .x:hover{color:var(--bad);background:var(--badbg)}
+.car-r .ract{grid-column:span 2;display:flex;align-items:center;justify-content:space-between;gap:6px}
+.xptot{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 10px;margin:4px 0 8px}
+.xptot b{font-size:22px;font-weight:500}
+.xptot span{color:var(--muted);font-size:13px}
+.xptot small{flex-basis:100%;color:var(--muted);font-size:12.5px}
+.xchips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px}
+.xchip{background:var(--surface2);border-radius:999px;padding:4px 10px;font-size:12.5px;color:var(--fg)}
+.xchip b{font-weight:500;margin-left:2px}
+.xlist{list-style:none;margin:0;padding:0}
+.xlist .empty{display:block;padding:10px 0;color:var(--muted)}
+.xr{display:grid;grid-template-columns:52px minmax(0,1fr) auto auto;gap:8px;align-items:center;padding:9px 0;border-top:1px solid var(--line);cursor:pointer}
+.xr:focus-visible{outline:2px solid var(--auto);outline-offset:2px;border-radius:8px}
+.xr .xd{color:var(--muted);font-size:12.5px}
+.xr .xt{display:flex;flex-direction:column;min-width:0}
+.xr .xt small{color:var(--muted);font-size:12px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.xr .xa{white-space:nowrap}
+.xr .x{background:transparent;border:0;color:var(--muted);border-radius:7px;font-size:18px;line-height:1;padding:5px;min-width:30px}
+.xr .x:hover{color:var(--bad);background:var(--badbg)}
+.xr .x.armed{font-size:12.5px;font-weight:600;color:var(--bad);background:var(--badbg);padding:6px 8px}
+.xpform{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px;margin:8px 0 12px;padding:12px;border:1px solid var(--line);border-radius:12px;background:var(--surface2)}
+.xpform label{display:flex;flex-direction:column;gap:4px;font-size:12px;color:var(--muted);min-width:0}
+.xpform input,.xpform select{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:9px 10px;color:var(--fg);font-size:15px;min-width:0;width:100%}
+.xpform .wide{grid-column:1 / -1}
+.xpbtns{grid-column:1 / -1;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.xpmsg{color:var(--bad);font-size:13px}
 @media (max-width:899px){
   .car-h{display:none}
   .car-r{grid-template-columns:minmax(0,1fr) minmax(0,1fr);row-gap:6px;padding:12px 0}
@@ -598,6 +623,23 @@ details.fold[open]>summary{margin-bottom:10px}
     <!-- ============ TRANSPORT ============ -->
     <section class="tab" id="tab-transport" data-tab="transport" role="tabpanel" aria-labelledby="tb-transport" hidden>
       <div class="rowhead"><h2><i style="background:var(--auto)"></i>Transport</h2></div>
+      <section class="panel" id="xpPanel" aria-labelledby="xpTitle">
+        <div class="tablehead">
+          <h2 id="xpTitle">Cheltuieli</h2>
+          <div class="tools"><button class="btn auto" type="button" id="xpAdd">+ Cheltuială</button></div>
+        </div>
+        <form class="xpform" id="xpForm" hidden novalidate>
+          <label>Sumă <input id="xpAmt" class="num" inputmode="decimal" placeholder="ex. 250" autocomplete="off"></label>
+          <label>Monedă <select id="xpCur"><option value="RON">lei</option><option value="EUR">€</option></select></label>
+          <label>Ce <select id="xpCat"><option value="fuel">Combustibil</option><option value="ride">Taxi / Uber / Bolt</option><option value="pub">Transport public</option><option value="park">Parcare</option><option value="toll">Taxe de drum, peaj</option><option value="wash">Spălătorie</option><option value="serv">Service și piese</option><option value="other">Altele</option></select></label>
+          <label>Data <input id="xpDate" type="date"></label>
+          <label id="xpVehL">Vehicul <select id="xpVeh"></select></label>
+          <label class="wide">Notă <input id="xpNote" placeholder="opțional, de ex. plin la OMV" autocomplete="off"></label>
+          <div class="xpbtns"><button class="btn auto" type="submit" id="xpSave">Salvează</button><button class="btn" type="button" id="xpCancel">Renunță</button><span class="xpmsg" id="xpMsg" role="status"></span></div>
+        </form>
+        <div id="xpSum"></div>
+        <ul class="xlist" id="xpList"></ul>
+      </section>
       <p class="hint tphint">Scadențe și revizii pe fiecare vehicul. Verde e în regulă, galben se apropie, roșu a trecut.</p>
       <div id="vehs"></div>
       <section class="panel" aria-labelledby="hvadd">
@@ -678,7 +720,7 @@ This typically indicates that your device does not have a healthy Internet conne
 <script>
 (function(){"use strict";
 var TARGET="web";
-var BUILD_ID="web 1.0 · 2026-10-27 13:36 UTC";
+var BUILD_ID="web 1.0 · 2026-10-27 13:49 UTC";
 var WHERE_DB="Datele tale stau în contul tău Google, într-un proiect Firebase (Google Cloud, regiunea Frankfurt). Pe telefon rămâne doar o copie temporară, ca să meargă și fără net.";
 var MONTHS=["ianuarie","februarie","martie","aprilie","mai","iunie","iulie","august","septembrie","octombrie","noiembrie","decembrie"];
 var GROUPS=["Casă","Firmă"], KINDS=["Plată","Încasare","Transfer","Memento"];
@@ -1199,7 +1241,7 @@ function setTab(t,noScroll){
 function renderTabs(){
   document.querySelectorAll(".tabbar button").forEach(function(b){var t=b.getAttribute("data-tab");b.hidden=!modOn(t);b.setAttribute("aria-selected",t===tab?"true":"false")});
   document.querySelectorAll("main .tab").forEach(function(s){s.hidden=s.getAttribute("data-tab")!==tab});
-  document.querySelector(".monthbar").hidden=(tab==="transport");
+  document.querySelector(".monthbar").hidden=false;
 }
 function renderMonth(){
   $("#curm").textContent=label(ym);
@@ -1501,7 +1543,7 @@ function render(){
   if(tab==="general")renderGeneral();
   else if(tab==="casa")renderCasa();
   else if(tab==="firma"){renderFirma();renderExtrase()}
-  else if(tab==="transport")renderCarList();
+  else if(tab==="transport"){renderXp();renderCarList()}
   else renderMai();
 }
 
@@ -1647,7 +1689,7 @@ var carChg=false,car=CARDEF.map(function(d){return Object.assign({},d)}),carKm=n
 try{var lc=JSON.parse(localStorage.getItem("fin_car")||"null");if(lc&&lc.items){if(lc.items.length||Array.isArray(lc.vehs)){car=lc.items;carKm=lc.km||null;carKmAt=lc.at||null;vehs=Array.isArray(lc.vehs)?lc.vehs:[]}}}catch(e){}
 function cleanCar(it){var o={};["name","kind","due","dueKm","every","everyKm","remind","season","order","veh"].forEach(function(k){o[k]=it[k]==null?null:it[k]});return o}
 function cleanVeh(v){var o={};["name","kind","km","at","order","deleted"].forEach(function(k){o[k]=v[k]==null?null:v[k]});return o}
-function persistCar(){try{localStorage.setItem("fin_car",JSON.stringify({items:car,km:carKm,at:carKmAt,vehs:vehs}))}catch(e){}}
+function persistCar(){try{localStorage.setItem("fin_car",JSON.stringify({items:car,km:carKm,at:carKmAt,vehs:vehs,xps:xps}))}catch(e){}}
 function carSaveMsg(t){var el=$("#carsave");if(el)el.textContent=t}
 function carWrite(fn){
   if(mode==="db"&&ccol){
@@ -1757,7 +1799,6 @@ function carRowHtml(r){
     '<div><span class="lab">La câte luni</span><input class="num" data-f="every" inputmode="numeric" value="'+(it.every>0?it.every:"")+'" placeholder="–" aria-label="Interval în luni"></div>'+
     (rv?'<div><span class="lab">La câți km</span><input class="num" data-f="everyKm" inputmode="numeric" value="'+(it.everyKm>0?it.everyKm:"")+'" placeholder="–" aria-label="Interval în km"></div>':'<div class="empty0"></div>')+
     '<div class="ract"><button type="button" class="btn" data-act="renew">'+(sz?"Schimbate":rv?"Făcută":"Reînnoit")+'</button><button class="x" type="button" data-cdel="1" aria-label="Șterge" title="Șterge">×</button></div>'+
-    '<div class="empty0"></div>'+
   '</div>';
 }
 function renderCarList(){
@@ -1769,7 +1810,7 @@ function renderCarList(){
     var rows=carRows(v);
     h+='<section class="panel veh" data-v="'+esc(v.id)+'">'+
       '<div class="carh">'+
-        '<div class="vhead"><i aria-hidden="true"></i><input class="vname" data-vf="name" value="'+esc(v.name)+'" placeholder="'+esc(vehName(v))+' (de ex. Audi Q5)" aria-label="Numele vehiculului">'+
+        '<div class="vhead"><i aria-hidden="true"></i><input class="vname" data-vf="name" value="'+esc(v.name)+'" placeholder="Nume, de ex. Audi Q5" aria-label="Numele vehiculului">'+
         '<select class="vkind" data-vf="kind" aria-label="Tipul vehiculului">'+VKIND.map(function(k){return '<option value="'+k[0]+'"'+(v.kind===k[0]?" selected":"")+'>'+k[1]+'</option>'}).join("")+'</select></div>'+
         '<div class="carkm"><label>Kilometraj acum <input class="num" data-vf="km" inputmode="numeric" placeholder="ex. 128000" value="'+(v.km>0?v.km:"")+'" aria-label="Kilometraj actual: '+esc(vehName(v))+'"></label><span>'+(v.at?"actualizat "+fmtD(v.at):"")+'</span></div>'+
       '</div>'+
@@ -1845,6 +1886,85 @@ $("#vehs").addEventListener("click",function(e){
   if(e.target.closest("[data-act=renew]")&&canWrite)renewCar(it);
 });
 $("#vehs").addEventListener("focusout",function(){setTimeout(function(){if(pendingCar&&!inTyping("#vehs"))renderCarList()},0)});
+
+/* ================= Transport: cheltuieli (combustibil, taxi, parcare…) =================
+   Stau în colecția „car”, ca documente „x_…” {date, amount, cur, cat, note, veh}.
+   Sunt separate de rândurile Casă/Firmă: nu se copiază în luna următoare și nu apar în „Urmează”. */
+var XCAT=[["fuel","Combustibil"],["ride","Taxi / Uber / Bolt"],["pub","Transport public"],["park","Parcare"],["toll","Taxe de drum, peaj"],["wash","Spălătorie"],["serv","Service și piese"],["other","Altele"]];
+var xps=[],xpEdit=null,xpDelArm=null,xpDelT=null,xpLastCat="fuel";
+try{var lx=JSON.parse(localStorage.getItem("fin_car")||"null");if(lx&&Array.isArray(lx.xps))xps=lx.xps}catch(e){}
+function cleanX(x){return {date:x.date,amount:x.amount,cur:x.cur==="EUR"?"EUR":"RON",cat:x.cat||"other",note:x.note||"",veh:x.veh||null}}
+function catName(c){var f=XCAT.find(function(k){return k[0]===c});return f?f[1]:"Altele"}
+function xpOfMonth(m){return xps.filter(function(x){return isoOk(x.date)&&x.date.slice(0,7)===m}).sort(function(a,b){return b.date.localeCompare(a.date)||String(b.id).localeCompare(String(a.id))})}
+function putX(x){
+  var i=xps.findIndex(function(o){return o.id===x.id});if(i>=0)xps[i]=x;else xps.push(x);
+  render();carWrite(function(){return ccol.doc(x.id).set(cleanX(x))});
+}
+function delX(id){xps=xps.filter(function(o){return o.id!==id});xpDelArm=null;render();carWrite(function(){return ccol.doc(id).delete()})}
+function renderXp(){
+  $("#xpTitle").textContent="Cheltuieli · "+label(ym);
+  var list=xpOfMonth(ym),rt=rateFor(ym),tr=0,te=0,by={},noRate=false;
+  list.forEach(function(x){
+    var a=+x.amount||0;
+    if(x.cur==="EUR"){te+=a;if(rt)by[x.cat]=(by[x.cat]||0)+a*rt;else noRate=true}
+    else{tr+=a;by[x.cat]=(by[x.cat]||0)+a}
+  });
+  var tot=tr+(rt?te*rt:0);
+  $("#xpSum").innerHTML=list.length
+    ?'<div class="xptot"><b class="num">'+lei(tot)+'</b>'+(noRate?' <span>+ '+eur(te)+' (pune cursul lunii la Firmă ca să-i socotesc în lei)</span>':te>0?' <span>din care '+eur(te)+' la cursul '+String(rt).replace(".",",")+'</span>':'')+'<small>'+list.length+(list.length===1?' cheltuială':' cheltuieli')+' în '+esc(label(ym))+'</small></div>'+
+     '<div class="xchips">'+Object.keys(by).sort(function(a,b){return by[b]-by[a]}).map(function(k){return '<span class="xchip">'+esc(catName(k))+' <b class="num">'+money0(by[k])+'</b></span>'}).join("")+'</div>'
+    :'';
+  var vs=vehicles(),vn={};vs.forEach(function(v){vn[v.id]=vehName(v)});
+  $("#xpList").innerHTML=list.length?list.map(function(x){
+    var sub=[x.veh&&vn[x.veh]?vn[x.veh]:"",x.note||""].filter(Boolean).join(" · ");
+    var armed=xpDelArm===x.id;
+    return '<li class="xr" data-x="'+esc(x.id)+'" tabindex="0"><span class="xd">'+esc(shortD(x.date))+'</span><span class="xt"><b>'+esc(catName(x.cat))+'</b>'+(sub?'<small>'+esc(sub)+'</small>':'')+'</span><span class="xa num">'+money(x.amount)+(x.cur==="EUR"?" €":" lei")+'</span><button class="x'+(armed?" armed":"")+'" type="button" data-xdel="1" aria-label="Șterge cheltuiala">'+(armed?"Sigur?":"×")+'</button></li>';
+  }).join(""):'<li class="empty">Nicio cheltuială în '+esc(label(ym))+'. Apasă „+ Cheltuială” când alimentezi sau iei un Uber.</li>';
+  $("#xpAdd").disabled=!canWrite;
+}
+function xpMsg(t){$("#xpMsg").textContent=t||""}
+function openXp(x){
+  xpEdit=x||null;
+  var f=$("#xpForm"),vs=vehicles();
+  $("#xpVeh").innerHTML='<option value="">—</option>'+vs.map(function(v){return '<option value="'+esc(v.id)+'">'+esc(vehName(v))+'</option>'}).join("");
+  $("#xpVehL").hidden=!vs.length;
+  $("#xpAmt").value=x?String(x.amount).replace(".",","):"";
+  $("#xpCur").value=x&&x.cur==="EUR"?"EUR":"RON";
+  $("#xpCat").value=x?x.cat:xpLastCat;
+  $("#xpDate").value=x?x.date:(ym===ymNow()?iso(new Date()):ym+"-01");
+  $("#xpVeh").value=x?(x.veh||""):(vs.length===1&&$("#xpCat").value!=="ride"&&$("#xpCat").value!=="pub"?vs[0].id:"");
+  $("#xpNote").value=x?(x.note||""):"";
+  $("#xpSave").textContent=x?"Salvează modificarea":"Salvează";
+  xpMsg("");f.hidden=false;
+  try{f.scrollIntoView({block:"nearest"})}catch(e){}
+  $("#xpAmt").focus();
+}
+function closeXp(){xpEdit=null;$("#xpForm").hidden=true;xpMsg("")}
+$("#xpAdd").addEventListener("click",function(){if(canWrite)openXp(null)});
+$("#xpCancel").addEventListener("click",closeXp);
+$("#xpCat").addEventListener("change",function(){var c=this.value;if((c==="ride"||c==="pub")&&!xpEdit)$("#xpVeh").value=""});
+$("#xpForm").addEventListener("submit",function(e){
+  e.preventDefault();
+  if(!canWrite)return;
+  var a=parseAmt($("#xpAmt").value),d=$("#xpDate").value;
+  if(!(a>0)){xpMsg("Scrie suma (de ex. 250).");$("#xpAmt").focus();return}
+  if(!isoOk(d)){xpMsg("Alege data.");$("#xpDate").focus();return}
+  var x={id:xpEdit?xpEdit.id:"x_"+rid()+rid(),date:d,amount:Math.round(a*100)/100,cur:$("#xpCur").value==="EUR"?"EUR":"RON",cat:$("#xpCat").value,note:$("#xpNote").value.trim(),veh:$("#xpVeh").value||null};
+  xpLastCat=x.cat;
+  closeXp();putX(x);
+  if(x.date.slice(0,7)!==ym)toast("Am pus cheltuiala în "+label(x.date.slice(0,7))+".");
+});
+$("#xpList").addEventListener("click",function(e){
+  var li=e.target.closest(".xr");if(!li)return;
+  var id=li.getAttribute("data-x"),x=xps.find(function(o){return o.id===id});if(!x)return;
+  if(e.target.closest("[data-xdel]")){
+    if(!canWrite)return;
+    if(xpDelArm===id){clearTimeout(xpDelT);delX(id);return}
+    xpDelArm=id;clearTimeout(xpDelT);xpDelT=setTimeout(function(){xpDelArm=null;if(tab==="transport")renderXp()},4000);renderXp();return;
+  }
+  if(canWrite)openXp(x);
+});
+$("#xpList").addEventListener("keydown",function(e){if((e.key==="Enter"||e.key===" ")&&e.target.classList.contains("xr")){e.preventDefault();e.target.click()}});
 
 /* ================= Extrase: ecranul de import ================= */
 var PDF_URL="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js", PDF_WORKER="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
@@ -2167,7 +2287,7 @@ function stopListening(){unsubs.forEach(function(f){try{f()}catch(e){}});unsubs=
 async function connectDb(db,user){
   mode="db";items=[];meta={};rules=[];imports=[];startBal={eur:0,ron:0,since:""};col=db.collection("items");
   carEmpty=false;carSeeded=false;firstDefinitive=false;autoTried={};mods={firma:true,transport:true};
-  car=[];vehs=[];carKm=null;carKmAt=null;carLoaded=false;
+  car=[];vehs=[];xps=[];carKm=null;carKmAt=null;carLoaded=false;
   if(user){try{var w=await Promise.resolve(user.can("data.write"));if(w===false)canWrite=false}catch(e){}}
   if(!canWrite){var bb=$("#banner");bb.hidden=false;bb.textContent="Ai acces doar de citire la această pagină."}
   render();
@@ -2191,9 +2311,9 @@ async function connectDb(db,user){
   },listenErr("meta")));
   ccol=db.collection("car");
   unsubs.push(ccol.onSnapshot(function(snap){
-    var arr=[],vv=[],k0=null,at0=null;
-    snap.docs.forEach(function(d){var o=Object.assign({},d.data());o.id=d.id;if(d.id==="_km"){k0=o.km>0?o.km:null;at0=o.at||null}else if(d.id.indexOf("veh_")===0)vv.push(o);else arr.push(o)});
-    carKm=k0;carKmAt=at0;vehs=vv;
+    var arr=[],vv=[],xx=[],k0=null,at0=null;
+    snap.docs.forEach(function(d){var o=Object.assign({},d.data());o.id=d.id;if(d.id==="_km"){k0=o.km>0?o.km:null;at0=o.at||null}else if(d.id.indexOf("veh_")===0)vv.push(o);else if(d.id.indexOf("x_")===0)xx.push(o);else arr.push(o)});
+    carKm=k0;carKmAt=at0;vehs=vv;xps=xx;
     if(snap.docs.length){car=arr;carEmpty=false;carLoaded=true}
     else if(!snap.metadata.fromCache){car=[];carEmpty=true;carLoaded=true;seedCar()}
     render();
