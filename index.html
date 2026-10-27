@@ -72,7 +72,7 @@ h1{font-family:var(--f-display);font-size:24px;font-weight:700;letter-spacing:-.
 .tabbar button svg .f{fill:currentColor;stroke:none}
 .tabbar button[aria-selected="true"]{color:var(--tc,var(--fg))}
 .tabbar button[aria-selected="true"]::before{content:"";position:absolute;top:-7px;left:24%;right:24%;height:3px;border-radius:0 0 3px 3px;background:var(--tc,var(--fg))}
-.tabbar button[data-tab="casa"]{--tc:var(--casa)} .tabbar button[data-tab="firma"]{--tc:var(--firma)} .tabbar button[data-tab="extrase"]{--tc:var(--auto)}
+.tabbar button[data-tab="casa"]{--tc:var(--casa)} .tabbar button[data-tab="firma"]{--tc:var(--firma)} .tabbar button[data-tab="transport"]{--tc:var(--auto)}
 .tab{display:flex;flex-direction:column;gap:14px}
 @media (min-width:900px){
   body{padding-bottom:48px}
@@ -359,6 +359,19 @@ details.fold[open]>summary{margin-bottom:10px}
 
 /* extrase */
 .vh{position:absolute;width:1px;height:1px;overflow:hidden;opacity:0;pointer-events:none}
+.gcards.one{grid-template-columns:minmax(0,1fr)!important}
+.hist.nofirma th:nth-child(3),.hist.nofirma td:nth-child(3){display:none}
+.mods{display:flex;flex-direction:column;gap:6px;margin-top:10px}
+.mod{display:flex;align-items:center;gap:12px;padding:10px 4px;cursor:pointer;min-width:0}
+.mod .mt{display:flex;flex-direction:column;gap:2px;min-width:0}
+.mod .mt b{font-weight:600}
+.mod .mt small{color:var(--muted);font-size:12.5px}
+.sw{flex:none;width:44px;height:26px;border-radius:13px;background:var(--surface2);border:1px solid var(--line);position:relative;transition:background .15s}
+.sw::after{content:"";position:absolute;top:2px;left:2px;width:20px;height:20px;border-radius:50%;background:var(--muted);transition:transform .15s,background .15s}
+.mod input:checked+.sw{background:var(--ok);border-color:var(--ok)}
+.mod input:checked+.sw::after{transform:translateX(18px);background:var(--surface)}
+.mod input:focus-visible+.sw{outline:2px solid var(--fg);outline-offset:2px}
+.mod input:disabled+.sw{opacity:.5}
 .drop{border:1.5px dashed var(--line);border-radius:12px;padding:18px;display:flex;flex-direction:column;align-items:center;gap:10px;text-align:center}
 .drop.over{border-color:var(--auto);background:var(--neutralbg)}
 .drop p{margin:0;color:var(--muted);font-size:13px;max-width:46ch}
@@ -461,7 +474,7 @@ details.fold[open]>summary{margin-bottom:10px}
     <button role="tab" id="tb-general" data-tab="general" aria-selected="true" aria-controls="tab-general"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.5 12.5A8.5 8.5 0 1 1 11.5 3.5"/><path d="M14 3.7a8.5 8.5 0 0 1 6.3 6.3H14z"/></svg><span>General</span></button>
     <button role="tab" id="tb-casa" data-tab="casa" aria-selected="false" aria-controls="tab-casa"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 11.5L12 5l8 6.5V19.5H4z"/><path d="M10 19.5v-5h4v5"/></svg><span>Casă</span></button>
     <button role="tab" id="tb-firma" data-tab="firma" aria-selected="false" aria-controls="tab-firma"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 20V5h9v15M14 10h5v10M3.5 20h17"/><path d="M8 8.5h3M8 12h3M8 15.5h3"/></svg><span>Firmă</span></button>
-    <button role="tab" id="tb-extrase" data-tab="extrase" aria-selected="false" aria-controls="tab-extrase"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3.5h7l4 4V20.5H7z"/><path d="M14 3.5v4h4M12 17.5v-6M9.5 14L12 11.5 14.5 14"/></svg><span>Extrase</span></button>
+    <button role="tab" id="tb-transport" data-tab="transport" aria-selected="false" aria-controls="tab-transport"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4.5 16.5v-4.2L6.6 7.3a1.5 1.5 0 0 1 1.4-.9h8a1.5 1.5 0 0 1 1.4.9l2.1 5v4.2z"/><path d="M4.5 12.3h15"/><circle cx="8" cy="16.6" r="1.7"/><circle cx="16" cy="16.6" r="1.7"/></svg><span>Transport</span></button>
     <button role="tab" id="tb-mai" data-tab="mai" aria-selected="false" aria-controls="tab-mai"><svg viewBox="0 0 24 24" aria-hidden="true"><circle class="f" cx="6" cy="12" r="1.7"/><circle class="f" cx="12" cy="12" r="1.7"/><circle class="f" cx="18" cy="12" r="1.7"/></svg><span>Mai mult</span></button>
   </nav>
 
@@ -549,12 +562,8 @@ details.fold[open]>summary{margin-bottom:10px}
         <div class="grid" id="gridF"></div>
         <div class="foot"><span>Rândurile noi pornesc pe „De făcut”. Digi, încasarea și salariul net se copiază în luna nouă. Decontarea grădiniței se pune singură la cât ai plătit la Grădiniță luna trecută.</span></div>
       </section>
-    </section>
-
-    <!-- ============ EXTRASE ============ -->
-    <section class="tab" id="tab-extrase" data-tab="extrase" role="tabpanel" aria-labelledby="tb-extrase" hidden>
-      <div class="rowhead"><h2><i style="background:var(--auto)"></i>Extrase de cont</h2></div>
-      <section class="panel">
+      <section class="panel" id="impPanel" aria-labelledby="himp">
+        <h2 id="himp">Extrase de cont</h2>
         <div class="drop" id="drop">
           <p>Alege PDF-ul extrasului ING (cont în lei sau în EUR). Se citește chiar pe telefon: fișierul nu pleacă nicăieri. Vezi mai întâi ce s-ar importa și abia apoi confirmi.</p>
           <label class="btn auto filebtn" for="impFile">Alege extrasul (PDF)</label>
@@ -567,19 +576,20 @@ details.fold[open]>summary{margin-bottom:10px}
         <p class="note" id="impNote">Rândurile importate se salvează în baza de date a paginii. Ține pagina privată, fără link partajat, cât timp pui extrase reale.</p>
       </section>
       <div id="impPreview"></div>
-      <section class="panel" id="impHist">
-        <h2>Importuri făcute</h2>
+      <details class="panel fold" id="impHist">
+        <summary><h2>Importuri făcute</h2></summary>
         <div class="hint">Poți anula un import: rândurile adăugate se șterg, iar cele bifate revin cum erau.</div>
         <div id="impHistList"></div>
-      </section>
+      </details>
     </section>
 
-    <!-- ============ MAI MULT ============ -->
-    <section class="tab" id="tab-mai" data-tab="mai" role="tabpanel" aria-labelledby="tb-mai" hidden>
+    <!-- ============ TRANSPORT ============ -->
+    <section class="tab" id="tab-transport" data-tab="transport" role="tabpanel" aria-labelledby="tb-transport" hidden>
+      <div class="rowhead"><h2><i style="background:var(--auto)"></i>Transport</h2></div>
       <section class="panel" aria-labelledby="hcar">
         <div class="carh">
           <div>
-            <h2 id="hcar"><i></i>Mașina · Audi Q5</h2>
+            <h2 id="hcar"><i></i>Mașina</h2>
             <div class="hint" style="margin:2px 0 0">Scadențe și revizii. Verde e în regulă, galben se apropie, roșu a trecut.</div>
           </div>
           <div class="carkm"><label for="km">Kilometraj acum</label><input id="km" class="num" inputmode="numeric" placeholder="ex. 128000" aria-label="Kilometraj actual"><span id="kmat"></span></div>
@@ -589,12 +599,24 @@ details.fold[open]>summary{margin-bottom:10px}
         <div class="carbtns" style="margin-top:12px"><button class="btn auto" id="addcar">+ Scadență</button><button class="btn" id="addrev">+ Revizie</button></div>
         <div class="foot"><span id="carsave"></span><span>„Reînnoit” mută data înainte cu intervalul. La revizie calculează și noii km. Anvelopele trec pe sezonul următor.</span></div>
       </section>
+    </section>
+
+    <!-- ============ MAI MULT ============ -->
+    <section class="tab" id="tab-mai" data-tab="mai" role="tabpanel" aria-labelledby="tb-mai" hidden>
+      <section class="panel" id="setPanel" aria-labelledby="hset">
+        <h2 id="hset">Setări · ce urmărești</h2>
+        <div class="hint">Casă e mereu pornită. Când oprești un modul, datele lui nu se șterg: doar se ascund, și revin când îl pornești din nou.</div>
+        <div class="mods">
+          <label class="mod"><input type="checkbox" class="vh" id="modFirma"><span class="sw" aria-hidden="true"></span><span class="mt"><b>Firmă / PFA</b><small>facturi, taxe, curs EUR, extrase de cont, sold reportat</small></span></label>
+          <label class="mod"><input type="checkbox" class="vh" id="modTransport"><span class="sw" aria-hidden="true"></span><span class="mt"><b>Transport</b><small>mașina: scadențe, revizii, kilometraj</small></span></label>
+        </div>
+      </section>
       <section class="panel">
         <h2 id="yrt">Total pe an</h2>
         <div class="hint">Cât ai de plată pe fiecare lună, la Casă și la Firmă (fără încasări).</div>
         <div class="histwrap" id="yr"></div>
       </section>
-      <section class="panel">
+      <section class="panel" id="startPanel">
         <h2>Sold de pornire firmă</h2>
         <div class="setgrid">
           <label>EUR în cont <input id="seur" class="num" inputmode="decimal" placeholder="€" aria-label="Sold de pornire al firmei, în EUR"></label>
@@ -649,11 +671,15 @@ This typically indicates that your device does not have a healthy Internet conne
 <script>
 (function(){"use strict";
 var TARGET="web";
-var BUILD_ID="web 1.0 · 2026-10-26 14:13 UTC";
+var BUILD_ID="web 1.0 · 2026-10-27 13:23 UTC";
 var WHERE_DB="Datele tale stau în contul tău Google, într-un proiect Firebase (Google Cloud, regiunea Frankfurt). Pe telefon rămâne doar o copie temporară, ca să meargă și fără net.";
 var MONTHS=["ianuarie","februarie","martie","aprilie","mai","iunie","iulie","august","septembrie","octombrie","noiembrie","decembrie"];
 var GROUPS=["Casă","Firmă"], KINDS=["Plată","Încasare","Transfer","Memento"];
-var TABS=["general","casa","firma","extrase","mai"], TAB_ALIAS={luna:"general"};
+var TABS=["general","casa","firma","transport","mai"], TAB_ALIAS={luna:"general",extrase:"firma",masina:"transport"};
+/* module: Casă e mereu pornită; Firmă și Transport se pot opri din Setări (datele nu se șterg, doar se ascund) */
+var mods={firma:true,transport:true};
+function modOn(t){return t==="firma"?mods.firma!==false:t==="transport"?mods.transport!==false:true}
+function grpOn(g){return g!=="Firmă"||mods.firma!==false}
 var PAL={"Casă":["#E8903A","#F2C14E","#D9644A","#B58A5C","#E86F9A","#C9A227","#F29E7B","#9C6B3C","#D4553A","#F0A35E"],
          "Firmă":["#2FA6D8","#3CCBB0","#6C8CF0","#9373E6","#34B7E0","#5BC2A0","#4A78C8","#7FA7E8","#2A8FA8","#8E8AE0"]};
 function colorOf(x){
@@ -721,7 +747,7 @@ function toast(t){var el=$("#toast");if(!el)return;el.textContent=t;el.hidden=fa
 function saveState(t){var el=$("#savestate");if(el)el.textContent=t;if(/^(Nu s-a|Conexiune|Doar citire)/.test(t))toast(t)}
 function clean(it){var o={};["ym","group","name","kind","day","amount","status","note","key","order","cur","date","src","hs","locked"].forEach(function(k){o[k]=it[k]==null?null:it[k]});return o}
 function persistLocal(){try{localStorage.setItem("fin_items",JSON.stringify(items))}catch(e){}}
-function persistMisc(){try{localStorage.setItem("fin_meta",JSON.stringify(meta));localStorage.setItem("fin_start",JSON.stringify(startBal));localStorage.setItem("fin_rules",JSON.stringify(rules));localStorage.setItem("fin_imps",JSON.stringify(imports))}catch(e){}}
+function persistMisc(){try{localStorage.setItem("fin_settings",JSON.stringify(mods));localStorage.setItem("fin_meta",JSON.stringify(meta));localStorage.setItem("fin_start",JSON.stringify(startBal));localStorage.setItem("fin_rules",JSON.stringify(rules));localStorage.setItem("fin_imps",JSON.stringify(imports))}catch(e){}}
 function retry(fn,n){n=n==null?3:n;return Promise.resolve().then(fn).catch(function(e){var c=e&&e.code;if(n>0&&(c==="resource_exhausted"||c==="resource-exhausted"||c==="unavailable"))return new Promise(function(r){setTimeout(r,250+Math.random()*450)}).then(function(){return retry(fn,n-1)});throw e})}
 function chunkRun(list,fn,size){size=size||6;var p=Promise.resolve();for(var i=0;i<list.length;i+=size)(function(part){p=p.then(function(){return Promise.all(part.map(function(x){return retry(function(){return fn(x)})}))})})(list.slice(i,i+size));return p}
 /* scrierile merg una după alta; rezultatul poate fi așteptat de cine a cerut scrierea */
@@ -782,6 +808,14 @@ function putStart(patch){
   var pr=Promise.resolve();
   if(mode==="db"&&mcol&&canWrite)pr=queue(function(){return mcol.doc("start").set({eur:startBal.eur||0,ron:startBal.ron||0,since:startBal.since||""})});
   else persistMisc();
+  render();return pr;
+}
+function putSettings(patch){
+  mods=Object.assign({},mods,patch);
+  var pr=Promise.resolve();
+  if(mode==="db"&&mcol&&canWrite)pr=queue(function(){return mcol.doc("settings").set({firma:mods.firma!==false,transport:mods.transport!==false})});
+  else persistMisc();
+  if(!modOn(tab))tab="general";
   render();return pr;
 }
 function saveRules(list){
@@ -1147,7 +1181,7 @@ var FS={"Casă":{st:"all",kind:"all"},"Firmă":{st:"all",kind:"all"}}, calSel=nu
 
 function setTab(t,noScroll){
   t=TAB_ALIAS[t]||t;
-  if(TABS.indexOf(t)<0)t="general";
+  if(TABS.indexOf(t)<0||!modOn(t))t="general";
   dropDraft();
   tab=t;
   try{localStorage.setItem("fin_tab",t)}catch(e){}
@@ -1156,9 +1190,9 @@ function setTab(t,noScroll){
   if(!noScroll){try{window.scrollTo(0,0)}catch(e){}}
 }
 function renderTabs(){
-  document.querySelectorAll(".tabbar button").forEach(function(b){b.setAttribute("aria-selected",b.getAttribute("data-tab")===tab?"true":"false")});
+  document.querySelectorAll(".tabbar button").forEach(function(b){var t=b.getAttribute("data-tab");b.hidden=!modOn(t);b.setAttribute("aria-selected",t===tab?"true":"false")});
   document.querySelectorAll("main .tab").forEach(function(s){s.hidden=s.getAttribute("data-tab")!==tab});
-  document.querySelector(".monthbar").hidden=(tab==="extrase");
+  document.querySelector(".monthbar").hidden=(tab==="transport");
 }
 function renderMonth(){
   $("#curm").textContent=label(ym);
@@ -1188,8 +1222,10 @@ function renderGeneral(){
     em.innerHTML=emptyMonthHtml();
     return;
   }
+  var fo=mods.firma!==false;
+  $("#sumRow .gcard.f").hidden=!fo;$("#sumRow").classList.toggle("one",!fo);
   renderUpcoming();renderSummary();renderCal();
-  donut("Casă","#donutCasaG","#legCasaG");donut("Firmă","#donutFirmaG","#legFirmaG");
+  donut("Casă","#donutCasaG","#legCasaG");if(fo)donut("Firmă","#donutFirmaG","#legFirmaG");
 }
 function sumGroup(g){
   var rt=rateFor(ym);
@@ -1207,12 +1243,12 @@ function renderUpcoming(){
   var cur=ym===ymNow(),today=new Date().getDate(),m;
   if(cur){
     var p=ym.split("-").map(Number),dim=new Date(p[0],p[1],0).getDate(),nxt=shift(ym,1);
-    var a=monthItems(ym).filter(function(x){return x.status!=="Gata"&&x.day!=null&&x.day-today<=5}).map(function(x){return {x:x,d:x.day-today}});
-    var b=monthItems(nxt).filter(function(x){return x.status!=="Gata"&&x.day!=null&&x.day+dim-today<=5}).map(function(x){return {x:x,d:x.day+dim-today}});
+    var a=monthItems(ym).filter(function(x){return grpOn(x.group)&&x.status!=="Gata"&&x.day!=null&&x.day-today<=5}).map(function(x){return {x:x,d:x.day-today}});
+    var b=monthItems(nxt).filter(function(x){return grpOn(x.group)&&x.status!=="Gata"&&x.day!=null&&x.day+dim-today<=5}).map(function(x){return {x:x,d:x.day+dim-today}});
     m=a.concat(b).sort(function(u,v){return u.d-v.d||(u.x.order||0)-(v.x.order||0)});
     $("#upchint").textContent="Ce ai de făcut în următoarele 5 zile, plus ce a rămas întârziat. Azi e "+today+".";
   }else{
-    m=monthItems(ym).filter(function(x){return x.status!=="Gata"}).sort(function(a,b){var da=a.day==null?99:a.day,db=b.day==null?99:b.day;return da-db||(a.order||0)-(b.order||0)}).map(function(x){return {x:x,d:null}});
+    m=monthItems(ym).filter(function(x){return grpOn(x.group)&&x.status!=="Gata"}).sort(function(a,b){var da=a.day==null?99:a.day,db=b.day==null?99:b.day;return da-db||(a.order||0)-(b.order||0)}).map(function(x){return {x:x,d:null}});
     $("#upchint").textContent="Ce n-ai bifat în "+label(ym)+", în ordinea zilei.";
   }
   if(!m.length){$("#upc").innerHTML='<li class="empty" style="display:block">'+(cur?"Nimic în următoarele 5 zile.":"Totul e bifat pentru luna asta.")+'</li>';return}
@@ -1226,7 +1262,7 @@ function renderUpcoming(){
 }
 function renderLate(){
   var b=$("#late"),now=ymNow(),today=new Date().getDate();
-  var l=items.filter(function(x){return x.ym===now&&isTodo(x)&&x.day!=null&&x.day<today}).sort(function(a,c){return a.day-c.day});
+  var l=items.filter(function(x){return x.ym===now&&grpOn(x.group)&&isTodo(x)&&x.day!=null&&x.day<today}).sort(function(a,c){return a.day-c.day});
   if(!l.length){b.hidden=true;return}
   b.hidden=false;
   b.textContent=(l.length===1?"1 lucru întârziat: ":l.length+" lucruri întârziate: ")+l.map(function(x){return x.name+" (ziua "+x.day+")"}).join(" · ");
@@ -1241,7 +1277,7 @@ function renderCal(){
   var dim=new Date(y,mo,0).getDate(),first=(new Date(y,mo-1,1).getDay()+6)%7;
   var cur=ym===ymNow(),today=new Date().getDate();
   var sel=calSel!=null?calSel:(cur?today:null);
-  var m=monthItems(ym).slice().sort(function(a,b){return (a.order||0)-(b.order||0)});
+  var m=monthItems(ym).filter(function(x){return grpOn(x.group)}).sort(function(a,b){return (a.order||0)-(b.order||0)});
   var by={},nod=[];
   m.forEach(function(x){if(x.day==null){nod.push(x);return}var d=Math.min(x.day,dim);(by[d]=by[d]||[]).push(x)});
   var h="";["Lun","Mar","Mie","Joi","Vin","Sâm","Dum"].forEach(function(n){h+='<div class="dow">'+n+'</div>'});
@@ -1425,15 +1461,20 @@ function renderYear(){
   for(var m=1;m<=12;m++){
     var k=y+"-"+String(m).padStart(2,"0");
     if(!monthItems(k).length)continue;
-    var c=mSum(k,"Casă",false),f=mSum(k,"Firmă",false);
-    tc+=c;tf+=f;pc+=mSum(k,"Casă",true);pf+=mSum(k,"Firmă",true);
+    var fo=mods.firma!==false,c=mSum(k,"Casă",false),f=fo?mSum(k,"Firmă",false):0;
+    tc+=c;tf+=f;pc+=mSum(k,"Casă",true);pf+=fo?mSum(k,"Firmă",true):0;
     rows+='<tr><td>'+MONTHS[m-1]+'</td><td class="num">'+(c?money0(c):"—")+'</td><td class="num">'+(f?money0(f):"—")+'</td><td class="num">'+((c+f)?money0(c+f):"—")+'</td></tr>';
   }
   if(!rows){$("#yr").innerHTML='<div class="empty">Apare după ce treci sumele pe luni.</div>';return}
-  $("#yr").innerHTML='<table class="hist"><thead><tr><th>Luna</th><th style="color:var(--casa)">Casă</th><th style="color:var(--firma)">Firmă</th><th>Total</th></tr></thead><tbody>'+rows+'</tbody><tfoot><tr><td>Total anual</td><td class="num">'+money0(tc)+'</td><td class="num">'+money0(tf)+'</td><td class="num">'+money0(tc+tf)+'</td></tr><tr><td style="font-weight:400;color:var(--muted)">din care plătit</td><td class="num" style="font-weight:400;color:var(--muted)">'+money0(pc)+'</td><td class="num" style="font-weight:400;color:var(--muted)">'+money0(pf)+'</td><td class="num" style="font-weight:400;color:var(--muted)">'+money0(pc+pf)+'</td></tr></tfoot></table>';
+  $("#yr").innerHTML='<table class="hist'+(mods.firma!==false?'':' nofirma')+'"><thead><tr><th>Luna</th><th style="color:var(--casa)">Casă</th><th style="color:var(--firma)">Firmă</th><th>Total</th></tr></thead><tbody>'+rows+'</tbody><tfoot><tr><td>Total anual</td><td class="num">'+money0(tc)+'</td><td class="num">'+money0(tf)+'</td><td class="num">'+money0(tc+tf)+'</td></tr><tr><td style="font-weight:400;color:var(--muted)">din care plătit</td><td class="num" style="font-weight:400;color:var(--muted)">'+money0(pc)+'</td><td class="num" style="font-weight:400;color:var(--muted)">'+money0(pf)+'</td><td class="num" style="font-weight:400;color:var(--muted)">'+money0(pc+pf)+'</td></tr></tfoot></table>';
+}
+function renderSettings(){
+  var a=$("#modFirma"),b=$("#modTransport");
+  a.checked=mods.firma!==false;b.checked=mods.transport!==false;a.disabled=b.disabled=!canWrite;
+  $("#startPanel").hidden=mods.firma===false;
 }
 function renderMai(){
-  renderCarList();renderYear();
+  renderSettings();renderYear();
   var se=$("#seur"),sr=$("#sron"),sm=$("#sinceM");
   if(document.activeElement!==se)se.value=startBal.eur?String(startBal.eur).replace(".",","):"";
   if(document.activeElement!==sr)sr.value=startBal.ron?String(startBal.ron).replace(".",","):"";
@@ -1452,8 +1493,8 @@ function render(){
   renderTabs();renderMonth();renderLate();renderCarBanner();
   if(tab==="general")renderGeneral();
   else if(tab==="casa")renderCasa();
-  else if(tab==="firma")renderFirma();
-  else if(tab==="extrase")renderExtrase();
+  else if(tab==="firma"){renderFirma();renderExtrase()}
+  else if(tab==="transport")renderCarList();
   else renderMai();
 }
 
@@ -1568,6 +1609,10 @@ var delArm={id:null,t:null};
   el.addEventListener("focusout",function(){setTimeout(function(){if(pendingRender&&!inTyping(q))renderGrid(g)},0)});
 });
 
+/* Setări: modulele */
+$("#modFirma").addEventListener("change",function(){putSettings({firma:this.checked})});
+$("#modTransport").addEventListener("change",function(){putSettings({transport:this.checked})});
+
 /* ================= Mașina: scadențe și revizii ================= */
 function iso(d){return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0")}
 function isoOk(v){return /^\d{4}-\d{2}-\d{2}$/.test(v||"")}
@@ -1625,7 +1670,7 @@ function carState(it){
 function carRows(){return car.map(function(it){return {it:it,s:carState(it)}}).sort(function(a,b){return (b.s.rank-a.s.rank)||(a.s.d-b.s.d)||((a.it.order||0)-(b.it.order||0))})}
 function renderCarBanner(){
   var hot=carRows().filter(function(r){return r.s.rank>=2}),bar=$("#carbar");
-  if(!hot.length){bar.hidden=true;return}
+  if(!hot.length||mods.transport===false){bar.hidden=true;return}
   bar.hidden=false;bar.className="car-banner"+(hot.some(function(r){return r.s.rank===3})?" bad":"");
   bar.textContent="Mașina: "+hot.map(function(r){return r.it.name+" ("+r.s.text+(r.s.sub?", "+r.s.sub:"")+")"}).join(" · ");
 }
@@ -1988,9 +2033,10 @@ $("#impGroup").addEventListener("change",function(){if(IMP.st)buildPreview()});
   try{var sb0=JSON.parse(localStorage.getItem("fin_start")||"null");if(sb0)startBal={eur:+sb0.eur||0,ron:+sb0.ron||0,since:/^\d{4}-\d{2}$/.test(sb0.since||"")?sb0.since:""}}catch(e){}
   try{rules=JSON.parse(localStorage.getItem("fin_rules")||"[]")||[]}catch(e){rules=[]}
   try{imports=JSON.parse(localStorage.getItem("fin_imps")||"[]")||[]}catch(e){imports=[]}
+  try{var ms0=JSON.parse(localStorage.getItem("fin_settings")||"null");if(ms0)mods={firma:ms0.firma!==false,transport:ms0.transport!==false}}catch(e){}
   var t0=(location.hash||"").replace("#","");t0=TAB_ALIAS[t0]||t0;
   if(TABS.indexOf(t0)<0){try{t0=localStorage.getItem("fin_tab")||""}catch(e){t0=""}t0=TAB_ALIAS[t0]||t0}
-  tab=TABS.indexOf(t0)>=0?t0:"general";
+  tab=TABS.indexOf(t0)>=0&&modOn(t0)?t0:"general";
   render();saveState("Se conectează la baza de date…");
 })();
 
@@ -2017,22 +2063,25 @@ function listenErr(which){return function(err){
 function stopListening(){unsubs.forEach(function(f){try{f()}catch(e){}});unsubs=[]}
 async function connectDb(db,user){
   mode="db";items=[];meta={};rules=[];imports=[];startBal={eur:0,ron:0,since:""};col=db.collection("items");
-  carEmpty=false;carSeeded=false;firstDefinitive=false;autoTried={};
+  carEmpty=false;carSeeded=false;firstDefinitive=false;autoTried={};mods={firma:true,transport:true};
   if(user){try{var w=await Promise.resolve(user.can("data.write"));if(w===false)canWrite=false}catch(e){}}
   if(!canWrite){var bb=$("#banner");bb.hidden=false;bb.textContent="Ai acces doar de citire la această pagină."}
   render();
   mcol=db.collection("meta");
   unsubs.push(mcol.onSnapshot(function(snap){
-    var m={},sb={eur:0,ron:0,since:""},rl=[],imps=[],wl=false;
+    var m={},sb={eur:0,ron:0,since:""},rl=[],imps=[],wl=false,stg=null;
     snap.docs.forEach(function(d){
       var o=d.data(),id=d.id;if(!o)return;
       if(id==="welcome"){wl=true;return}
+      if(id==="settings"){stg=o;return}
       if(id==="start"){sb={eur:+o.eur||0,ron:+o.ron||0,since:/^\d{4}-\d{2}$/.test(o.since||"")?o.since:""};return}
       if(id==="rules"){rl=Array.isArray(o.list)?o.list:[];return}
       if(id.indexOf("imp_")===0){var r=Object.assign({},o);r.id=id;imps.push(r);return}
       if(/^\d{4}-\d{2}$/.test(id)&&(o.rate>0||o.exch!=null))m[id]=o;
     });
     meta=m;startBal=sb;rules=rl;imports=imps;
+    mods={firma:!(stg&&stg.firma===false),transport:!(stg&&stg.transport===false)};
+    if(!modOn(tab))tab="general";
     if(wl&&!welcomed){welcomed=true;maybeAuto();seedCar()}
     render();
   },listenErr("meta")));
