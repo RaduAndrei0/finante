@@ -638,15 +638,13 @@ details.fold[open]>summary{margin-bottom:10px}
         <div class="grid" id="gridF"></div>
         <div class="foot"><span id="firmaFoot">Rândurile noi pornesc pe „De făcut”. Digi, încasarea și salariul net se copiază în luna nouă. Decontarea grădiniței se pune singură la cât ai plătit la Grădiniță luna trecută.</span></div>
       </section>
+      <div id="impWrap">
       <section class="panel" id="impPanel" aria-labelledby="himp">
         <h2 id="himp">Extrase de cont</h2>
         <div class="drop" id="drop">
-          <p>Alege PDF-ul extrasului ING (cont în lei sau în EUR). Se citește chiar pe telefon: fișierul nu pleacă nicăieri. Vezi mai întâi ce s-ar importa și abia apoi confirmi.</p>
+          <p id="impDropTxt">Alege PDF-ul extrasului ING Business (cont în lei sau în EUR). Se citește chiar pe telefon: fișierul nu pleacă nicăieri. Vezi mai întâi ce s-ar importa și abia apoi confirmi.</p>
           <label class="btn auto filebtn" for="impFile">Alege extrasul (PDF)</label>
           <input class="vh" id="impFile" type="file" accept="application/pdf,.pdf">
-        </div>
-        <div class="impctl">
-          <label class="rate">Pentru <select id="impGroup" aria-label="Pentru ce grup e extrasul"><option value="auto">se alege singur</option><option value="Firmă">Firmă</option><option value="Casă">Casă</option></select></label>
         </div>
         <div class="impmsg" id="impMsg" role="status"></div>
         <p class="note" id="impNote">Rândurile importate se salvează în baza de date a paginii. Ține pagina privată, fără link partajat, cât timp pui extrase reale.</p>
@@ -657,6 +655,7 @@ details.fold[open]>summary{margin-bottom:10px}
         <div class="hint">Poți anula un import: rândurile adăugate se șterg, iar cele bifate revin cum erau.</div>
         <div id="impHistList"></div>
       </details>
+      </div>
     </section>
 
     <!-- ============ TRANSPORT ============ -->
@@ -761,7 +760,7 @@ This typically indicates that your device does not have a healthy Internet conne
 <script>
 (function(){"use strict";
 var TARGET="web";
-var BUILD_ID="web 1.0 · 2026-10-27 14:22 UTC";
+var BUILD_ID="web 1.0 · 2026-10-28 08:45 UTC";
 var WHERE_DB="Datele tale stau în contul tău Google, într-un proiect Firebase (Google Cloud, regiunea Frankfurt). Pe telefon rămâne doar o copie temporară, ca să meargă și fără net.";
 var MONTHS=["ianuarie","februarie","martie","aprilie","mai","iunie","iulie","august","septembrie","octombrie","noiembrie","decembrie"];
 var GROUPS=["Casă","Firmă"], KINDS=["Plată","Încasare","Transfer","Memento"];
@@ -1127,9 +1126,105 @@ function parseIngBusiness(pages){
   return {ok:true,st:st};
 }
 
+/* ================= Extrase Salt Bank (cont personal): citire ================= */
+var SALT_MON={ian:1,jan:1,feb:2,mar:3,apr:4,mai:5,may:5,iun:6,jun:6,iul:7,jul:7,aug:8,sep:9,oct:10,noi:11,nov:11,dec:12};
+var SALT_DATE=/^(\d{2})\.([A-Za-z]{3})[a-z]*\.(\d{4})$/;
+var RO_AMT=/^\d{1,3}(?:\.\d{3})*,\d{2}$/;
+function saltIso(s){var m=SALT_DATE.exec(String(s).trim());if(!m)return null;var mo=SALT_MON[m[2].toLowerCase()];return mo?m[3]+"-"+String(mo).padStart(2,"0")+"-"+m[1]:null}
+function nameToks(s){return String(s||"").toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g,"").replace(/[^a-z ]+/g," ").split(" ").filter(function(w){return w.length>=2}).sort().join(" ")}
+/* tipul de pe rândul de deasupra datei -> felul tranzacției */
+function saltKind(type,amount,det){
+  var t=String(type||"").toLowerCase();
+  if(/atm/.test(t))return "cash";
+  if(/impozit|comision/.test(t)||/^dobanda/.test(t))return "fee";
+  if(/^incasare/.test(t))return "in";
+  if(/^plata|^transfer/.test(t))return amount<0?"tr":"in";
+  if(/google pay|apple pay|card|pos/.test(t))return amount<0?"pos":"in";
+  if(/top-?up/i.test(det))return "in";
+  return amount<0?"pos":"in";
+}
+function parseSaltBank(pages){
+  if(!pages||!pages.length)return {ok:false,reason:"Fișierul nu are pagini."};
+  var all=pages.map(function(p){return p.lines.map(lineText).join("\n")}).join("\n");
+  if(!/Salt Bank/.test(all)||!/Detalii tranzactii/.test(all)||!/Sumar cont/.test(all))return {ok:false,reason:"Nu recunosc formatul."};
+  var hi=[];pages[0].lines.forEach(function(l){hi.push(l)});
+  function after(label){for(var i=0;i<hi.length;i++){var its=lineItems(hi[i]);for(var k=0;k<its.length-1;k++)if(its[k]===label)return its[k+1]}return ""}
+  var holder=after("Nume:"),iban=after("IBAN:").replace(/\s+/g,""),mon=after("Moneda:");
+  var st={fmt:"salt",iban:iban,cur:/eur/i.test(mon)?"EUR":"RON",holder:holder,cui:"",isBiz:false,opening:null,closing:null,from:null,to:null,tx:[]};
+  var per=/(\d{2}\.[A-Za-z]{3}\.\d{4})\s*-\s*(\d{2}\.[A-Za-z]{3}\.\d{4})/.exec(all);
+  if(per){st.from=saltIso(per[1]);st.to=saltIso(per[2])}
+  /* sumarul: soldul inițial, plăți, încasări, soldul final */
+  var sumPl=null,sumIn=null;
+  for(var a=0;a<hi.length;a++){
+    if(!/In cont la inceputul/.test(lineText(hi[a])))continue;
+    for(var b=a+1;b<Math.min(hi.length,a+5);b++){
+      var am=lineItems(hi[b]).filter(function(s){return RO_AMT.test(s)||/^-\d/.test(s)});
+      if(am.length>=4){st.opening=roNum(am[0]);sumPl=roNum(am[1]);sumIn=roNum(am[2]);st.closing=roNum(am[3]);break}
+    }
+    break;
+  }
+  /* tranzacțiile: între capul de tabel și subsolul paginii */
+  var occ={};
+  pages.forEach(function(pg){
+    var L=pg.lines,h=-1,platiX=null,incX=null;
+    for(var i=0;i<L.length;i++){var t=lineText(L[i]);if(/Detalii tranzactii/.test(t)&&/Incasari/.test(t)){h=i;L[i].items.forEach(function(it){if(/^Plati$/.test(it.s.trim()))platiX=it.x;if(/^Incasari$/.test(it.s.trim()))incX=it.x});break}}
+    if(h<0||platiX==null||incX==null)return;
+    var reg=[];
+    for(var j=h+1;j<L.length;j++){var tx=lineText(L[j]);if(/^Prezentul extras|^E bine sa stii|^© \d{4} Salt/.test(tx))break;reg.push(L[j])}
+    var cur=null,starts=[];
+    reg.forEach(function(l,ix){var f=l.items[0];if(f&&f.x<incX&&f.x<120&&saltIso(f.s))starts.push(ix)});
+    starts.forEach(function(ix,n){
+      var l=reg[ix],date=saltIso(l.items[0].s),txt=[],amt=null,cred=false;
+      l.items.slice(1).forEach(function(it){var s=it.s.trim();if(it.x>=platiX-15&&RO_AMT.test(s)){amt=roNum(s);cred=it.x>=incX-15}else txt.push(s)});
+      if(amt==null)return;
+      var end=n+1<starts.length?starts[n+1]-1:reg.length;   /* rândul dinaintea următoarei date e tipul ei */
+      var type=ix>0?lineText(reg[ix-1]):"";
+      for(var k=ix+1;k<end;k++)txt.push(lineText(reg[k]));
+      var det=txt.join(" ").replace(/\s+/g," ").trim(),segs=det.split(/\s\/\s/),cp="",purpose="",ciban="";
+      var mI=/IBAN:\s*([A-Z]{2}\d{2}[A-Z0-9 ]{8,40})/.exec(det);if(mI)ciban=mI[1].replace(/\s+/g,"");
+      var party=segs.slice(1).join(" / "),mP=/(?:^|\s)(Catre|De la)\s+(.+?)(?:\s+IBAN:.*)?$/.exec(party);
+      if(mP){cp=mP[2].trim();purpose=segs[0].trim();if(purpose.length<3)purpose=""}
+      else{cp=segs[0].trim();purpose=segs.length>1?segs.slice(1).join(" / ").replace(/\s*\/?\s*Card\s+\d{4,}X+\d+.*$/,"").trim():""}
+      var amount=cred?amt:-amt,kind=saltKind(type,amount,det);
+      cur={date:date,cp:cp,purpose:purpose,amount:amount,balance:null,ref:"",l2:"",det:[],type:type,full:det,ciban:ciban,k0:kind};
+      st.tx.push(cur);
+    });
+  });
+  if(!st.tx.length)return {ok:false,reason:"Nu am găsit nicio tranzacție în fișier."};
+  /* transferuri între conturile tale: același nume ca titularul, top-up de card, alimentări Revolut */
+  var hk=nameToks(holder);
+  st.tx.forEach(function(t,i){
+    t.i=i;
+    t.own=(!!hk&&(t.k0==="tr"||t.k0==="in")&&nameToks(t.cp)===hk)||/top-?up/i.test(t.full)||(t.k0==="pos"&&/^REVOLUT/i.test(t.cp));
+    var key=[st.iban,t.date,t.type,t.amount.toFixed(2),t.cp,t.purpose].join("|");occ[key]=(occ[key]||0)+1;
+    t.h=hash53(key+"#"+occ[key]);
+  });
+  var sd=r2(st.tx.filter(function(t){return t.amount<0}).reduce(function(s,t){return s-t.amount},0)),sc=r2(st.tx.filter(function(t){return t.amount>0}).reduce(function(s,t){return s+t.amount},0));
+  var chk={ok:true,msgs:[],kind:"sum"};
+  if(st.opening==null||sumPl==null){chk.ok=false;chk.msgs.push("nu găsesc sumarul din antet")}
+  else{
+    if(Math.abs(sd-sumPl)>0.005){chk.ok=false;chk.msgs.push("plățile găsite ("+sd.toFixed(2)+") nu dau totalul din antet ("+sumPl.toFixed(2)+")")}
+    if(Math.abs(sc-sumIn)>0.005){chk.ok=false;chk.msgs.push("încasările găsite ("+sc.toFixed(2)+") nu dau totalul din antet ("+sumIn.toFixed(2)+")")}
+    if(Math.abs(r2(st.opening-sumPl+sumIn)-st.closing)>0.005){chk.ok=false;chk.msgs.push("soldul final din antet nu se leagă")}
+  }
+  st.check=chk;st.sumDeb=-sd;st.sumCred=sc;st.nDebFound=st.tx.filter(function(t){return t.amount<0}).length;st.nCredFound=st.tx.length-st.nDebFound;
+  return {ok:true,st:st};
+}
+
 /* ================= Extrase: clasificare, grupare, potrivire cu rândurile din tabel (funcții pure) ================= */
 var FUEL_RE=/\b(ESO|OMV|PETROM|MOL|ROMPETROL|LUKOIL|SOCAR|GAZPROM|PETROL|BENZINARIE)\b/i;
 var IBANISH=/^[A-Z]{2}\d{2}[A-Z0-9]{10,30}$/;
+/* plățile cu cardul din contul personal: pe categorii (lanțuri mari, fără nume anume) */
+var SHOP_CATS=[
+ {key:"tob",name:"Tutun și chioșc",re:/^INM|TABAC|TOBACCO|INMEDIO|RELAY|HUBIZ|\bPRESS\b/i},
+ {key:"health",name:"Sănătate și farmacie",re:/FARMAC|CATENA|HELP ?NET|SENSIBLU|DR\.? ?MAX|\bDONA\b|MEDLIFE|REGINA MARIA|SANADOR|SYNEVO|CLINIC|DENT|OPTIC/i},
+ {key:"groc",name:"Cumpărături (magazine)",re:/AUCHAN|CARREFOUR|KAUFLAND|\bLIDL|PENNY|SELGROS|MEGA ?IMAGE|ROSSMANN|ANNABELLA|PEPCO|\bPROFI\b|\bDM\b|DROGERIE|\bMETRO\b|\bCORA\b|\bNORMAL\b|\bACTION\b|\bJYSK\b|\bIKEA\b|DEDEMAN|LEROY|BRICO|HORNBACH|LA DOI PASI|MINIMARKET|SUPERMARKET|\bMARKET\b|ALIMENTAR|FLOR\b|FLORAR/i},
+ {key:"food",name:"Mâncare și cafea în oraș",re:/\bFAST\b|FOOD|RESTAUR|PIZZ|MCDONALD|\bKFC\b|BURGER|STARBUCKS|\bCAFE|COFFEE|BISTRO|SPARTAN|SUBWAY|SHAORMA|KEBAB|COFETAR|PATISER|BRUTAR|PANIFIC|GELAT|VENDING|BAKERY|GLOVO|TAZZ|WOLT/i},
+ {key:"online",name:"Cumpărături online și livrări",re:/PAYU|EMAG|AMAZON\b|EASYBOX|SAMEDAY|FAN ?COURIER|CARGUS|ALTEX|FLANCO|ALIEXPRESS|TEMU|SHEIN|NETOPIA|MOBILPAY|EUPLATESC|PAYPAL|ELEFANT|LIBRIS/i},
+ {key:"clothes",name:"Haine și încălțăminte",re:/SINSAY|\bH ?& ?M\b|ZARA|RESERVED|\bKIK\b|DEICHMANN|\bCCC\b|NEW YORKER|WAIKIKI|DECATHLON|BERSHKA|PULL ?& ?BEAR|ORSAY|\bOVS\b/i},
+ {key:"fun",name:"Ieșiri, sport și distracție",re:/AQUAPARK|AMAZONIA|\bPOOL\b|CINEMA|BOWLING|\bZOO\b|FITNESS|\bGYM\b|WORLD CLASS|STAY FIT|IABILET|ENTERTIX|\bSPORT|TEATRU|THEATR/i}
+];
+function shopCat(cp){var s=String(cp||"");for(var i=0;i<SHOP_CATS.length;i++)if(SHOP_CATS[i].re.test(s))return SHOP_CATS[i];return {key:"other",name:"Alte plăți cu cardul"}}
 var STOPW={plata:1,plati:1,transfer:1,incasare:1,factura:1,business:1,bank:1,card:1,srl:1,sro:1,cont:1,luna:1,pentru:1,decont:1};
 function foldTxt(s){return String(s||"").toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g,"")}
 function normTokens(s){return foldTxt(s).replace(/[^a-z0-9]+/g," ").split(" ").filter(function(w){return w.length>=4&&!STOPW[w]})}
@@ -1140,6 +1235,7 @@ function rowCur(r){return r.cur||((r.kind==="Încasare"&&r.group==="Firmă")?"EU
 var REF_LINE=/^(Value date|Internal reference|Bank reference|Instant reference|Reference|Card No|Date:|Auth)/i;
 
 function txInfo(t,accCur){
+  if(t.k0)return {kind:t.k0,fc:null,purpose:t.purpose||"",fx:null,tax:/TREZOR/i.test(t.full||"")};   /* extrase deja clasificate la citire (Salt) */
   var all=[t.cp,t.l2].concat(t.det).join(" | "),kind;
   if(/^service fee$/i.test(t.cp))kind="fee";
   else if(/foreign exchange/i.test(all))kind="fx";
@@ -1169,7 +1265,7 @@ function txInfo(t,accCur){
 
 function feeKey(t,ctx){
   var s=t.l2+" "+t.det.join(" ");
-  if(ctx.group==="Casă")return {key:"bankfee",name:"Comisioane bancare"};
+  if(ctx.group==="Casă")return {key:"bankfee",name:"Dobândă și comisioane bancare"};
   if(/monthly fee|administration fee|administrare/i.test(s))return ctx.cur==="EUR"?{key:"comeur",name:"Comision cont EUR (ING)"}:{key:"comron",name:"Taxă lunară ING (cont lei)"};
   if(ctx.cur==="RON"&&Math.abs(Math.abs(t.amount)-0.51)<0.0005)return {key:"comtx",name:"Comisioane plăți în lei (0,51/plată)"};
   return {key:"feeother",name:"Alte comisioane bancare"};
@@ -1203,6 +1299,14 @@ function buildProposals(st,group,ctx){
   var fcCount={};
   infos.forEach(function(inf,i){if(inf.kind==="pos"&&inf.fc&&inf.fc.cur!==cur)fcCount[inf.fc.cur]=(fcCount[inf.fc.cur]||0)+1});
   var map={},order=[],dupes=0,fxm={},fxOrder=[];
+  /* o plată cu cardul care seamănă cu un rând al tău (de ex. apa plătită online) rămâne separată, ca să se poată bifa */
+  var ownRows=(ctx.items||[]).filter(function(r){return r.group===group&&r.kind!=="Memento"&&!r.src});
+  function likeRow(t,ym){
+    var w=normTokens(merchantClean(t.cp))[0];   /* doar marca (primul cuvânt), nu și orașul */
+    if(w&&ownRows.some(function(r){return r.ym===ym&&normTokens(r.name)[0]===w}))return true;
+    var pp={cp:t.cp,purpose:"",name:merchantClean(t.cp)};
+    return (ctx.rules||[]).some(function(ru){return ru.k&&ruleHits(ru,pp)&&ownRows.some(function(r){return r.ym===ym&&r.key===ru.k})});
+  }
   st.tx.forEach(function(t,i){
     if(ctx.seen&&ctx.seen[t.h]){dupes++;return}
     var inf=infos[i],ym=monthOf(t.date),b;
@@ -1211,14 +1315,19 @@ function buildProposals(st,group,ctx){
       f.eur+=inf.fx.eur;f.ronEq+=inf.fx.eur*inf.fx.rate;f.txs.push(t.i);f.hs.push(t.h);if(t.date>f.date)f.date=t.date;
       return;
     }
-    if(inf.kind==="fee"){var fk=feeKey(t,{group:group,cur:cur});b={k:"fee:"+fk.key,cat:"fee",key:fk.key,name:fk.name,agg:true}}
-    else if(inf.kind==="cash")b={k:"cash",cat:"cash",name:"Retrageri numerar",agg:true};
+    var home=group==="Casă";
+    if(t.own)b={k:"own:"+(t.amount<0?"o":"i"),cat:"own",key:"own_"+(t.amount<0?"o":"i"),name:t.amount<0?"Transfer către conturile tale":"Transfer din conturile tale",agg:true,acc:true};
+    else if(inf.kind==="fee"){var fk=feeKey(t,{group:group,cur:cur});b={k:"fee:"+fk.key,cat:"fee",key:fk.key,name:fk.name,agg:true,acc:home}}
+    else if(inf.kind==="cash")b={k:"cash",cat:"cash",key:home?"cash":"",name:"Retrageri numerar",agg:true,acc:home};
     else if(inf.kind==="pos"){
-      if(FUEL_RE.test(t.cp))b={k:"fuel",cat:"fuel",name:"Carburant",agg:true};
+      if(FUEL_RE.test(t.cp))b={k:"fuel",cat:"fuel",key:home?"fuel":"",name:"Carburant",agg:true,acc:home};
+      else if(home&&likeRow(t,ym))b={k:"t:"+t.h,cat:"pos",name:merchantClean(t.cp),agg:false};
+      else if(home){var sc=shopCat(t.cp);b={k:"cat:"+sc.key,cat:"pos",key:"cat_"+sc.key,name:sc.name,agg:true,acc:true}}
       else if(inf.fc&&inf.fc.cur!==cur&&fcCount[inf.fc.cur]>=3)b={k:"fc:"+inf.fc.cur,cat:"fc",name:"Plăți în "+inf.fc.cur+" (card)",agg:true};
       else b={k:"m:"+merchantKey(t.cp),cat:"pos",name:merchantClean(t.cp),agg:true};
     }
     else if(inf.tax)b={k:"tax",cat:"tax",name:"Taxe la stat",agg:true};
+    else if(home&&t.amount<0&&t.cp){var ck=hash53(foldTxt(t.cp)).slice(0,8);b={k:"to:"+ck,cat:"tr",key:"to_"+ck,name:"Către "+t.cp,agg:true,acc:true}}
     else b={k:"t:"+t.h,cat:t.amount<0?"tr":"in",name:transferName(t,inf),agg:false};
     var key=b.k+"|"+ym,p=map[key];
     if(!p){p=map[key]=Object.assign({},b,{ym:ym,net:0,txs:[],hs:[],dates:[],cps:[],purpose:inf.purpose,cp:t.cp});order.push(key)}
@@ -1228,7 +1337,7 @@ function buildProposals(st,group,ctx){
   order.forEach(function(key,ix){
     var p=map[key],net=r2(p.net);if(Math.abs(net)<0.005)return;
     var date=p.dates.slice().sort().pop();
-    var o={id:"p"+ix,cat:p.cat,key:p.key||"",name:p.name,dir:net<0?-1:1,amount:Math.abs(net),cur:cur,ym:p.ym,date:date,day:+date.slice(8,10),n:p.txs.length,txs:p.txs,hs:p.hs,cp:p.cp,purpose:p.purpose||"",group:group,include:true,action:"new",why:"",cands:[]};
+    var o={id:"p"+ix,cat:p.cat,key:p.key||"",acc:!!p.acc,name:p.name,dir:net<0?-1:1,amount:Math.abs(net),cur:cur,ym:p.ym,date:date,day:+date.slice(8,10),n:p.txs.length,txs:p.txs,hs:p.hs,cp:p.cp,purpose:p.purpose||"",group:group,include:true,action:"new",why:"",cands:[]};
     o.kind=o.dir>0?"Încasare":((o.cat==="tr"&&/salar|decont|diurn|avans/i.test(o.name+" "+o.purpose))?"Transfer":"Plată");
     var parts=[];
     if(o.n>1)parts.push(o.n+" tranzacții"+(p.cps.length>1?": "+p.cps.slice(0,4).join(", ")+(p.cps.length>4?"…":""):""));
@@ -1242,13 +1351,18 @@ function buildProposals(st,group,ctx){
     return {id:"fx"+ym,cat:"fx",ym:ym,eur:eur,rate:rate,date:f.date,day:+f.date.slice(8,10),n:f.txs.length,txs:f.txs,hs:f.hs,group:group,include:!same,action:same?"skip":"fx",same:same,prev:m?{rate:m.rate||0,exch:m.exch==null?null:m.exch}:null}});
 
   /* ---- potrivire cu rândurile planificate ---- */
-  var rows=(ctx.items||[]).filter(function(r){return r.group===group&&r.kind!=="Memento"});
+  /* la Casă, banii primiți de la firmă (salariu, decontare, diurnă) se bifează pe rândurile de transfer ale Firmei */
+  var home=group==="Casă";
+  var rows=(ctx.items||[]).filter(function(r){return r.kind!=="Memento"&&(r.group===group||(home&&r.group==="Firmă"&&r.kind==="Transfer"))});
   var rules=ctx.rules||[],used={};
-  function compat(p,r){return (p.dir<0?(r.kind==="Plată"||r.kind==="Transfer"):r.kind==="Încasare")&&rowCur(r)===p.cur&&r.ym===p.ym}
+  function compat(p,r){
+    var ok=p.dir<0?(r.group===group&&(r.kind==="Plată"||r.kind==="Transfer")):(r.group===group?r.kind==="Încasare":(home&&r.kind==="Transfer"));
+    return ok&&rowCur(r)===p.cur&&r.ym===p.ym;
+  }
   var pairs=[];
   props.forEach(function(p){
     /* rând cu aceeași cheie (comisioane) */
-    if(p.cat==="fee"){var rk=rows.find(function(r){return r.ym===p.ym&&r.key===p.key});if(rk){pairs.push({p:p,r:rk,s:1000,why:"comision"});}}
+    if(p.cat==="fee"||(p.acc&&p.key)){var rk=rows.find(function(r){return r.ym===p.ym&&r.key===p.key&&r.group===group});if(rk){pairs.push({p:p,r:rk,s:1000,why:p.cat==="fee"?"comision":"se adună la rândul lunii"});}}
     /* reguli învățate */
     rules.forEach(function(ru){
       if(ru.k&&ruleHits(ru,p)){var rr=rows.find(function(r){return r.ym===p.ym&&r.key===ru.k&&compat(p,r)});if(rr)pairs.push({p:p,r:rr,s:500,why:"regulă"})}
@@ -1285,6 +1399,8 @@ function buildProposals(st,group,ctx){
     p.gname=p.name;p.kind0=p.kind;
     if(a){p.action="match:"+a.r.id;p.why=a.why}
     else if(p.cat==="fee")p.action="new";
+    if(p.cat==="own"){p.include=false;p.why="între conturile tale"}
+    if(p.cat==="fuel"&&home&&ctx.xp&&!a)p.action="xp";
     /* regulă de denumire pentru rânduri noi */
     if(p.action==="new"){rules.forEach(function(ru){if(ru.n&&ruleHits(ru,p)){p.name=ru.n;if(ru.kd)p.kind=ru.kd;p.why="regulă"}})}
     /* candidații afișați în listă */
@@ -1634,7 +1750,7 @@ function render(){
   if(pressing){pressFlush=true;return}
   renderTabs();renderMonth();renderLate();renderCarBanner();
   if(tab==="general")renderGeneral();
-  else if(tab==="casa")renderCasa();
+  else if(tab==="casa"){renderCasa();renderExtrase()}
   else if(tab==="firma"){renderFirma();renderExtrase()}
   else if(tab==="transport"){renderXp();renderCarList()}
   else renderMai();
@@ -1988,7 +2104,19 @@ $("#vehs").addEventListener("focusout",function(){setTimeout(function(){if(pendi
 var XCAT=[["fuel","Combustibil"],["ride","Taxi / Uber / Bolt"],["pub","Transport public"],["park","Parcare"],["toll","Taxe de drum, peaj"],["wash","Spălătorie"],["serv","Service și piese"],["other","Altele"]];
 var xps=[],xpEdit=null,xpDelArm=null,xpDelT=null,xpLastCat="fuel",xpLastFrom="casa";
 try{var lx=JSON.parse(localStorage.getItem("fin_car")||"null");if(lx&&Array.isArray(lx.xps))xps=lx.xps}catch(e){}
-function cleanX(x){return {date:x.date,amount:x.amount,cur:x.cur==="EUR"?"EUR":"RON",cat:x.cat||"other",note:x.note||"",veh:x.veh||null,from:x.from==="firma"?"firma":"casa"}}
+function cleanX(x){return {date:x.date,amount:x.amount,cur:x.cur==="EUR"?"EUR":"RON",cat:x.cat||"other",note:x.note||"",veh:x.veh||null,from:x.from==="firma"?"firma":"casa",hs:Array.isArray(x.hs)?x.hs:null}}
+/* scrieri în bloc (importul de extras): așteptabile, ca importul să știe când s-a terminat */
+function putXs(list){
+  list.forEach(function(x){var i=xps.findIndex(function(o){return o.id===x.id});if(i>=0)xps[i]=x;else xps.push(x)});
+  render();
+  if(mode==="db"&&ccol&&canWrite)return queue(function(){return chunkRun(list,function(x){return ccol.doc(x.id).set(cleanX(x))})});
+  persistCar();return Promise.resolve();
+}
+function delXs(ids){
+  xps=xps.filter(function(o){return ids.indexOf(o.id)<0});render();
+  if(mode==="db"&&ccol&&canWrite)return queue(function(){return chunkRun(ids,function(id){return ccol.doc(id).delete()})});
+  persistCar();return Promise.resolve();
+}
 /* „plătit din”: informativ (nu schimbă totalurile Casă/Firmă, ca să nu se numere de două ori cu extrasele) */
 function xFrom(x){return x.from==="firma"?"firma":"casa"}
 function vehPay(id){var v=id?vehById(id):null;return v&&v.pay==="firma"?"firma":v&&v.pay==="casa"?"casa":null}
@@ -2107,8 +2235,11 @@ async function onFile(file){
     var doc=await lib.getDocument({data:new Uint8Array(buf),isEvalSupported:false}).promise;
     var pages=await pdfToPages(doc);
     try{doc.destroy()}catch(e){}
-    var r=parseIngBusiness(pages);
-    if(!r.ok){impMsg(r.reason,"err");return}
+    var r=parseIngBusiness(pages),g=impGroup();
+    if(!r.ok){var r2_=parseSaltBank(pages);if(r2_.ok)r=r2_}
+    if(!r.ok){impMsg(g==="Casă"?"Nu recunosc formatul. În Casă citesc extrase Salt Bank (PDF) și extrase ING pentru persoane fizice.":"Nu recunosc formatul. În Firmă citesc extrasele ING Business (cele „Account Statement”, în engleză).","err");return}
+    if(g==="Firmă"&&!r.st.isBiz){impMsg("Ăsta pare extrasul unui cont personal. Încarcă-l din tabul Casă.","err");return}
+    if(g==="Casă"&&r.st.isBiz){impMsg("Ăsta e extrasul firmei. Încarcă-l din tabul Firmă.","err");return}
     IMP.st=r.st;IMP.fileName=file.name;
     impMsg("","");
     buildPreview();
@@ -2121,20 +2252,31 @@ async function onFile(file){
 function seenMap(){
   var s={};
   items.forEach(function(x){(x.hs||[]).forEach(function(h){s[h]=1})});
-  imports.forEach(function(r){(r.fxhs||[]).forEach(function(h){s[h]=1})});
+  xps.forEach(function(x){(x.hs||[]).forEach(function(h){s[h]=1})});
+  imports.forEach(function(r){(r.fxhs||[]).concat(r.skiphs||[]).forEach(function(h){s[h]=1})});
   return s;
 }
+/* extrasul intră în grupul tabului în care ești: Casă (cont personal) sau Firmă */
+function impGroup(){return tab==="casa"?"Casă":"Firmă"}
 function buildPreview(){
-  var st=IMP.st,sel=$("#impGroup").value;
-  IMP.group=sel==="auto"?(st.isBiz?"Firmă":"Casă"):sel;
-  var out=buildProposals(st,IMP.group,{items:items,meta:meta,rules:rules,seen:seenMap()});
+  var st=IMP.st;
+  IMP.group=impGroup();
+  var out=buildProposals(st,IMP.group,{items:items,meta:meta,rules:rules,seen:seenMap(),xp:mods.transport!==false});
   IMP.props=out.props;IMP.fx=out.fx;IMP.dupes=out.dupes;
   renderPreview();
 }
 
 /* ---------- previzualizare ---------- */
 function rowOf(p){return p.action.indexOf("match:")===0?items.find(function(x){return x.id===p.action.slice(6)}):null}
+function xpHtml(p){
+  var vs=vehicles(),sel='<select data-pa="1" aria-label="Ce faci cu tranzacțiile"><option value="xp" selected>Cheltuieli de transport (din Casă)</option><option value="new">Rând nou în tabel</option></select>';
+  return '<div class="pr'+(p.include?'':' off')+'" data-pid="'+esc(p.id)+'">'+
+    '<div class="pck"><input type="checkbox" data-pc="1"'+(p.include?' checked':'')+' aria-label="Include în import"></div>'+
+    '<div><div class="ptop"><span class="pdate">'+shortD(p.date)+(p.n>1?' · '+p.n+' plăți':'')+'</span><span class="pamt">−'+amtTxt(p.amount,p.cur)+'</span></div><span class="pfix">Carburant → Transport'+(vs.length===1?' · '+esc(vehName(vs[0])):'')+'</span>'+
+    '<div class="pbot">'+sel+'<span class="why ok">fiecare plată devine o cheltuială</span>'+(p.note?'<span class="pnote">'+esc(p.note.replace(/^\d+ tranzacții:?\s*/,""))+'</span>':'')+'</div></div></div>';
+}
 function prHtml(p){
+  if(p.action==="xp")return xpHtml(p);
   var row=rowOf(p);
   var sign=p.dir<0?"−":"+";
   var nameCell=row?'<span class="pfix" title="'+esc(row.name)+'">'+esc(row.name)+'</span>':'<input class="pname" data-pn="1" value="'+esc(p.name)+'" aria-label="Numele rândului nou">';
@@ -2143,10 +2285,12 @@ function prHtml(p){
   sel+='</select>';
   var ks=(!row&&p.dir<0)?'<select data-pk="1" aria-label="Tip">'+["Plată","Transfer"].map(function(k){return '<option'+(p.kind===k?' selected':'')+'>'+k+'</option>'}).join("")+'</select>':'';
   var why="";
-  if(row)why='<span class="why ok">'+(p.manual?'ales de tine':'potrivit: '+esc(p.why||"sumă"))+'</span>';
+  if(row)why='<span class="why ok">'+(p.manual?'ales de tine':'potrivit: '+esc(p.why||"sumă"))+'</span>'+(row.group!==IMP.group?'<span class="why ok">rând din '+esc(row.group)+'</span>':'');
+  else if(p.cat==="own")why='<span class="why">între conturile tale · debifat</span>';
   else if(p.why==="regulă")why='<span class="why ok">nume învățat</span>';
   var note=[];
-  if(row&&row.amount>0&&Math.abs(row.amount-p.amount)>0.005)note.push("în tabel era "+amtTxt(row.amount,p.cur));
+  if(row&&p.acc&&row.key===p.key)note.push("se adaugă la "+amtTxt(row.amount||0,p.cur)+" din tabel");
+  else if(row&&row.amount>0&&Math.abs(row.amount-p.amount)>0.005)note.push("în tabel era "+amtTxt(row.amount,p.cur));
   if(p.note&&p.n>1)note.push(p.note.replace(/^\d+ tranzacții:?\s*/,""));
   else if(p.note)note.push(p.note);
   var cpTxt="";
@@ -2164,13 +2308,14 @@ function fxHtml(f){
 }
 function impCounts(){
   var inc=IMP.props.filter(function(p){return p.include});
-  var nNew=inc.filter(function(p){return !rowOf(p)}).length, nM=inc.length-nNew, nF=IMP.fx.filter(function(f){return f.include}).length;
-  return {nNew:nNew,nM:nM,nF:nF,total:nNew+nM+nF};
+  var nX=inc.filter(function(p){return p.action==="xp"}).reduce(function(a,p){return a+p.n},0);
+  var nNew=inc.filter(function(p){return p.action!=="xp"&&!rowOf(p)}).length, nM=inc.filter(function(p){return !!rowOf(p)}).length, nF=IMP.fx.filter(function(f){return f.include}).length;
+  return {nNew:nNew,nM:nM,nF:nF,nX:nX,total:nNew+nM+nF+nX};
 }
 function updateImpSummary(){
   var el=$("#impSum"),go=$("#impGo");if(!el||!go||!IMP.st)return;
   var c=impCounts();
-  el.textContent=plural(c.nNew,"rând nou","rânduri noi")+" · "+plural(c.nM,"bifat pe rând existent","bifate pe rânduri existente")+(c.nF?" · "+plural(c.nF,"schimb valutar","schimburi valutare"):"");
+  el.textContent=plural(c.nNew,"rând nou","rânduri noi")+" · "+plural(c.nM,"bifat pe rând existent","bifate pe rânduri existente")+(c.nF?" · "+plural(c.nF,"schimb valutar","schimburi valutare"):"")+(c.nX?" · "+plural(c.nX,"cheltuială de transport","cheltuieli de transport"):"");
   go.disabled=!(c.total>0)||!canWrite||!IMP.st.check.ok||IMP.busy;
 }
 function renderPreview(){
@@ -2179,9 +2324,9 @@ function renderPreview(){
   var chk=st.check,h='<section class="panel"><h2>Extras citit</h2>';
   h+='<div class="hint" style="margin-bottom:4px">'+esc(IMP.fileName)+'</div>';
   h+='<div class="hint">Cont în '+esc(st.cur)+(st.iban?' · '+esc(st.iban.slice(0,4)+"…"+st.iban.slice(-4)):'')+(st.from?' · '+fmtD(st.from)+' – '+fmtD(st.to):'')+' · '+st.tx.length+' tranzacții · sold '+amtTxt(st.opening,st.cur)+' → '+amtTxt(st.closing,st.cur)+'</div>';
-  if(chk.ok)h+='<div class="impcheck ok"><span>✓</span><span>Extras verificat: fiecare sold se leagă de tranzacția dinainte, iar numărul de intrări și ieșiri se potrivește cu antetul.</span></div>';
+  if(chk.ok)h+='<div class="impcheck ok"><span>✓</span><span>'+(chk.kind==="sum"?'Extras verificat: plățile și încasările găsite dau exact totalurile din antet, iar soldul final se leagă.':'Extras verificat: fiecare sold se leagă de tranzacția dinainte, iar numărul de intrări și ieșiri se potrivește cu antetul.')+'</span></div>';
   else h+='<div class="impcheck bad"><span>!</span><span>Extrasul nu se leagă ('+esc(chk.msgs.join("; "))+'). Nu import nimic din el, ca să nu intre cifre greșite.</span></div>';
-  h+='<div class="hint" style="margin:0">Se importă în <b>'+esc(IMP.group)+'</b>'+($("#impGroup").value==="auto"?' (ales după tipul contului)':'')+'.</div>';
+  h+='<div class="hint" style="margin:0">Se importă în <b>'+esc(IMP.group)+'</b>'+(st.fmt==="salt"?' · Salt Bank':'')+'.'+(IMP.group==="Casă"?' Banii primiți de la firmă se bifează pe rândurile Firmei, iar transferurile între conturile tale sunt debifate.':'')+'</div>';
   if(IMP.dupes>0)h+='<div class="impcheck info"><span>i</span><span>'+plural(IMP.dupes,"tranzacție era deja importată și a fost sărită.","tranzacții erau deja importate și au fost sărite.")+'</span></div>';
   if(!IMP.props.length&&!IMP.fx.length){
     h+='<div class="empty">'+(IMP.dupes>0?'Nu mai e nimic nou de importat din acest extras.':'Nu am găsit nimic de importat.')+'</div>'+'<div class="impfoot"><div class="grow"></div><button class="btn" id="impCancel" type="button">Închide</button></div></section>';
@@ -2241,25 +2386,32 @@ async function applyImport(){
   var st=IMP.st;IMP.busy=true;updateImpSummary();
   impMsg("Se importă… nu închide pagina.","");
   try{
-    var now=new Date(),ordNext={},newRows=[],upRows=[],updated=[],used={},missing=0,newRules=[],fxRecs=[],fxhs=[];
+    var now=new Date(),ordNext={},newRows=[],upRows=[],updated=[],used={},missing=0,newRules=[],fxRecs=[],fxhs=[],newXs=[];
+    var vs=vehicles(),veh1=vs.length===1?vs[0].id:null;
     function nextOrd(m){if(ordNext[m]==null)ordNext[m]=items.filter(function(x){return x.ym===m}).reduce(function(a,x){return Math.max(a,x.order||0)},-1)+1;return ordNext[m]++}
+    var skiphs=[];
     IMP.props.forEach(function(p){
-      if(!p.include)return;
+      if(!p.include){p.hs.forEach(function(h){skiphs.push(h)});return}   /* ce ai debifat nu-ți mai apare la reimport */
+      if(p.action==="xp"){
+        p.txs.forEach(function(i){var t=st.tx[i];newXs.push({id:"x_"+t.h,date:t.date,amount:Math.abs(t.amount),cur:p.cur,cat:"fuel",note:merchantClean(t.cp),veh:veh1,from:"casa",hs:[t.h]})});
+        return;
+      }
       var row=rowOf(p);
       if(p.action.indexOf("match:")===0&&!row){missing++;return}
       if(row&&used[row.id])row=null;
       if(row){
         used[row.id]=1;
         var prev={amount:row.amount==null?null:row.amount,status:row.status||null,date:row.date||null,hs:row.hs||null,locked:row.locked||null,day:row.day==null?null:row.day,cur:row.cur||null};
-        var n=Object.assign({},row,{amount:p.amount,status:"Gata",date:p.date,hs:uniq((row.hs||[]).concat(p.hs)),day:row.day==null?p.day:row.day});
+        var addUp=p.acc&&row.key===p.key,n=Object.assign({},row,{amount:addUp?r2((row.amount||0)+p.amount):p.amount,status:"Gata",date:addUp&&row.date>p.date?row.date:p.date,hs:uniq((row.hs||[]).concat(p.hs)),day:row.day==null?p.day:row.day});
+        if(addUp&&p.note)n.note=p.note;
         if(row.key==="comtx")n.locked=true;
         updated.push({id:row.id,prev:prev});upRows.push(n);
         if(p.cat!=="fee"&&row.key&&!row.src&&(p.manual||p.why!=="regulă"))newRules.push({p:rulePattern(p),k:row.key});
       }else{
         var nm=(p.name||"").trim()||"Tranzacție";
-        var id=p.ym+"_i"+p.hs[0];
-        newRows.push({id:id,key:"i"+p.hs[0],ym:p.ym,group:IMP.group,name:nm,kind:p.dir>0?"Încasare":p.kind,day:p.day,amount:p.amount,status:"Gata",note:p.note||"",order:nextOrd(p.ym),cur:p.cur,date:p.date,src:"imp",hs:p.hs.slice(),locked:null});
-        if(nm!==p.gname||(p.dir<0&&p.kind!==p.kind0))newRules.push({p:rulePattern(p),n:nm,kd:p.dir>0?"Încasare":p.kind});
+        var kk=p.acc&&p.key?p.key:"i"+p.hs[0],id=p.ym+"_"+kk;
+        newRows.push({id:id,key:kk,ym:p.ym,group:IMP.group,name:nm,kind:p.dir>0?"Încasare":p.kind,day:p.day,amount:p.amount,status:"Gata",note:p.note||"",order:nextOrd(p.ym),cur:p.cur,date:p.date,src:"imp",hs:p.hs.slice(),locked:null});
+        if(!p.acc&&(nm!==p.gname||(p.dir<0&&p.kind!==p.kind0)))newRules.push({p:rulePattern(p),n:nm,kd:p.dir>0?"Încasare":p.kind});
       }
     });
     IMP.fx.forEach(function(f){
@@ -2268,18 +2420,20 @@ async function applyImport(){
       fxRecs.push({ym:f.ym,prev:m?{rate:m.rate||0,exch:m.exch==null?null:m.exch}:null,rate:f.rate,exch:f.eur});
       f.hs.forEach(function(h){fxhs.push(h)});
     });
-    var rec={id:"imp_"+now.getTime().toString(36)+rid(),at:now.toISOString(),file:IMP.fileName,iban:st.iban,cur:st.cur,from:st.from,to:st.to,group:IMP.group,nTx:st.tx.length,created:newRows.map(function(r){return r.id}),updated:updated,fx:fxRecs,fxhs:fxhs};
+    var rec={id:"imp_"+now.getTime().toString(36)+rid(),at:now.toISOString(),file:IMP.fileName,iban:st.iban,cur:st.cur,from:st.from,to:st.to,group:IMP.group,nTx:st.tx.length,created:newRows.map(function(r){return r.id}),updated:updated,fx:fxRecs,fxhs:fxhs,skiphs:skiphs,xids:newXs.map(function(x){return x.id})};
     /* întâi amprenta importului, ca să existe mereu cu ce să-l anulezi */
     await saveImportRec(rec);
     await putMany(newRows.concat(upRows),"Se importă…");
+    if(newXs.length)await putXs(newXs);
     for(var i=0;i<fxRecs.length;i++)await putMeta(fxRecs[i].ym,{rate:fxRecs[i].rate,exch:fxRecs[i].exch});
     if(newRules.length)await saveRules(mergeRules(newRules));
     syncFees(uniq(newRows.concat(upRows).map(function(r){return r.ym})));
     var months=uniq(newRows.concat(upRows).map(function(r){return r.ym}).concat(fxRecs.map(function(f){return f.ym}))).sort();
     var parts=[plural(newRows.length,"rând nou","rânduri noi"),plural(upRows.length,"bifat pe rând existent","bifate pe rânduri existente")];
     if(fxRecs.length)parts.push(plural(fxRecs.length,"schimb valutar","schimburi valutare"));
+    if(newXs.length)parts.push(plural(newXs.length,"cheltuială de transport","cheltuieli de transport"));
     var tg=IMP.group==="Casă"?"casa":"firma";
-    var btns=months.slice(0,4).map(function(m){return ' <button class="btn" type="button" data-gom="'+m+'" data-gog="'+tg+'">Deschide '+esc(label(m))+'</button>'}).join("");
+    var btns=months.slice(0,4).map(function(m){return ' <button class="btn" type="button" data-gom="'+m+'" data-gog="'+tg+'">Deschide '+esc(label(m))+'</button>'}).join("")+(newXs.length?' <button class="btn" type="button" data-gom="'+newXs[0].date.slice(0,7)+'" data-gog="transport">Vezi în Transport</button>':'');
     IMP.st=null;IMP.props=[];IMP.fx=[];renderPreview();
     impMsg('<b>Gata.</b> '+esc(parts.join(" · "))+(missing?' · '+plural(missing,"rând potrivit nu mai exista, sărit","rânduri potrivite nu mai existau, sărite"):'')+'.<div style="margin-top:8px;display:flex;gap:8px;flex-wrap:wrap">'+btns+'</div>',"ok",true);
     renderImpHist();
@@ -2301,8 +2455,8 @@ function renderImpHist(){
   var el=$("#impHistList"),list=imports.slice().sort(function(a,b){return String(b.at).localeCompare(String(a.at))});
   if(!list.length){el.innerHTML='<div class="empty">Încă n-ai importat niciun extras.</div>';return}
   el.innerHTML=list.map(function(r){
-    var nNew=(r.created||[]).length,nUp=(r.updated||[]).length,nFx=(r.fx||[]).length;
-    var bits=[plural(nNew,"rând nou","rânduri noi"),plural(nUp,"bifat","bifate")];if(nFx)bits.push(plural(nFx,"schimb valutar","schimburi valutare"));
+    var nNew=(r.created||[]).length,nUp=(r.updated||[]).length,nFx=(r.fx||[]).length,nX=(r.xids||[]).length;
+    var bits=[plural(nNew,"rând nou","rânduri noi"),plural(nUp,"bifat","bifate")];if(nFx)bits.push(plural(nFx,"schimb valutar","schimburi valutare"));if(nX)bits.push(plural(nX,"cheltuială de transport","cheltuieli de transport"));
     return '<div class="hrow"><div class="t"><b>'+esc(r.cur||"")+' · …'+esc(String(r.iban||"").slice(-4))+'</b>'+(r.from?' · '+fmtD(r.from)+' – '+fmtD(r.to):'')+'<small>importat '+esc(fmtAt(r.at))+' · '+esc(bits.join(", "))+' · '+esc(r.group||"")+'</small></div>'+
       '<button class="btn warnb" type="button" data-undo="'+esc(r.id)+'"'+(canWrite?'':' disabled')+'>Anulează importul</button></div>';
   }).join("");
@@ -2326,6 +2480,8 @@ async function undoImport(id){
     (rec.updated||[]).forEach(function(u){var row=items.find(function(x){return x.id===u.id});if(row)back.push(Object.assign({},row,u.prev))});
     await delMany(gone);
     await putMany(back,"Se anulează…");
+    var xg=(rec.xids||[]).filter(function(i){return xps.some(function(x){return x.id===i})});
+    if(xg.length)await delXs(xg);
     var fxr=(rec.fx||[]);
     for(var i=0;i<fxr.length;i++){
       var f=fxr[i];
@@ -2333,7 +2489,7 @@ async function undoImport(id){
     }
     await dropImportRec(id);
     uniq(gone.concat(back.map(function(r){return r.id})).map(function(i){var x=items.find(function(y){return y.id===i});return x?x.ym:null}).filter(Boolean)).forEach(syncFee);
-    impMsg("Importul a fost anulat: "+plural(gone.length,"rând șters","rânduri șterse")+", "+plural(back.length,"rând revenit","rânduri revenite")+" cum erau.","ok");
+    impMsg("Importul a fost anulat: "+plural(gone.length,"rând șters","rânduri șterse")+", "+plural(back.length,"rând revenit","rânduri revenite")+" cum erau"+(xg.length?", "+plural(xg.length,"cheltuială de transport ștearsă","cheltuieli de transport șterse"):"")+".","ok");
     renderImpHist();
   }catch(e){
     impMsg("Anularea s-a oprit ("+(e&&e.code||e&&e.message||"eroare")+"). Mai încearcă o dată.","err");
@@ -2343,6 +2499,15 @@ async function undoImport(id){
 
 /* ---------- intrări: fișier + tragere ---------- */
 function renderExtrase(){
+  /* același panou, mutat în tabul în care ești; dacă schimbi tabul, previzualizarea veche se închide */
+  var w=$("#impWrap"),host=tab==="casa"?$("#tab-casa"):$("#tab-firma");
+  if(w&&host&&w.parentNode!==host){
+    host.appendChild(w);
+    if(IMP.st&&!IMP.busy&&IMP.group!==impGroup()){IMP.st=null;IMP.props=[];IMP.fx=[];renderPreview();impMsg("","")}
+  }
+  $("#impDropTxt").textContent=tab==="casa"
+    ?"Alege PDF-ul extrasului Salt Bank (contul personal). Se citește chiar pe telefon: fișierul nu pleacă nicăieri. Facturile se bifează singure, cumpărăturile se adună pe categorii, iar benzina merge în Transport."
+    :"Alege PDF-ul extrasului ING Business (cont în lei sau în EUR). Se citește chiar pe telefon: fișierul nu pleacă nicăieri. Vezi mai întâi ce s-ar importa și abia apoi confirmi.";
   var can=canWrite;
   $("#impFile").disabled=!can;
   var lb=document.querySelector('label[for="impFile"]');if(lb)lb.style.opacity=can?"":".5";
@@ -2350,7 +2515,6 @@ function renderExtrase(){
   updateImpSummary();
 }
 $("#impFile").addEventListener("change",function(){var f=this.files&&this.files[0];if(f)onFile(f)});
-$("#impGroup").addEventListener("change",function(){if(IMP.st)buildPreview()});
 (function(){
   var drop=$("#drop");
   ["dragenter","dragover"].forEach(function(ev){drop.addEventListener(ev,function(e){e.preventDefault();drop.classList.add("over")})});
