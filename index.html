@@ -272,12 +272,15 @@ details.fold[open]>summary{margin-bottom:10px}
 .impgrp{margin-top:12px;border-top:2px solid var(--line)}
 .impgrp>summary{list-style:none;cursor:pointer;display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 10px;padding:12px 2px 10px}
 .impgrp>summary::-webkit-details-marker{display:none}
+.impgrp>summary{margin:10px 0 4px;padding:12px 14px!important;border:1px solid var(--line);border-radius:12px;background:var(--surface2);transition:border-color .15s}
+.impgrp>summary:hover{border-color:var(--muted)}
+.impgrp>summary:focus-visible{outline:2px solid var(--auto);outline-offset:2px}
+.impgrp>summary::after{content:"Arată ▾"!important;margin-left:auto;font-size:12.5px;font-weight:600;color:var(--fg)!important;padding:4px 10px;border-radius:999px;background:var(--surface);border:1px solid var(--line)}
+.impgrp[open]>summary::after{content:"Ascunde ▴"!important}
 .impgrp .ig1 small{font-weight:400;color:var(--muted);font-size:12.5px;margin-left:4px}
 .txd .mkb{display:flex;flex-wrap:wrap;align-items:center;gap:6px 12px;padding:10px 0 2px;border-top:1px dashed var(--line);margin-top:6px}
 .txd .mkb small{color:var(--muted);font-size:12.5px;flex:1 1 200px;min-width:0}
 .gcard .s.sx{margin-top:2px;opacity:.85}
-.impgrp>summary::after{content:"▾";color:var(--muted);margin-left:auto}
-.impgrp[open]>summary::after{content:"▴"}
 .impgrp .ig1{font-weight:600}
 .impgrp .ig2{color:var(--muted);font-size:13px}
 .dbtn{background:transparent;border:1px solid var(--line);border-radius:7px;padding:6px 10px;color:var(--fg);text-align:left;cursor:pointer;width:100%}
@@ -301,6 +304,10 @@ details.fold[open]>summary{margin-bottom:10px}
 .nmw .sw2{position:absolute;left:9px;top:50%;width:10px;height:10px;border-radius:50%;transform:translateY(-50%);pointer-events:none}
 .nmw input{padding-left:26px!important}
 .sg{display:flex;gap:4px}
+.stx{display:inline-flex;align-items:center;gap:6px;height:34px;padding:0 10px;border-radius:8px;background:var(--okbg);color:var(--ok);font-size:13px;font-weight:500;white-space:nowrap}
+.stx svg{width:15px;height:15px;flex:none}
+.stb.fixed{cursor:default}
+.pnew{display:flex;align-items:center;min-height:36px;padding:0 10px;border-radius:8px;background:var(--surface2);color:var(--muted);font-size:13.5px}
 .sg button{flex:1;min-width:0;height:34px;border-radius:8px;border:1px solid var(--line);background:var(--surface);color:var(--muted);padding:0;display:flex;align-items:center;justify-content:center}
 .sg button:hover{border-color:var(--muted);color:var(--fg)}
 .sg button svg{width:16px;height:16px;display:block}
@@ -835,7 +842,7 @@ This typically indicates that your device does not have a healthy Internet conne
 <script>
 (function(){"use strict";
 var TARGET="web";
-var BUILD_ID="web 1.0 · 2026-10-28 11:45 UTC";
+var BUILD_ID="web 1.0 · 2026-10-28 12:11 UTC";
 var WHERE_DB="Datele tale stau în contul tău Google, într-un proiect Firebase (Google Cloud, regiunea Frankfurt). Pe telefon rămâne doar o copie temporară, ca să meargă și fără net.";
 var MONTHS=["ianuarie","februarie","martie","aprilie","mai","iunie","iulie","august","septembrie","octombrie","noiembrie","decembrie"];
 var GROUPS=["Casă","Firmă"], KINDS=["Plată","Încasare","Transfer","Memento"];
@@ -1832,11 +1839,12 @@ function renderCasa(){
   $("#casaHint").textContent=mods.tpl>=2?(mods.firma===false?"din salariu și alte venituri":"din salariul primit de la firmă și alte venituri"):"din salariu net, decontare și diurne";
   var m=monthItems(ym),r=rateFor(ym);
   var cin=m.filter(function(x){return x.group==="Casă"&&x.kind==="Încasare"});
-  var sal=sum(m.filter(function(x){return x.kind==="Transfer"}),function(x){return ron(x,r)});
-  var salDone=sum(m.filter(function(x){return x.kind==="Transfer"&&x.status==="Gata"}),function(x){return ron(x,r)});
+  /* venit = ce trimite firma în contul tău (transferurile Firmei) + încasările Casei; un transfer făcut din Casă e bani care ies */
+  var sal=sum(m.filter(function(x){return x.kind==="Transfer"&&x.group==="Firmă"}),function(x){return ron(x,r)});
+  var salDone=sum(m.filter(function(x){return x.kind==="Transfer"&&x.group==="Firmă"&&x.status==="Gata"}),function(x){return ron(x,r)});
   var other=sum(cin,function(x){return ron(x,r)}), otherDone=sum(cin.filter(function(x){return x.status==="Gata"}),function(x){return ron(x,r)});
   var venit=sal+other, venitDone=salDone+otherDone;
-  var cOut=m.filter(function(x){return x.group==="Casă"&&x.kind==="Plată"});
+  var cOut=m.filter(function(x){return x.group==="Casă"&&isOut(x)});
   var cTot=sum(cOut,function(x){return ron(x,r)}), cPaid=sum(cOut.filter(function(x){return x.status==="Gata"}),function(x){return ron(x,r)});
   var cBill=sum(cOut.filter(isBill),function(x){return ron(x,r)}),cEx=cTot-cBill;
   var c='';
@@ -1978,7 +1986,7 @@ function rowHtml(x){
   var lab=si===2?(x.kind==="Încasare"?"Încasat":x.kind==="Memento"?"Făcut":"Plătit"):si===1?"În așteptare":"Nefăcut";
   return '<div class="gr'+(si===2?' done':'')+(open?' open':'')+(hasTx?' hastx':'')+'" data-id="'+esc(x.id)+'">'+
     '<div class="gsum">'+
-      '<button type="button" class="stb s'+si+'" data-stb="1" aria-label="'+esc(x.name||"rând")+': '+lab+'. Atinge ca să schimbi." title="'+lab+'">'+(si===2?IC.circleOk:si===1?IC.circleClock:IC.circleEmpty)+'</button>'+
+      (x.src?'<span class="stb s2 fixed" title="'+lab+' (din extras)">'+IC.circleOk+'</span>':'<button type="button" class="stb s'+si+'" data-stb="1" aria-label="'+esc(x.name||"rând")+': '+lab+'. Atinge ca să schimbi." title="'+lab+'">'+(si===2?IC.circleOk:si===1?IC.circleClock:IC.circleEmpty)+'</button>')+
       '<button type="button" class="gmain" data-open="1" aria-expanded="'+open+'"><span class="gname">'+esc(x.name||"(fără nume)")+'</span><span class="gmeta">'+esc(mt.join(" · "))+'</span></button>'+
       '<span class="gamt'+(amt?(x.kind==="Încasare"?' pos':''):' none')+'">'+(amt||"–")+'</span>'+
     '</div>'+
@@ -1988,7 +1996,8 @@ function rowHtml(x){
       '<div><span class="lab">Zi</span><input class="num" data-f="day" inputmode="numeric" value="'+(x.day==null?"":x.day)+'" aria-label="Ziua" placeholder="–"></div>'+
       '<div><span class="lab">Sumă</span><input class="num amt" data-f="amount" inputmode="decimal" value="'+(x.amount==null?"":String(x.amount).replace(".",","))+'" aria-label="Sumă"'+(memo?' disabled placeholder="–"':' placeholder="0"')+'></div>'+
       '<div><span class="lab">Monedă</span><select data-f="cur" aria-label="Monedă">'+opts(["RON","EUR"],curOf(x))+'</select></div>'+
-      '<div class="stc"><span class="lab">Status</span><div class="sg" role="group" aria-label="Status">'+stBtns(x)+'</div></div>'+
+      (x.src?'<div class="stc"><span class="lab">Status</span><span class="stx">'+IC.ok+(x.kind==="Încasare"?"Încasat":"Plătit")+'</span></div>'
+        :'<div class="stc"><span class="lab">Status</span><div class="sg" role="group" aria-label="Status">'+stBtns(x)+'</div></div>')+
       (hasTx?'<div class="notec"><span class="lab">Detalii</span><button type="button" class="dbtn" data-open="1" aria-expanded="'+open+'">'+plural(x.tx.length,"plată","plăți")+' '+(open?'▴':'▾')+'</button></div>'
         :'<div class="notec"><span class="lab">Notă</span><input data-f="note" value="'+esc(x.note||"")+'" aria-label="Notă"></div>')+
       '<div class="xc"><button class="x" type="button" data-del="1" aria-label="Șterge rândul" title="Șterge rândul">×</button></div>'+
@@ -2654,6 +2663,7 @@ function prHtml(p){
   var sel='<select data-pa="1" aria-label="Ce faci cu tranzacția"><option value="new"'+(row?'':' selected')+'>Rând nou în tabel</option>';
   p.cands.forEach(function(c){sel+='<option value="match:'+esc(c.id)+'"'+(row&&row.id===c.id?' selected':'')+'>Bifează „'+esc(c.name)+'”'+(c.amount>0?' ('+money(c.amount)+')':'')+(c.taken?' · luat de alta':'')+'</option>'});
   sel+='</select>';
+  if(!row&&!p.cands.length)sel='<span class="pnew">Rând nou în tabel</span>';
   var ks=(!row&&p.dir<0)?'<select data-pk="1" aria-label="Tip">'+["Plată","Transfer"].map(function(k){return '<option'+(p.kind===k?' selected':'')+'>'+k+'</option>'}).join("")+'</select>':'';
   var why="";
   if(row)why='<span class="why ok">'+(p.manual?'ales de tine':'potrivit: '+esc(p.why||"sumă"))+'</span>'+(row.group!==IMP.group?'<span class="why ok">rând din '+esc(row.group)+'</span>':'');
