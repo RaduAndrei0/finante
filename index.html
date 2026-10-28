@@ -774,6 +774,7 @@ details.fold[open]>summary{margin-bottom:10px}
         <div class="mods">
           <label class="mod"><input type="checkbox" class="vh" id="modFirma"><span class="tgl" aria-hidden="true"></span><span class="mt"><b>Firmă / PFA</b><small>facturi, taxe, curs EUR, extrase de cont, sold reportat</small></span></label>
           <label class="setsel" id="modFxL">Firma încasează în <select id="modFx"><option value="EUR">euro (cu curs și schimb în lei)</option><option value="RON">lei</option></select></label>
+          <label class="mod"><input type="checkbox" class="vh" id="modCasaImp"><span class="tgl" aria-hidden="true"></span><span class="mt"><b>Extrase și la Casă</b><small>încarci extrasul contului personal la final de lună, pentru tot istoricul (la Firmă e mereu)</small></span></label>
           <label class="mod"><input type="checkbox" class="vh" id="modTransport"><span class="tgl" aria-hidden="true"></span><span class="mt"><b>Transport</b><small>mașina: scadențe, revizii, kilometraj</small></span></label>
           <label class="setsel" id="fuelMinL">La benzinărie, plinul pornește de la <input id="fuelMin" class="num" inputmode="numeric" style="width:84px;text-align:right"> lei <small style="flex-basis:100%">Din extras nu se vede ce ai luat: sub suma asta, plata e trecută la mărunțișuri (țigări, cafea).</small></label>
         </div>
@@ -842,7 +843,7 @@ This typically indicates that your device does not have a healthy Internet conne
 <script>
 (function(){"use strict";
 var TARGET="web";
-var BUILD_ID="web 1.0 · 2026-10-28 12:11 UTC";
+var BUILD_ID="web 1.0 · 2026-10-28 12:29 UTC";
 var WHERE_DB="Datele tale stau în contul tău Google, într-un proiect Firebase (Google Cloud, regiunea Frankfurt). Pe telefon rămâne doar o copie temporară, ca să meargă și fără net.";
 var MONTHS=["ianuarie","februarie","martie","aprilie","mai","iunie","iulie","august","septembrie","octombrie","noiembrie","decembrie"];
 var GROUPS=["Casă","Firmă"], KINDS=["Plată","Încasare","Transfer","Memento"];
@@ -850,7 +851,7 @@ var TABS=["general","casa","firma","transport","mai"], TAB_ALIAS={luna:"general"
 /* module: Casă e mereu pornită; Firmă și Transport se pot opri din Setări (datele nu se șterg, doar se ascund) */
 /* fx: moneda în care încasează firma ("EUR" = cu curs și schimb în lei; "RON" = doar lei). tpl: 2 = cont creat cu asistentul (rânduri-model generice) */
 var mods={firma:true,transport:true,fx:"EUR",tpl:0};
-function readMods(o){o=o||{};var r={firma:o.firma!==false,transport:o.transport!==false,fx:o.fx==="RON"?"RON":"EUR",tpl:o.tpl>=2?2:0,fuelMin:o.fuelMin>=0&&o.fuelMin<100000?Math.round(o.fuelMin):250};if(/^\d{4}-\d{2}$/.test(o.since||""))r.since=o.since;return r}
+function readMods(o){o=o||{};var r={firma:o.firma!==false,transport:o.transport!==false,fx:o.fx==="RON"?"RON":"EUR",tpl:o.tpl>=2?2:0,fuelMin:o.fuelMin>=0&&o.fuelMin<100000?Math.round(o.fuelMin):250,casaImp:o.casaImp===true};if(/^\d{4}-\d{2}$/.test(o.since||""))r.since=o.since;return r}
 /* luna în care ți-ai făcut contul: ce avea ziua deja trecută nu se arată ca întârziat (nu știm dacă l-ai plătit deja) */
 function freshMonth(m){return !!mods.since&&m===mods.since}
 function fxRon(){return mods.firma!==false&&mods.fx==="RON"}
@@ -2057,6 +2058,7 @@ function renderSettings(){
   $("#seurL").hidden=fxRon();
   var fm=$("#fuelMin");if(document.activeElement!==fm)fm.value=mods.fuelMin;fm.disabled=!canWrite;
   a.checked=mods.firma!==false;b.checked=mods.transport!==false;a.disabled=b.disabled=!canWrite;
+  var ci=$("#modCasaImp");ci.checked=mods.casaImp===true;ci.disabled=!canWrite;
   $("#startPanel").hidden=mods.firma===false;
 }
 function renderMai(){
@@ -2204,6 +2206,7 @@ var delArm={id:null,t:null};
 
 /* Setări: modulele */
 $("#modFirma").addEventListener("change",function(){putSettings({firma:this.checked})});
+$("#modCasaImp").addEventListener("change",function(){putSettings({casaImp:this.checked})});
 $("#modTransport").addEventListener("change",function(){putSettings({transport:this.checked})});
 $("#modFx").addEventListener("change",function(){putSettings({fx:this.value==="RON"?"RON":"EUR"})});
 $("#fuelMin").addEventListener("change",function(){var v=parseInt(this.value,10);if(v>=0&&v<100000)putSettings({fuelMin:v});else this.value=mods.fuelMin});
@@ -2922,6 +2925,8 @@ async function undoImport(id){
 function renderExtrase(){
   /* același panou, mutat în tabul în care ești; dacă schimbi tabul, previzualizarea veche se închide */
   var w=$("#impWrap"),host=tab==="casa"?$("#tab-casa"):$("#tab-firma");
+  /* la Casă, extrasele sunt opționale (Setări → „Extrase și la Casă”); la Firmă apar mereu */
+  if(w)w.hidden=tab==="casa"&&mods.casaImp!==true;
   if(w&&host&&w.parentNode!==host){
     host.appendChild(w);
     if((IMP.st||IMP.csv)&&!IMP.busy&&(IMP.csv||IMP.group!==impGroup())){IMP.csv=null;IMP.st=null;IMP.props=[];IMP.fx=[];renderPreview();impMsg("","")}
