@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="ro">
+<html lang="ro" translate="no">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
@@ -565,6 +565,8 @@ details.fold[open]>summary{margin-bottom:10px}
 .gbtn:hover{border-color:var(--muted)}
 .gbtn svg{width:20px;height:20px;flex:none}
 .gnote2{margin:6px 0 0;font-size:12px;color:var(--muted);max-width:34ch}
+.glang{display:flex;align-items:center;justify-content:center;gap:6px;margin-top:10px;font-size:13px;color:var(--muted)}
+.glang select{background:var(--surface);color:var(--fg);border:1px solid var(--line);border-radius:8px;padding:5px 8px;font:inherit}
 .acctrow{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:12px 0;flex-wrap:wrap}
 .acctmail{min-width:0}
 .acctmail small{display:block;color:var(--muted);font-size:12px}
@@ -596,6 +598,7 @@ details.fold[open]>summary{margin-bottom:10px}
     <div class="sub">Casă și firmă, o lună pe rând.</div>
     <div class="gmsg" id="gmsg" role="status">Se verifică contul…</div>
     <button class="btn gbtn" id="gsign" type="button" hidden><svg viewBox="0 0 48 48" aria-hidden="true"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg><span>Intră cu Google</span></button>
+    <label class="glang" data-notr>🌐 <select data-lang="1" aria-label="Limba / Language" data-notr><option value="ro">Română</option><option value="en">English</option></select></label>
     <p class="gnote2">Datele tale stau în contul tău Google (Firebase, Frankfurt). Doar contul tău are acces la ele.</p>
   </div>
 </div>
@@ -787,6 +790,7 @@ details.fold[open]>summary{margin-bottom:10px}
         <div class="hint">Casă e mereu pornită. Când oprești un modul, datele lui nu se șterg: doar se ascund, și revin când îl pornești din nou.</div>
         <div class="mods">
           <label class="mod"><input type="checkbox" class="vh" id="modFirma"><span class="tgl" aria-hidden="true"></span><span class="mt"><b>Firmă / PFA</b><small>facturi, taxe, curs EUR, extrase de cont, sold reportat</small></span></label>
+          <label class="setsel" id="langL" data-notr>Limba / Language <select data-lang="1" aria-label="Limba / Language" data-notr><option value="ro">Română</option><option value="en">English</option></select></label>
           <label class="setsel" id="modFxL">Firma încasează în <select id="modFx"><option value="EUR">euro (cu curs și schimb în lei)</option><option value="RON">lei</option></select></label>
           <label class="mod"><input type="checkbox" class="vh" id="modCasaImp"><span class="tgl" aria-hidden="true"></span><span class="mt"><b>Extrase și la Casă</b><small>încarci extrasul contului personal la final de lună, pentru tot istoricul (la Firmă e mereu)</small></span></label>
           <label class="mod"><input type="checkbox" class="vh" id="modTransport"><span class="tgl" aria-hidden="true"></span><span class="mt"><b>Transport</b><small>mașina: scadențe, revizii, kilometraj</small></span></label>
@@ -857,7 +861,7 @@ This typically indicates that your device does not have a healthy Internet conne
 <script>
 (function(){"use strict";
 var TARGET="web";
-var BUILD_ID="web 1.0 · 2026-11-02 11:35 UTC";
+var BUILD_ID="web 1.0 · 2026-11-02 12:44 UTC";
 var WHERE_DB="Datele tale stau în contul tău Google, într-un proiect Firebase (Google Cloud, regiunea Frankfurt). Pe telefon rămâne doar o copie temporară, ca să meargă și fără net.";
 var MONTHS=["ianuarie","februarie","martie","aprilie","mai","iunie","iulie","august","septembrie","octombrie","noiembrie","decembrie"];
 var GROUPS=["Casă","Firmă"], KINDS=["Plată","Încasare","Transfer","Memento"];
@@ -865,7 +869,7 @@ var TABS=["general","casa","firma","transport","mai"], TAB_ALIAS={luna:"general"
 /* module: Casă e mereu pornită; Firmă și Transport se pot opri din Setări (datele nu se șterg, doar se ascund) */
 /* fx: moneda în care încasează firma ("EUR" = cu curs și schimb în lei; "RON" = doar lei). tpl: 2 = cont creat cu asistentul (rânduri-model generice) */
 var mods={firma:true,transport:true,fx:"EUR",tpl:0};
-function readMods(o){o=o||{};var r={firma:o.firma!==false,transport:o.transport!==false,fx:o.fx==="RON"?"RON":"EUR",tpl:o.tpl>=2?2:0,fuelMin:o.fuelMin>=0&&o.fuelMin<100000?Math.round(o.fuelMin):250,casaImp:o.casaImp===true,mig:o.mig>0?Math.round(o.mig):0};if(/^\d{4}-\d{2}$/.test(o.since||""))r.since=o.since;return r}
+function readMods(o){o=o||{};var r={firma:o.firma!==false,transport:o.transport!==false,fx:o.fx==="RON"?"RON":"EUR",tpl:o.tpl>=2?2:0,fuelMin:o.fuelMin>=0&&o.fuelMin<100000?Math.round(o.fuelMin):250,casaImp:o.casaImp===true,mig:o.mig>0?Math.round(o.mig):0};if(o.lang==="ro"||o.lang==="en")r.lang=o.lang;if(/^\d{4}-\d{2}$/.test(o.since||""))r.since=o.since;return r}
 /* luna în care ți-ai făcut contul: ce avea ziua deja trecută nu se arată ca întârziat (nu știm dacă l-ai plătit deja) */
 function freshMonth(m){return !!mods.since&&m===mods.since}
 function fxRon(){return mods.firma!==false&&mods.fx==="RON"}
@@ -939,7 +943,7 @@ function esc(s){return String(s==null?"":s).replace(/[&<>"']/g,function(c){retur
 function ymNow(){var d=new Date();return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")}
 function shift(ym,n){var p=ym.split("-").map(Number),m=p[1]-1+n,y=p[0]+Math.floor(m/12);m=((m%12)+12)%12;return y+"-"+String(m+1).padStart(2,"0")}
 function label(ym){var p=ym.split("-");return MONTHS[+p[1]-1]+" "+p[0]}
-function money(n){if(n==null||isNaN(n))return "—";var neg=n<0;n=Math.abs(n);var r=Math.round(n*100)/100;var s=r.toLocaleString("ro-RO",{minimumFractionDigits:r%1?2:0,maximumFractionDigits:2});return (neg?"−":"")+s}
+function money(n){if(n==null||isNaN(n))return "—";var neg=n<0;n=Math.abs(n);var r=Math.round(n*100)/100;var s=r.toLocaleString(LANG==="en"?"en-US":"ro-RO",{minimumFractionDigits:r%1?2:0,maximumFractionDigits:2});return (neg?"−":"")+s}
 function money0(n){return money(n==null||isNaN(n)?n:Math.round(n))}
 function parseAmt(s){s=String(s).trim().replace(/\s/g,"").replace(/lei|ron/i,"");if(!s)return null;if(/,\d{1,2}$/.test(s))s=s.replace(/\./g,"").replace(",",".");else s=s.replace(/,/g,"");var v=Number(s);return isFinite(v)?v:null}
 /* curs: acceptă 5,2584 sau 5.2584 (parseAmt ar citi virgula cu 4 zecimale drept separator de mii) */
@@ -1149,6 +1153,276 @@ function maybeAuto(){
   if(monthItems(ym).length)return;
   autoTried[ym]=1;createMonth(ym);
 }
+
+/* ================= Limba aplicației (română / engleză) =================
+   Codul scrie în română; în engleză, textele de pe ecran se traduc din dicționar (I18N.en) chiar când apar.
+   Datele tale (numele rândurilor etc.) rămân cum le-ai scris. Schimbarea limbii reîncarcă pagina. */
+var LANGS={ro:"Română",en:"English"};
+var LANG="ro",LANG_SET=false;
+(function(){
+  var s=null;try{s=localStorage.getItem("fin_lang")}catch(e){}
+  if(s&&LANGS[s]){LANG=s;LANG_SET=true}
+  else{var n=String((navigator.languages&&navigator.languages[0])||navigator.language||"ro").toLowerCase();LANG=n.indexOf("ro")===0||n.indexOf("mo")===0?"ro":"en"}
+  try{document.documentElement.lang=LANG}catch(e){}
+})();
+if(LANG==="en")MONTHS=["January","February","March","April","May","June","July","August","September","October","November","December"];
+/* text care ajunge în date (numele rândurilor create de aplicație): în limba contului */
+function L(ro,en){return LANG==="en"&&en!=null?en:ro}
+/* zecimale în câmpuri: virgulă în română, punct în engleză */
+function decIn(v){return v==null||v===""?"":(LANG==="en"?String(v):String(v).replace(".",","))}
+function setLang(l){
+  if(!LANGS[l])return;
+  try{localStorage.setItem("fin_lang",l)}catch(e){}
+  var go=function(){location.reload()};
+  if(typeof putSettings==="function"&&mode==="db"&&canWrite)Promise.resolve(putSettings({lang:l})).then(go,go);else go();
+}
+/* setările contului decid limba: un cont vechi (fără limbă aleasă) rămâne în română */
+function syncLang(hasData){
+  var want=mods.lang||(hasData?"ro":null);
+  if(!want){if(!LANG_SET){try{localStorage.setItem("fin_lang",LANG)}catch(e){}LANG_SET=true}return}
+  if(want!==LANG){try{localStorage.setItem("fin_lang",want)}catch(e){}location.reload();return}
+  if(!LANG_SET){try{localStorage.setItem("fin_lang",LANG)}catch(e){}LANG_SET=true}
+}
+
+var I18N={en:{},enP:[]},I18N_OUT={};
+var I18N_SKIP={SCRIPT:1,STYLE:1,TEXTAREA:1,CODE:1};
+function trText(s){
+  var d=I18N.en,core=s.trim();if(!core||I18N_OUT[core])return null;
+  if(Object.prototype.hasOwnProperty.call(d,core)){I18N_OUT[d[core]]=1;return s.replace(core,function(){return d[core]})}
+  var P=I18N.enP;
+  for(var i=0;i<P.length;i++){var re=P[i][0];if(re.test(core)){var out=core.replace(re,P[i][1]);if(out!==core){I18N_OUT[out]=1;return s.replace(core,function(){return out})}}}
+  if(window.__I18N_DEBUG&&/[a-zăâîșț]{2,}/i.test(core)&&!/^[\d\s.,−\-+:%€()\/·]*$/.test(core))console.debug("[untr] "+core);
+  return null;
+}
+var TR_ATTR=["placeholder","title","aria-label"];
+function trNode(n){
+  if(LANG!=="en")return;
+  if(n.nodeType===3){var p=n.parentNode;if(!p||I18N_SKIP[p.nodeName]||(p.closest&&p.closest("[data-notr]")))return;var t=trText(n.nodeValue);if(t!=null&&t!==n.nodeValue)n.nodeValue=t;return}
+  if(n.nodeType!==1||I18N_SKIP[n.nodeName]||n.hasAttribute("data-notr"))return;
+  if(n.nodeName==="OPTION"&&!n.hasAttribute("value"))n.setAttribute("value",n.textContent);   /* valoarea rămâne cea românească, se schimbă doar ce vezi */
+  for(var a=0;a<TR_ATTR.length;a++){var v=n.getAttribute(TR_ATTR[a]);if(v){var t2=trText(v);if(t2!=null&&t2!==v)n.setAttribute(TR_ATTR[a],t2)}}
+  for(var c=n.firstChild;c;c=c.nextSibling)trNode(c);
+}
+function i18nStart(){
+  if(LANG!=="en")return;
+  try{document.title=trText(document.title)||document.title}catch(e){}
+  trNode(document.body);
+  new MutationObserver(function(ms){
+    ms.forEach(function(m){
+      if(m.type==="characterData")trNode(m.target);
+      else if(m.type==="attributes")trNode(m.target);
+      else m.addedNodes.forEach(function(x){trNode(x)});
+    });
+  }).observe(document.body,{subtree:true,childList:true,characterData:true,attributes:true,attributeFilter:TR_ATTR});
+}
+
+/* nume create de aplicație (categorii, rânduri-model, scadențe): în engleză pentru conturile în engleză */
+function trData(s){if(LANG!=="en"||s==null)return s;var t=trText(String(s));return t==null?s:t}
+function i18nData(){
+  if(LANG!=="en")return;
+  [TPL_C,TPL_F,[TPL_SAL],CARDEF,SHOP_CATS,[CAT_OTHER,CAT_GAS]].forEach(function(a){a.forEach(function(o){o.name=trData(o.name)})});
+}
+
+/* ================= Dicționarul englez: textul românesc de pe ecran -> engleză =================
+   Cheia e textul exact (fără spațiile de la capete). Pentru textele cu cifre/nume sunt tiparele de jos (I18N.enP). */
+I18N.en={
+/* ---- taburi, titluri, butoane generale ---- */
+"Finanțe Lunare":"Monthly Finances","General":"Overview","Casă":"Home","Firmă":"Business","Transport":"Transport","Mai mult":"More","Secțiuni":"Sections",
+"Luna precedentă":"Previous month","Luna următoare":"Next month","Luna curentă":"This month","Casă și firmă, o lună pe rând.":"Home and business, one month at a time.",
+"Casă și firmă, o lună pe rând.":"Home and business, one month at a time.",
+"Salvat":"Saved","Se salvează…":"Saving…","Offline":"Offline","Offline · se trimite":"Offline · sending","Se conectează la baza de date…":"Connecting to the database…","Se încarcă datele…":"Loading data…","Se încarcă…":"Loading…","Se creează luna…":"Creating the month…",
+"Salvează":"Save","Salvează modificarea":"Save changes","Renunță":"Cancel","Închide":"Close","Închide ▴":"Close ▴","Înapoi":"Back","Șterge":"Delete","Sigur?":"Sure?","Sigur? Apasă din nou":"Sure? Tap again","Apasă încă o dată ca să ștergi":"Tap once more to delete",
+"Șterge rândul":"Delete row","Toate":"All","Toate tipurile":"All types","Filtrează după tip":"Filter by type","Detalii":"Details","Notă":"Note","Element":"Item","Tip":"Type","Zi":"Day","Ziua":"Day","Sumă":"Amount","Monedă":"Currency","Moneda":"Currency","Status":"Status","Data":"Date","Descriere":"Description","Total":"Total","Luna":"Month","Curs":"Rate","Schimbat":"Exchanged","Diferență":"Difference","Încasat":"Received","De schimbat":"To exchange",
+"Ce":"What","lei":"lei","EUR":"EUR","RON":"RON","plus":"plus","făcut":"done","plătit":"paid","nefăcut":"not done","de plătit":"to pay","schimbat":"exchanged","totul e bifat":"all checked","necunoscut încă":"not known yet",
+/* tipuri și stări */
+"Plată":"Payment","Încasare":"Income","Transfer":"Transfer","Memento":"Reminder","Nefăcut":"To do","În așteptare":"Pending","în așteptare":"pending","Plătit":"Paid","Făcut":"Done","Făcută":"Done","Făcut / plătit":"Done / paid","Plătit (din extras)":"Paid (from statement)","Încasat (din extras)":"Received (from statement)",
+/* zile */
+"Lun":"Mon","Mar":"Tue","Mie":"Wed","Joi":"Thu","Vin":"Fri","Sâm":"Sat","Dum":"Sun",
+/* ---- General ---- */
+"Urmează":"Coming up","De plătit":"To pay","Sold reportat":"Carried balance","în contul firmei":"in the business account","Rând cu rând":"Row by row","Deschide ›":"Open ›","PLĂTIT":"PAID","FĂRĂ SUME":"NO AMOUNTS","completează tabelul":"fill in the table",
+"plătit":"paid","inelul interior: cât din total e plătit":"inner ring: how much of the total is paid","culori calde = Casă":"warm colours = Home","culori reci = Firmă":"cool colours = Business",
+"Calendarul lunii":"Month calendar","Fără zi fixă":"No fixed day","Fără zi fixă (le faci oricând în lună)":"No fixed day (any time in the month)","Nimic în ziua asta.":"Nothing on this day.","Nimic în luna asta.":"Nothing this month.",
+"Ce n-ai bifat încă în luna asta, în ordinea zilei.":"What you haven't checked yet this month, by day.","Totul e bifat pentru luna asta.":"Everything is checked for this month.","Nimic în următoarele 5 zile.":"Nothing in the next 5 days.","azi":"today",
+"Creează luna din luna precedentă":"Create the month from the previous one","Nu ai drept de scriere aici.":"You don't have write access here.","Aștept răspunsul bazei de date. Luna se poate crea doar cu internet.":"Waiting for the database. A month can only be created online.",
+/* ---- Casă ---- */
+"Rândurile lunii":"This month's rows","De nu uitat":"Don't forget","Plăți și încasări":"Payments and income","+ Rând Casă":"+ Home row","+ Rând Firmă":"+ Business row","Niciun rând aici. Apasă „+ Rând”.":"No rows here. Tap “+ Row”.","Nimic care să se potrivească filtrelor alese.":"Nothing matches the chosen filters.",
+"Sumele se salvează când ieși din câmp. Atinge un rând ca să-l editezi.":"Amounts are saved when you leave the field. Tap a row to edit it.",
+"Venit casă":"Home income","Plătit acasă":"Paid at home","Rămas de plătit":"Left to pay","Rămâne acasă":"Left at home","Plăți lunare":"Monthly payments","Rezultatul lunii":"Month result",
+"din salariu net, decontare și diurne":"from net salary, reimbursements and allowances","din salariu și alte venituri":"from salary and other income","din salariul primit de la firmă și alte venituri":"from the salary paid by the business and other income",
+"venitul lunii minus toate plățile de acasă":"this month's income minus all home payments","venit primit minus toate plățile de acasă":"income received minus all home payments",
+"Alte cheltuieli":"Other spending","din extrase":"from statements","Fă-l plată lunară":"Make it a monthly payment","Trece sus, la plățile lunii, și intră în cerc. Luna viitoare îl aștept și îl bifez singur din extras.":"It moves up to the monthly payments and into the chart. Next month I'll expect it and check it from the statement.",
+"mută în…":"move to…","Mută":"Move",
+/* categorii (și numele rândurilor create din extrase) */
+"Tutun și chioșc":"Tobacco and kiosk","Sănătate și farmacie":"Health and pharmacy","Cumpărături (magazine)":"Shopping (stores)","Mâncare și cafea în oraș":"Eating out and coffee","Cumpărături online și livrări":"Online shopping and delivery","Haine și încălțăminte":"Clothes and shoes","Ieșiri, sport și distracție":"Going out, sport and fun",
+"Alte plăți cu cardul":"Other card payments","Benzinărie (țigări, cafea, mărunțișuri)":"Petrol station (cigarettes, coffee, small items)","Benzinărie (mărunțișuri)":"Petrol station (small items)","Combustibil":"Fuel","Mărunțișuri":"Small items","Retrageri numerar":"Cash withdrawals",
+"Transfer către conturile tale":"Transfer to your accounts","Transfer din conturile tale":"Transfer from your accounts","Taxe la stat":"State taxes","Dobândă și comisioane bancare":"Interest and bank fees","Alte comisioane bancare":"Other bank fees","Tranzacție":"Transaction","(fără nume)":"(no name)",
+"Comision cont EUR (ING)":"EUR account fee (ING)","Taxă lunară ING (cont lei)":"ING monthly fee (RON account)","Comisioane plăți în lei (0,51/plată)":"RON payment fees (0.51/payment)",
+/* rândurile-model pentru conturi noi */
+"Chirie sau rată casă":"Rent or mortgage","Curent electric":"Electricity","Gaz":"Gas","Apă și canal":"Water and sewage","Internet, TV, telefon":"Internet, TV, phone","Alte cheltuieli casă":"Other home costs","Salariu":"Salary",
+"Emite factura către client":"Issue the invoice to the client","Încasare de la client":"Payment from the client","Contabilitate":"Accounting","Salariu net, în cont personal":"Net salary, to personal account","Alte cheltuieli firmă":"Other business costs","Transmite indexul la gaz":"Submit the gas meter reading","Transmite indexul la apă":"Submit the water meter reading",
+/* ---- Firmă ---- */
+"Curs BNR ↗":"BNR rate ↗","Curs EUR/RON":"EUR/RON rate","EUR schimbați luna asta":"EUR exchanged this month","EUR schimbați efectiv luna asta":"EUR actually exchanged this month","Curs și EUR schimbați":"Rate and EUR exchanged",
+"Pune cursul din ziua în care schimbi banii.":"Enter the rate from the day you exchange the money.","Cursul e moștenit din luna anterioară. Pune-l pe cel din ziua schimbului.":"The rate is carried from last month. Enter the one from the exchange day.",
+"Încasat de la client":"Received from client","Încasat de la client":"Received from client","Plăți firmă (lei)":"Business payments (lei)","Plăți firmă":"Business payments","De schimbat în lei":"To exchange into lei","Sold firmă, reportat":"Business balance, carried",
+"Încasat":"Received","încasări minus plăți, cum sunt trecute":"income minus payments, as entered","completează cursul de sus":"fill in the rate above","peste necesar":"over what's needed","· mai ai de schimbat":"· still to exchange","· cu":"· by",
+"lei în cont:":"lei in the account:","lei: lipsește cursul schimbului":"lei: the exchange rate is missing","Sold EUR reportat (cu soldul de pornire)":"EUR balance carried (with the starting balance)","Sold EUR reportat":"EUR balance carried",
+"Apare după ce treci sumele și cursul pe lună.":"Appears once you enter the amounts and the monthly rate.","Apare după ce treci sumele pe luni.":"Appears once you enter amounts per month.",
+"Pe luni: cât ai încasat în EUR, cât era necesar de schimbat, cât ai schimbat efectiv (îl treci sus, la „EUR schimbați luna asta”) și diferența lunii. Un minus la diferență înseamnă că ai schimbat mai mult decât a intrat luna asta, iar restul s-a luat din soldul reportat, deci nu e greșeală. Se face roșu doar dacă soldul total în EUR ajunge sub zero. Dacă nu treci nimic, se socotește cât era necesar.":"Per month: how much EUR you received, how much needed exchanging, how much you actually exchanged (enter it above, under “EUR exchanged this month”) and the month's difference. A minus means you exchanged more than came in this month and the rest came from the carried balance, so it isn't a mistake. It only turns red if the total EUR balance drops below zero. If you enter nothing, the amount needed is used.",
+"Luna nouă pornește cu aceleași rânduri, pe „De făcut” și fără sume: le treci tu când le afli.":"A new month starts with the same rows, set to “To do” and without amounts: you fill them in when you know them.",
+"Contabila trimite sumele de plată":"The accountant sends the amounts to pay","Contabilă":"Accountant",
+/* ---- Transport ---- */
+"Cheltuieli":"Expenses","+ Cheltuială":"+ Expense","Scadențe și revizii pe fiecare vehicul. Verde e în regulă, galben se apropie, roșu a trecut.":"Due dates and services for each vehicle. Green is fine, yellow is coming up, red is overdue.",
+"Adaugă un vehicul":"Add a vehicle","+ Mașină":"+ Car","+ Motocicletă":"+ Motorcycle","+ Alt vehicul":"+ Other vehicle","Mașină":"Car","Mașina":"Car","Motocicletă":"Motorcycle","Motocicleta":"Motorcycle","Alt vehicul":"Other vehicle","Vehicul":"Vehicle","Tipul vehiculului":"Vehicle type","Numele vehiculului":"Vehicle name",
+"Kilometraj acum":"Mileage now","Kilometraj":"Mileage","+ Scadență":"+ Due date","+ Revizie":"+ Service","Șterge vehiculul":"Delete vehicle","Sigur? Se șterg și scadențele lui":"Sure? Its due dates are deleted too",
+"Scadent la":"Due on","La km":"At km","La câte luni":"Every (months)","La câți km":"Every (km)","Interval în luni":"Interval in months","Interval în km":"Interval in km","Acum pe":"Now on","Anvelope montate acum":"Tyres fitted now","vară":"summer","iarnă":"winter",
+"Reînnoit":"Renewed","Schimbate":"Changed","alege o dată":"pick a date","fără dată":"no date","„Reînnoit” mută data înainte cu intervalul. La revizie calculează și noii km. Anvelopele trec pe sezonul următor.":"“Renewed” moves the date forward by the interval. For services it also works out the new km. Tyres move to the next season.",
+"RCA":"Car insurance (RCA)","Rovinietă":"Road vignette","ITP":"Roadworthiness test (ITP)","Schimb anvelope":"Tyre change","Revizie (ulei și filtre)":"Service (oil and filters)","Inspecție service":"Service inspection","Schimb ulei":"Oil change",
+"De obicei plătit din":"Usually paid from","plătit din Casă":"paid from Home","plătit din Firmă":"paid from Business","Plătit din":"Paid from","din Casă":"from Home","din Firmă":"from Business","din care plătit":"of which paid",
+"Taxi / Uber / Bolt":"Taxi / Uber / Bolt","Transport public":"Public transport","Parcare":"Parking","Taxe de drum, peaj":"Road tolls","Spălătorie":"Car wash","Service și piese":"Service and parts","Altele":"Other","Vezi în Transport":"See in Transport",
+"opțional, de ex. plin la OMV":"optional, e.g. full tank at OMV","Șterge cheltuiala":"Delete expense","Alege data.":"Pick the date.",
+/* ---- Mai mult ---- */
+"Total pe an":"Total per year","Total anual":"Year total","Cât ai de plată pe fiecare lună, la Casă și la Firmă (fără încasări).":"What you pay each month, at Home and in the Business (without income).",
+"Setări · ce urmărești":"Settings · what you track","Firmă / PFA":"Business / sole trader","facturi, taxe, curs EUR, extrase de cont, sold reportat":"invoices, taxes, EUR rate, statements, carried balance","mașina: scadențe, revizii, kilometraj":"car: due dates, services, mileage",
+"Extrase și la Casă":"Statements for Home too","încarci extrasul contului personal la final de lună, pentru tot istoricul (la Firmă e mereu)":"load your personal account statement at month end, for the full history (always on for Business)",
+"Firma încasează în":"The business is paid in","euro (cu curs și schimb în lei)":"euro (with rate and exchange into lei)","euro (și schimb în lei)":"euro (and exchange into lei)","La benzinărie, plinul pornește de la":"At the petrol station, a full tank starts from",
+"Din extras nu se vede ce ai luat: sub suma asta, plata e trecută la mărunțișuri (țigări, cafea).":"The statement doesn't show what you bought: below this amount, the payment goes to small items (cigarettes, coffee).",
+"Casă e mereu pornită. Când oprești un modul, datele lui nu se șterg: doar se ascund, și revin când îl pornești din nou.":"Home is always on. Turning a module off doesn't delete its data: it's only hidden and comes back when you turn it on again.",
+"Sold de pornire firmă":"Business starting balance","Sold de pornire al firmei, în EUR":"Business starting balance, in EUR","Sold de pornire al firmei, în lei":"Business starting balance, in lei","EUR în cont":"EUR in the account","Lei în cont":"Lei in the account","La începutul lunii":"At the start of month","Luna de la care se adună soldul":"Month the balance counts from","de la prima lună":"from the first month",
+"Soldul firmei se adună de la luna aleasă încoace. Lunile dinainte (de exemplu importate din extrase vechi) apar în istoric și în totalul pe an, dar nu schimbă soldul.":"The business balance adds up from the chosen month onwards. Earlier months (for example imported from old statements) show in the history and the yearly total, but don't change the balance.",
+"Contul și datele":"Account and data","Unde sunt datele":"Where your data is","Intrat ca":"Signed in as","Ieșire":"Sign out","Se iese…":"Signing out…","Sunt modificări netrimise. Apasă din nou ca să ieși":"Some changes aren't sent yet. Tap again to sign out",
+"Descarcă o copie (JSON)":"Download a copy (JSON)","Încarcă dintr-o copie":"Load from a copy","Încarcă o copie (JSON)":"Load a copy (JSON)","Se pregătește copia…":"Preparing the copy…","Copia a fost descărcată":"The copy was downloaded",
+"Copia are toate rândurile, cursurile și scadențele mașinii. Păstrează-o într-un loc sigur: e doar a ta și nu o pune pe GitHub.":"The copy has all rows, rates and car due dates. Keep it somewhere safe: it's yours alone, don't put it on GitHub.",
+"Fișierul nu e o copie făcută de aplicația asta.":"This file isn't a copy made by this app.","Nu pare o copie făcută de aplicație (nu e JSON valid).":"This doesn't look like a copy made by the app (not valid JSON).","Copia are":"The copy has",
+"Versiunea aplicației:":"App version:","Pune aplicația pe ecranul telefonului":"Put the app on your phone's home screen","Se deschide ca o aplicație, fără bara browserului.":"It opens like an app, without the browser bar.","Instalează":"Install",
+"Datele tale stau în contul tău Google, într-un proiect Firebase (Google Cloud, regiunea Frankfurt). Pe telefon rămâne doar o copie temporară, ca să meargă și fără net.":"Your data lives in your Google account, in a Firebase project (Google Cloud, Frankfurt region). Your phone keeps only a temporary copy so it works offline.",
+"Fără bază de date: rândurile rămân doar în acest browser. Nu se văd pe alt telefon.":"No database: rows stay only in this browser. They don't show on another phone.",
+"Acum datele stau în baza de date a acestei pagini, în contul tău Claude. Ține pagina privată (fără link partajat). Pasul următor e mutarea lor în proiectul tău Google Cloud, cu cont de acces și reguli de securitate.":"Your data is stored in this page's database, in your Claude account. Keep the page private (no shared link).",
+"Gata, aplicația e pe ecranul telefonului.":"Done, the app is on your home screen.",
+/* ---- login, bun venit ---- */
+"Se verifică contul…":"Checking your account…","Intră cu Google":"Sign in with Google","Se deschide fereastra Google…":"Opening the Google window…","Datele tale stau în contul tău Google (Firebase, Frankfurt). Doar contul tău are acces la ele.":"Your data lives in your Google account (Firebase, Frankfurt). Only your account can access it.",
+"Browserul a blocat fereastra de login. Permite ferestrele pop-up pentru site și apasă din nou.":"The browser blocked the sign-in window. Allow pop-ups for this site and tap again.","Ai închis fereastra înainte să termini. Apasă din nou.":"You closed the window before finishing. Tap again.",
+"Adresa asta nu e autorizată în Firebase (Authentication → Settings → Authorized domains).":"This address isn't authorised in Firebase (Authentication → Settings → Authorized domains).","Nu pot ajunge la Google. Verifică internetul (sau dezactivează blocatorul de reclame pentru site) și încearcă din nou.":"Can't reach Google. Check your internet (or turn off the ad blocker for this site) and try again.",
+"Browserul blochează stocarea site-ului (cookie-uri). Permite-o pentru acest site și încearcă din nou.":"The browser is blocking site storage (cookies). Allow it for this site and try again.","Login-ul Google nu merge aici. Deschide linkul direct în Chrome sau Safari.":"Google sign-in doesn't work here. Open the link directly in Chrome or Safari.",
+"Bine ai venit!":"Welcome!","Contul ăsta e nou. Spune-mi ce vrei să urmărești și îți pregătesc prima lună. Dacă ai deja o copie a datelor (JSON), o poți încărca în loc.":"This account is new. Tell me what you want to track and I'll set up your first month. If you already have a copy of your data (JSON), you can load it instead.",
+"Pornesc de la zero":"Start from scratch","Ce vrei să urmărești?":"What do you want to track?","chirie, utilități, salariu · mereu pornită":"rent, utilities, salary · always on","facturi, taxe, contabilitate, soldul firmei":"invoices, taxes, accounting, business balance","combustibil, Uber, parcare":"fuel, Uber, parking",
+"Am mașină sau motocicletă":"I have a car or motorcycle","îți pregătesc RCA, ITP, rovinietă, revizie":"I'll set up insurance, roadworthiness test, vignette, service","cheltuieli pe lună (le adaugi când apar)":"monthly expenses (add them as they come)","Pregătesc pentru":"Setting up for","Gata, pornesc":"Done, let's go",
+"Sumele le treci tu. Rândurile le poți redenumi, șterge sau completa oricând, iar modulele le schimbi din „Mai mult → Setări”.":"You enter the amounts. You can rename, delete or add rows any time, and change modules in “More → Settings”.",
+/* ---- extrase ---- */
+"Extrase de cont":"Bank statements","Importuri făcute":"Imports done","Încă n-ai importat niciun extras.":"You haven't imported any statement yet.","Anulează importul":"Undo import","Se anulează importul…":"Undoing the import…","Se anulează…":"Undoing…","Poți anula un import: rândurile adăugate se șterg, iar cele bifate revin cum erau.":"You can undo an import: added rows are deleted and checked rows go back to how they were.",
+"Alege extrasul (PDF sau CSV)":"Choose the statement (PDF or CSV)","Alege extrasul (PDF)":"Choose the statement (PDF)",
+"Alege extrasul: PDF Salt Bank sau CSV de la orice bancă (Revolut, BT, BCR, ING…). Se citește chiar pe telefon: fișierul nu pleacă nicăieri. Facturile se bifează singure, cumpărăturile se adună pe categorii.":"Choose the statement: a Salt Bank PDF or a CSV from any bank (Revolut, BT, BCR, ING…). It's read on your phone: the file goes nowhere. Bills get checked automatically, shopping is grouped by category.",
+"Alege extrasul: PDF ING Business sau CSV de la orice bancă. Se citește chiar pe telefon: fișierul nu pleacă nicăieri. Vezi mai întâi ce s-ar importa și abia apoi confirmi.":"Choose the statement: an ING Business PDF or a CSV from any bank. It's read on your phone: the file goes nowhere. You see what would be imported before you confirm.",
+"Alege PDF-ul extrasului ING Business (cont în lei sau în EUR). Se citește chiar pe telefon: fișierul nu pleacă nicăieri. Vezi mai întâi ce s-ar importa și abia apoi confirmi.":"Choose the ING Business statement PDF (RON or EUR account). It's read on your phone: the file goes nowhere. You see what would be imported before you confirm.",
+"Rândurile importate se salvează în contul tău (Firebase). PDF-ul rămâne pe telefon, nu se trimite nicăieri.":"Imported rows are saved in your account (Firebase). The file stays on your phone and isn't sent anywhere.",
+"Rândurile importate se salvează în baza de date a paginii. Ține pagina privată, fără link partajat, cât timp pui extrase reale.":"Imported rows are saved in this page's database. Keep the page private while you load real statements.",
+"Extras citit":"Statement read","Fișier CSV":"CSV file","Rânduri din extras":"Rows from the statement","bifează ce intră în tabel":"check what goes into the table","Schimb valutar":"Currency exchange","nu devine rând":"doesn't become a row","Importă":"Import","Se importă…":"Importing…","Se importă… nu închide pagina.":"Importing… don't close the page.","Gata.":"Done.",
+"Rând nou în tabel":"New row in the table","Ce faci cu tranzacția":"What to do with the transaction","Numele rândului nou":"Name of the new row","Include în import":"Include in import","Include schimbul valutar":"Include the currency exchange","nume învățat":"learned name","potrivit: nume":"matched: name","potrivit: sumă":"matched: amount","potrivit: comision":"matched: fee","potrivit: sumă aprox.":"matched: approx. amount","potrivit: regulă":"matched: rule","potrivit: se adună la rândul lunii":"matched: adds to the month's row","ales de tine":"chosen by you","rând din Firmă":"Business row","între conturile tale · debifat":"between your accounts · unchecked",
+"Plăți la benzinării":"Petrol station payments","Ce a fost plata":"What was the payment",
+"Extras verificat: fiecare sold se leagă de tranzacția dinainte, iar numărul de intrări și ieșiri se potrivește cu antetul.":"Statement verified: every balance follows from the previous transaction and the number of ins and outs matches the header.",
+"Extras verificat: plățile și încasările găsite dau exact totalurile din antet, iar soldul final se leagă.":"Statement verified: the payments and income found add up exactly to the header totals and the closing balance matches.",
+"CSV-ul nu are totaluri de control. Uită-te pe exemplele de mai sus că datele și sumele arată bine, apoi importă.":"The CSV has no control totals. Check in the examples above that dates and amounts look right, then import.",
+"Nu mai e nimic nou de importat din acest extras.":"There's nothing new to import from this statement.","Nu am găsit nimic de importat.":"Found nothing to import.","Se importă în":"Importing into",
+"Banii primiți de la firmă se bifează pe rândurile Firmei, iar transferurile între conturile tale sunt debifate.":"Money received from the business is checked on the Business rows, and transfers between your accounts are unchecked.",
+"Coloanele din CSV":"CSV columns","ghicite singure; schimbă dacă n-am nimerit":"guessed automatically; change them if I got it wrong","alege-le tu":"choose them yourself","Suma (cu minus la plăți)":"Amount (minus for payments)","Debit (ieșiri)":"Debit (out)","Credit (intrări)":"Credit (in)","Descriere (încă o coloană)":"Description (another column)","Nume / comerciant":"Name / merchant",
+"Banca are coloane separate de Debit și Credit?":"Does the bank have separate Debit and Credit columns?","Banca are o singură coloană de sumă?":"Does the bank have a single amount column?","Fișierul are mai multe monede. Import doar":"The file has several currencies. Import only","Alege coloana cu data.":"Choose the date column.","Alege coloana cu suma (sau coloanele Debit și Credit).":"Choose the amount column (or the Debit and Credit columns).","Alege coloanele.":"Choose the columns.",
+"Nu găsesc nicio tranzacție cu dată și sumă. Verifică ce coloane sunt alese mai jos.":"Can't find any transaction with a date and amount. Check the columns chosen below.","Nu găsesc coloane în fișier (separate prin ; sau , sau Tab).":"Can't find columns in the file (separated by ; or , or Tab).",
+"Ăsta e extrasul firmei. Încarcă-l din tabul Firmă.":"This is the business statement. Load it from the Business tab.","Ăsta pare extrasul unui cont personal. Încarcă-l din tabul Casă.":"This looks like a personal account statement. Load it from the Home tab.",
+"Nu recunosc formatul. În Casă citesc extrase Salt Bank (PDF) și extrase ING pentru persoane fizice.":"I don't recognise the format. Home reads Salt Bank statements (PDF) and CSV files.","Nu recunosc formatul. În Firmă citesc extrasele ING Business (cele „Account Statement”, în engleză).":"I don't recognise the format. Business reads ING Business statements (“Account Statement”, in English) and CSV files.",
+"Se mută…":"Moving…",
+/* mesaje de eroare de salvare */
+"Doar citire: nu ai drept de scriere.":"Read only: you don't have write access.","Ai acces doar de citire la această pagină.":"You only have read access to this page.","Salvat în acest browser":"Saved in this browser",
+"Firestore a refuzat scrierea. În Firebase, la Firestore → Rules, publică regulile primite de la mine.":"Firestore refused the write. In Firebase, under Firestore → Rules, publish the rules I gave you.","Firestore nu te lasă să citești datele. În Firebase, la Firestore → Rules, verifică să fie publicate regulile primite de la mine.":"Firestore won't let you read the data. In Firebase, under Firestore → Rules, check the rules are published.",
+"scade azi":"due today","treci kilometrajul":"enter the mileage","Plăți Casă":"Home payments","Plăți Firmă":"Business payments","· Plătit":"· Paid","· Încasat":"· Received","· CSV.":"· CSV.","transfer bancar":"bank transfer","Debit":"Debit","Credit":"Credit",
+"contează doar ce e bifat ca făcut":"only checked rows count","se adună de la o lună la alta":"carries over month to month","venit minus plăți":"income minus payments",
+"✓ Nimic de plătit în următoarele 5 zile.":"✓ Nothing to pay in the next 5 days.","✓ Totul e bifat pentru luna asta.":"✓ Everything is checked for this month."
+};
+/* textele cu cifre și nume: [tipar, înlocuire] (înlocuirea poate fi o funcție). tx(): traduce o bucată dacă o știe */
+function tx(s){var d=I18N.en;s=String(s);return Object.prototype.hasOwnProperty.call(d,s)?d[s]:s}
+function capF(s){return s.charAt(0).toUpperCase()+s.slice(1)}
+var EN_SEG=[
+ [/^ziua (\d+)$/,"day $1"],[/^fără zi$/,"no day"],[/^plată$/,"payment"],[/^încasare$/,"income"],[/^transfer$/,"transfer"],[/^memento$/,"reminder"],[/^din extras$/,"from statement"],
+ [/^(\d+) plată$/,"$1 payment"],[/^(\d+) plăți$/,"$1 payments"],[/^(\d+) plăți × (.+)$/,"$1 payments × $2"],[/^(\d+) tranzacții$/,"$1 transactions"],[/^(\d+) tranzacție$/,"$1 transaction"],
+ [/^intrări (.+)$/,"in $1"],[/^ieșiri (.+)$/,"out $1"],[/^(\d+) rând$/,"$1 row"],[/^(\d+) rânduri$/,"$1 rows"],
+ [/^(\d+) rând nou$/,"$1 new row"],[/^(\d+) rânduri noi$/,"$1 new rows"],[/^(\d+) bifat pe rând existent$/,"$1 checked on an existing row"],[/^(\d+) bifate pe rânduri existente$/,"$1 checked on existing rows"],
+ [/^(\d+) schimb valutar$/,"$1 currency exchange"],[/^(\d+) schimburi valutare$/,"$1 currency exchanges"],[/^(\d+) cheltuială de transport$/,"$1 transport expense"],[/^(\d+) cheltuieli de transport$/,"$1 transport expenses"],
+ [/^(\d+) rând potrivit nu mai exista, sărit$/,"$1 matched row no longer existed, skipped"],[/^(\d+) rânduri potrivite nu mai existau, sărite$/,"$1 matched rows no longer existed, skipped"],
+ [/^(\d+) rând nou, (\d+) bifat(e)?(.*)$/,function(m,a,b,c,r){return a+" new row, "+b+" checked"+segList(r)}],[/^(\d+) rânduri noi, (\d+) bifat(e)?(.*)$/,function(m,a,b,c,r){return a+" new rows, "+b+" checked"+segList(r)}],
+ [/^importat (.+)$/,"imported $1"],[/^(Casă|Firmă)$/,function(m,a){return tx(a)}],[/^plin (.+)$/,"full tank $1"],
+ [/^(EUR|RON) · …(.*)$/,"$1 · …$2"],[/^(\d+) (plată|plăți) nebifat[ăe]$/,function(m,a,b){return a+" unchecked payment"+(b==="plată"?"":"s")}],[/^din (.+) lei$/,"of $1 lei"],
+ [/^curs (.+)$/,"rate $1"],[/^ref\. (.+)$/,"ref. $1"]
+];
+function segList(r){return String(r||"").split(", ").map(function(p,i){if(!i)return "";var o=trSeg(p);return ", "+(o==null?p:o)}).join("")}
+function trSeg(s){
+  var dot=/\.$/.test(s)&&!Object.prototype.hasOwnProperty.call(I18N.en,s)?".":"",b=dot?s.slice(0,-1):s;
+  if(Object.prototype.hasOwnProperty.call(I18N.en,b))return I18N.en[b]+dot;
+  for(var i=0;i<EN_SEG.length;i++){if(EN_SEG[i][0].test(b))return b.replace(EN_SEG[i][0],EN_SEG[i][1])+dot}
+  var P=I18N.enP;
+  for(var j=0;j<P.length;j++){if(P[j][2])continue;var re=P[j][0];if(re.test(s)){var o=s.replace(re,P[j][1]);if(o!==s)return o}}
+  return null;
+}
+I18N.enP=[
+ [/^(\d+) (plată|plăți) ([▾▴])$/,function(m,a,b,c){return a+" payment"+(b==="plată"?"":"s")+" "+c}],
+ [/^(\d+) (cheltuială|cheltuieli) în (.+)$/,function(m,a,b,c){return a+" expense"+(b==="cheltuială"?"":"s")+" in "+c}],
+ [/^(\d+) (lucru întârziat|lucruri întârziate): (.+)$/,function(m,a,b,c){return a+" overdue: "+c.split(" · ").map(function(p){return p.replace(/^(.+) \(ziua (\d+)\)$/,function(q,n,d){return tx(n)+" (day "+d+")"})}).join(" · ")}],
+ [/^Bifează „(.+)” \((.+)\)( · luat de alta)?$/,function(m,a,b,c){return "Check “"+tx(a)+"” ("+b+")"+(c?" · taken by another":"")}],
+ [/^Bifează „(.+)”( · luat de alta)?$/,function(m,a,c){return "Check “"+tx(a)+"”"+(c?" · taken by another":"")}],
+ [/^Bifează: (.+)$/,function(m,a){return "Check: "+tx(a)}],
+ [/^(.+): (Nefăcut|Plătit|Încasat|Făcut|În așteptare)\. Atinge ca să schimbi\.$/,function(m,a,b){return tx(a)+": "+tx(b)+". Tap to change."}],
+ [/^Mută „(.+)” în altă categorie$/,function(m,a){return "Move “"+a+"” to another category"}],
+ [/^Ce a fost plata la (.+)$/,"What was the payment at $1"],[/^din extras: (.+)$/,"from statement: $1"],
+ [/^Kilometraj actual: (.+)$/,function(m,a){return "Current mileage: "+tx(a)}],
+ [/^Către (.+)$/,"To $1"],[/^Plăți în (\w+) \(card\)$/,"Card payments in $1"],
+ [/^Ziua (\d+)$/,"Day $1"],[/^Ce n-ai bifat în (.+), în ordinea zilei\.$/,"What you haven't checked in $1, by day."],[/^se adaugă la (.+) din tabel$/,"adds to $1 in the table"],[/^ref\. (.+)$/,"ref. $1"],
+ [/^(.+), (încă .+ km|depășit cu .+ km|treci kilometrajul)$/,function(m,a,b){return (trText(a)||a).trim()+", "+(trText(b)||b).trim()}],
+ [/^(întârziat cu|expirat de) (\d+) (zi|zile)$/,function(m,a,n,u){return (a==="expirat de"?"expired "+n+" day"+(n==="1"?"":"s")+" ago":n+" day"+(n==="1"?"":"s")+" overdue")}],[/^Total pe (\d+) \(lei\)$/,"Total for $1 (lei)"],[/^Cheltuieli · (.+)$/,"Expenses · $1"],[/^Deschide (.+)$/,"Open $1"],[/^Am pus cheltuiala în (.+)\.$/,"Expense added to $1."],
+ [/^Nu există încă nimic pentru (.+)\.$/,"Nothing yet for $1."],[/^Nicio cheltuială în (.+)\. Apasă „\+ Cheltuială” când alimentezi sau iei un Uber\.$/,"No expenses in $1. Tap “+ Expense” when you fill up or take an Uber."],
+ [/^Ce ai de făcut în următoarele (\d+) zile, plus ce a rămas întârziat\. Azi e (\d+)\.$/,"What's due in the next $1 days, plus anything overdue. Today is the $2th."],
+ [/^în (\d+) zile$/,"in $1 days"],[/^în (\d+) zi$/,"in $1 day"],[/^întârziat (\d+) zile$/,"$1 days overdue"],[/^întârziat (\d+) zi$/,"$1 day overdue"],
+ [/^peste ~(\d+) luni$/,"in ~$1 months"],[/^peste ~(\d+) lună$/,"in ~$1 month"],[/^încă (.+) km$/,"$1 km left"],[/^depășit cu (.+) km$/,"$1 km over"],[/^expirat de (\d+) zile$/,"expired $1 days ago"],
+ [/^scade pe (.+)$/,"due on $1"],[/^următoarea: (.+)$/,"next: $1"],[/^acum pe (vară|iarnă)$/,function(m,a){return "now on "+tx(a)}],[/^actualizat (.+)$/,"updated $1"],
+ [/^(.+): (.+) \(((?:peste ~|încă |în |întârziat cu |expirat de |depășit cu |scade azi|treci kilometrajul).*)\)$/,function(m,a,b,c){return tx(a)+": "+tx(b)+" ("+(trText(c)||c).trim()+")"}],
+ [/^(\d+) (rând|rânduri)$/,function(m,a,b){return a+(b==="rând"?" row":" rows")}],
+ [/^(\d+) (tranzacție era deja importată și a fost sărită|tranzacții erau deja importate și au fost sărite)\.$/,function(m,a){return a+(a==="1"?" transaction was already imported and was skipped.":" transactions were already imported and were skipped.")}],
+ [/^(\d+) înregistrări importate\.$/,"$1 records imported."],[/^\((\d+) înregistrări\)\. Caut-o în Descărcări\.$/,"($1 records). Look for it in Downloads."],
+ [/^Importul a fost anulat: (.+)\.$/,function(m,a){return "The import was undone: "+a.replace(/(\d+) rând șters/,"$1 row deleted").replace(/(\d+) rânduri șterse/,"$1 rows deleted").replace(/(\d+) rând revenit cum era/,"$1 row restored").replace(/(\d+) rânduri revenite cum erau/,"$1 rows restored").replace(/(\d+) cheltuială de transport ștearsă/,"$1 transport expense deleted").replace(/(\d+) cheltuieli de transport șterse/,"$1 transport expenses deleted")+"."}],
+ [/^Se citește „(.+)”…$/,"Reading “$1”…"],[/^Schimb valutar: (.+) la cursul (.+)$/,"Currency exchange: $1 at rate $2"],
+ [/^în (.+) · se trece în Firmă: cursul lunii și „EUR schimbați”( · deja trecut așa)?$/,function(m,a,b){return "in "+a+" · goes to Business: the month's rate and “EUR exchanged”"+(b?" · already entered":"")}],
+ [/^în tabel era: curs (.+), schimbat (.+)$/,"in the table: rate $1, exchanged $2"],[/^în tabel era (.+?)( ·)?$/,"in the table: $1$2"],
+ [/^\+ și în Transport \((\d+) (plată|plăți), din (Casă|Firmă)\)$/,function(m,a,b,c){return "+ also in Transport ("+a+" payment"+(b==="plată"?"":"s")+", from "+tx(c)+")"}],
+ [/^peste (.+) lei e plin; schimbă unde n-a nimerit$/,"over $1 lei is a full tank; change where it's wrong"],
+ [/^\+ alte cheltuieli din extrase: (.+)$/,"+ other spending from statements: $1"],
+ [/^din (.+) așteptat$/,"of $1 expected"],[/^din (.+) € așteptat \(≈ (.+)\)$/,"of $1 € expected (≈ $2)"],[/^din (.+) de plătit$/,"of $1 to pay"],[/^plătit din (.+)$/,"paid of $1"],[/^din care (.+) la cursul (.+)$/,"of which $1 at rate $2"],
+ [/^plătit (.+) · inclusiv salariu, decontare și diurne(?: · în plus (.+) direct din contul în EUR)?$/,function(m,a,b){return "paid "+a+" · including salary, reimbursements and allowances"+(b?" · plus "+b+" straight from the EUR account":"")}],
+ [/^plătit (.+) · inclusiv salariul tău$/,"paid $1 · including your salary"],
+ [/^plăți lunare (.+) · alte cheltuieli (.+)$/,"monthly payments $1 · other spending $2"],
+ [/^primit din (.+) așteptat \(salariu, decontare, diurne(, alte venituri)?\)$/,function(m,a,b){return "received of "+a+" expected (salary, reimbursements, allowances"+(b?", other income":"")+")"}],
+ [/^primit din (.+) așteptat \(salariu, decontare, diurne(, alte venituri)?\) · contează doar ce e bifat ca făcut$/,function(m,a,b){return "received of "+a+" expected (salary, reimbursements, allowances"+(b?", other income":"")+") · only checked rows count"}],
+ [/^sold la început de lună (.+) \+ venit − plăți(?: \+ (.+) aduși din alt cont al tău| − (.+) mutați în alt cont al tău)?$/,function(m,a,b,c){return "start-of-month balance "+a+" + income − payments"+(b?" + "+b+" brought from another of your accounts":c?" − "+c+" moved to another of your accounts":"")}],
+ [/^la fel ca în extras, la (.+) ✓$/,"same as the statement, on $1 ✓"],
+ [/^extrasul arată (.+) la (.+), diferă cu (.+) \(vreo plată trecută de mână, din alt cont\?\)$/,"the statement shows $1 on $2, a difference of $3 (a payment entered by hand, from another account?)"],
+ [/^estimat: (.+) rămași din (\S+) \+ venit primit (.+) − plăți bifate ([^·]+)$/,function(m,a,b,c,d){return "estimate: "+a+" left from "+capF(b)+" + income received "+c+" − checked payments "+d}],
+ [/^cumpărăturile cu cardul intră când încarci extrasul$/,"card purchases come in when you load the statement"],
+ [/^luna asta ([+−].+) · se adună de la o lună la alta(.*)$/,function(m,a,b){return "this month "+a+" · carries over month to month"+trTail(b)}],
+ [/^în cont · luna asta ([+−].+) · se adună de la o lună la alta(.*)$/,function(m,a,b){return "in the account · this month "+a+" · carries over month to month"+trTail(b)}],
+ [/^· luna asta ([+−].+) · se adună de la o lună la alta(.*)$/,function(m,a,b){return "· this month "+a+" · carries over month to month"+trTail(b)}],
+ [/^\+ (.+) lei în cont$/,"+ $1 lei in the account"],[/^plus (.+) în cont$/,"plus $1 in the account"],[/^minus (.+) în cont$/,"minus $1 in the account"],
+ [/^\+ (.+) € \(pune cursul lunii la Firmă ca să-i socotesc în lei\)$/,"+ $1 € (enter the month's rate in Business to count them in lei)"],
+ [/^moștenit: (.+)$/,"carried: $1"],[/^necesar: (.+)$/,"needed: $1"],[/^ex\. (.+)$/,"e.g. $1"],[/^Nume, de ex\. (.+)$/,"Name, e.g. $1"],[/^Scrie suma \(de ex\. (.+)\)\.$/,"Enter the amount (e.g. $1)."],
+ [/^Coloana (\d+)(.*)$/,"Column $1$2"],[/^(.+) \(ex\. (.+)\)$/,function(m,a,b){return tx(a)+" (e.g. "+b+")"}],
+ [/^Fișier CSV · în (\w+)(.*)$/,function(m,a,b){return "CSV file · in "+a+b.replace(/ tranzacții/," transactions").replace(/ rânduri fără dată, sărite/," rows without a date, skipped")}],
+ [/^Cont în (\w+)(.*)$/,function(m,a,b){return "Account in "+a+b.replace(/ tranzacții/," transactions").replace(/ · sold /," · balance ")}],
+ [/^· (Salt Bank|CSV)\.(.*)$/,function(m,a,b){return "· "+a+"."+(b?" "+tx(b.trim()):"")}],
+ [/^(\d+) rânduri, (\d+) înregistrări de curs sau sold și (\d+) scadențe auto\. Se adaugă în contul tău; ce are același cod se înlocuiește, nimic nu se șterge\.$/,"$1 rows, $2 rate or balance records and $3 car due dates. They're added to your account; anything with the same code is replaced, nothing is deleted."],
+ [/^„(.+)” e acum plată lunară\. Luna viitoare apare de la început și se bifează din extras\.$/,"“$1” is now a monthly payment. Next month it's there from the start and gets checked from the statement."],
+ [/^„(.+)” a trecut la „(.+)”\. La următoarele extrase merge singur acolo\.$/,function(m,a,b){return "“"+a+"” moved to “"+tx(b)+"”. Future statements put it there automatically."}],
+ [/^Conexiune întreruptă \((.+)\)$/,"Connection lost ($1)"],[/^Nu s-a salvat \((.+)\)$/,"Not saved ($1)"],[/^Copia are o înregistrare care nu e în regulă \((.+)\)\.$/,"The copy has an invalid record ($1)."],
+ [/^Nu am reușit să te loghez \((.+)\)\.$/,"Couldn't sign you in ($1)."],[/^Nu am putut citi (PDF-ul|fișierul): (.+)$/,function(m,a,b){return "Couldn't read the "+(a==="PDF-ul"?"PDF":"file")+": "+b}],
+ [/^(.+) · (Nefăcut|Plătit|Încasat|Făcut|În așteptare)$/,function(m,a,b){return tx(a)+" · "+tx(b)}],
+ [/^(.+) (rămas|rămași) din (.+)$/,"$1 left from $3"]
+];
+/* la urmă: listă de bucăți despărțite cu „ · ”: traduce ce știe, lasă restul (nume, note) cum sunt */
+I18N.enP.push([/^.+ · .+$/,function(s){var ps=s.split(" · "),any=false,out=ps.map(function(p){var t=trSeg(p);if(t!=null){any=true;return t}return p});return any?out.join(" · "):s},1]);
+function trTail(b){return String(b||"").replace(/ · pune cursul lunii \(sus\), ca să se socotească și leii din schimb/," · enter the month's rate (above) so the lei from the exchange count too").replace(/ · lipsește cursul unei luni cu schimb, mai în urmă/," · a month with an exchange is missing its rate, further back")}
 
 /* ================= Extrase ING Business: citire (funcții pure, testate în Node) ================= */
 var IMP_DATE=/^(\d{2})\.(\d{2})\.(\d{4})$/;
@@ -1676,7 +1950,7 @@ function buildProposals(st,group,ctx){
     if(o.n>1)parts.push(o.n+" tranzacții"+(p.cps.length>1?": "+p.cps.slice(0,4).join(", ")+(p.cps.length>4?"…":""):""));
     else if(p.purpose&&/^\d+$/.test(p.purpose))parts.push("ref. "+p.purpose);
     o.note=parts.join(" · ");
-    props.push(o);
+    o.name=trData(o.name);props.push(o);
   });
   /* schimburi valutare: nu devin rânduri, ci curs + EUR schimbați pe lună */
   var fxs=fxOrder.map(function(ym){var f=fxm[ym],m=ctx.meta&&ctx.meta[ym],rate=r2(f.ronEq/f.eur*10000)/10000,eur=r2(f.eur);
@@ -1966,18 +2240,18 @@ function renderFirma(){
   $("#ratePanel").hidden=!hasEur;$("#bnrLink").hidden=!hasEur;
   var rin=$("#rate"),an=$("#autonote");
   an.textContent=ownRate(ym)?"":(r?"Cursul e moștenit din luna anterioară. Pune-l pe cel din ziua schimbului.":"Pune cursul din ziua în care schimbi banii.");
-  if(document.activeElement!==rin){var o=ownRate(ym);rin.value=o?String(o).replace(".",","):"";rin.placeholder=r?("moștenit: "+String(r).replace(".",",")):"ex. 5,19"}
+  if(document.activeElement!==rin){var o=ownRate(ym);rin.value=o?decIn(o):"";rin.placeholder=r?("moștenit: "+decIn(r)):"ex. 5,19"}
   var inc=m.filter(function(x){return x.group==="Firmă"&&x.kind==="Încasare"});
   var incEur=f.ie, incEurDone=sum(inc.filter(function(x){return x.status==="Gata"}),function(x){return curOf(x)==="EUR"?x.amount:0});
   var fOutR=m.filter(function(x){return x.group==="Firmă"&&isOut(x)&&curOf(x)==="RON"});
   var fPaidR=sum(fOutR.filter(function(x){return x.status==="Gata"}),function(x){return x.amount});
   var needEur=f.need, exv=f.ex0, exSet=exv!=null;
   var restE=(exSet&&needEur!=null)?needEur-exv:null;
-  var xin=$("#exch");if(document.activeElement!==xin){xin.value=exSet?String(exv).replace(".",","):"";xin.placeholder=needEur!=null?("necesar: "+money(needEur)):"ex. 2100"}
+  var xin=$("#exch");if(document.activeElement!==xin){xin.value=exSet?decIn(exv):"";xin.placeholder=needEur!=null?("necesar: "+money(needEur)):"ex. 2100"}
   var k='';
   k+=kpi("good","Încasat de la client",eur(incEurDone),"din "+eur(incEur)+" așteptat"+(r&&incEur?" (≈ "+lei(incEur*r)+")":""));
   k+=kpi("","Plăți firmă (lei)",lei(f.oR),"plătit "+lei(fPaidR)+" · inclusiv salariu, decontare și diurne"+(f.oE>0?" · în plus "+eur(f.oE)+" direct din contul în EUR":""));
-  k+=kpi("","De schimbat în lei",needEur==null?"—":eur(needEur),exSet?("schimbat <b>"+eur(exv)+"</b>"+(restE==null?"":restE>0.005?" · mai ai de schimbat <b>"+eur(restE)+"</b>":restE<-0.005?" · cu <b>"+eur(-restE)+"</b> peste necesar":" · acoperă plățile")):(r?("la cursul "+String(r).replace(".",",")+" ca să acoperi plățile firmei · treci sus cât ai schimbat efectiv"):"completează cursul de sus"));
+  k+=kpi("","De schimbat în lei",needEur==null?"—":eur(needEur),exSet?("schimbat <b>"+eur(exv)+"</b>"+(restE==null?"":restE>0.005?" · mai ai de schimbat <b>"+eur(restE)+"</b>":restE<-0.005?" · cu <b>"+eur(-restE)+"</b> peste necesar":" · acoperă plățile")):(r?("la cursul "+decIn(r)+" ca să acoperi plățile firmei · treci sus cât ai schimbat efectiv"):"completează cursul de sus"));
   var run=firmRun(ym),runPrev=firmRun(shift(ym,-1)),dE=run.eur-runPrev.eur;
   k+=kpi(run.eur<0||(!run.noRate&&run.ron<-0.5)?"bad":(run.noRate?"":"good"),"Sold firmă, reportat",eur(run.eur),(run.noRate?"lei în cont: <b>necunoscut încă</b>":(run.ron<0?"minus <b>"+lei(-run.ron)+"</b>":"plus <b>"+lei(run.ron)+"</b>")+" în cont")+" · luna asta "+(dE>=0?"+":"")+eur(dE)+" · se adună de la o lună la alta"+(run.noRate?(f.ex>0&&!f.rr?" · pune cursul lunii (sus), ca să se socotească și leii din schimb":" · lipsește cursul unei luni cu schimb, mai în urmă"):""));
   $("#kpisF").innerHTML=k;
@@ -2019,7 +2293,7 @@ function renderHist(){
     any=true;
     var known=f.ex0!=null||f.rr!=null, left=known?f.ie-f.oE-f.ex:null, bal=firmRun(k).eur;
     /* roșu doar dacă soldul total în EUR ajunge sub zero; un minus al lunii acoperit din soldul reportat nu e greșeală */
-    rows+='<tr><td>'+label(k)+'</td><td class="num" data-l="Curs">'+(f.rr?String(f.rr).replace(".",","):"—")+'</td><td class="num" data-l="Încasat">'+(f.ie>0?eur(f.ie):"—")+'</td><td class="num" data-l="De schimbat">'+(f.need==null?"—":eur(f.need))+'</td><td class="num" data-l="Schimbat">'+(f.ex0!=null?eur(f.ex0):"—")+'</td><td class="num'+(left!=null&&bal<-0.005?' bad':'')+'" data-l="Diferență">'+(left==null?"—":eur(left))+'</td></tr>';
+    rows+='<tr><td>'+label(k)+'</td><td class="num" data-l="Curs">'+(f.rr?decIn(f.rr):"—")+'</td><td class="num" data-l="Încasat">'+(f.ie>0?eur(f.ie):"—")+'</td><td class="num" data-l="De schimbat">'+(f.need==null?"—":eur(f.need))+'</td><td class="num" data-l="Schimbat">'+(f.ex0!=null?eur(f.ex0):"—")+'</td><td class="num'+(left!=null&&bal<-0.005?' bad':'')+'" data-l="Diferență">'+(left==null?"—":eur(left))+'</td></tr>';
   }
   if(!any){$("#hist").innerHTML='<div class="empty">Apare după ce treci sumele și cursul pe lună.</div>';return}
   var run=firmRun(ym);
@@ -2086,7 +2360,7 @@ function rowHtml(x){
       '<div class="nmc"><span class="lab">Element</span><div class="nmw"><i class="sw2" style="background:'+colorOf(x)+'"></i><input class="nm" data-f="name" value="'+esc(x.name)+'" aria-label="Element"></div></div>'+
       '<div><span class="lab">Tip</span><select data-f="kind" aria-label="Tip">'+opts(KINDS,x.kind)+'</select></div>'+
       '<div><span class="lab">Zi</span><input class="num" data-f="day" inputmode="numeric" value="'+(x.day==null?"":x.day)+'" aria-label="Ziua" placeholder="–"></div>'+
-      '<div><span class="lab">Sumă</span><input class="num amt" data-f="amount" inputmode="decimal" value="'+(x.amount==null?"":String(x.amount).replace(".",","))+'" aria-label="Sumă"'+(memo?' disabled placeholder="–"':' placeholder="0"')+'></div>'+
+      '<div><span class="lab">Sumă</span><input class="num amt" data-f="amount" inputmode="decimal" value="'+(x.amount==null?"":decIn(x.amount))+'" aria-label="Sumă"'+(memo?' disabled placeholder="–"':' placeholder="0"')+'></div>'+
       (showCur(x)?'<div><span class="lab">Monedă</span><select data-f="cur" aria-label="Monedă">'+opts(["RON","EUR"],curOf(x))+'</select></div>':'')+
       (x.src?'<div class="stc"><span class="lab">Status</span><span class="stx">'+IC.ok+(x.kind==="Încasare"?"Încasat":"Plătit")+'</span></div>'
         :'<div class="stc"><span class="lab">Status</span><div class="sg" role="group" aria-label="Status">'+stBtns(x)+'</div></div>')+
@@ -2155,8 +2429,8 @@ function renderSettings(){
 function renderMai(){
   renderSettings();renderYear();
   var se=$("#seur"),sr=$("#sron"),sm=$("#sinceM");
-  if(document.activeElement!==se)se.value=startBal.eur?String(startBal.eur).replace(".",","):"";
-  if(document.activeElement!==sr)sr.value=startBal.ron?String(startBal.ron).replace(".",","):"";
+  if(document.activeElement!==se)se.value=startBal.eur?decIn(startBal.eur):"";
+  if(document.activeElement!==sr)sr.value=startBal.ron?decIn(startBal.ron):"";
   if(document.activeElement!==sm){
     var ms=allMonths();[ymNow(),startBal.since].forEach(function(k){if(k&&/^\d{4}-\d{2}$/.test(k)&&ms.indexOf(k)<0)ms.push(k)});ms.sort();
     sm.innerHTML='<option value="">de la prima lună</option>'+ms.map(function(k){return '<option value="'+k+'">'+label(k)+'</option>'}).join("");
@@ -2571,7 +2845,7 @@ function renderXp(){
   });
   var tot=tr+(rt?te*rt:0);
   $("#xpSum").innerHTML=list.length
-    ?'<div class="xptot"><b class="num">'+lei(tot)+'</b>'+(noRate?' <span>+ '+eur(te)+' (pune cursul lunii la Firmă ca să-i socotesc în lei)</span>':te>0?' <span>din care '+eur(te)+' la cursul '+String(rt).replace(".",",")+'</span>':'')+'<small>'+list.length+(list.length===1?' cheltuială':' cheltuieli')+' în '+esc(label(ym))+'</small></div>'+
+    ?'<div class="xptot"><b class="num">'+lei(tot)+'</b>'+(noRate?' <span>+ '+eur(te)+' (pune cursul lunii la Firmă ca să-i socotesc în lei)</span>':te>0?' <span>din care '+eur(te)+' la cursul '+decIn(rt)+'</span>':'')+'<small>'+list.length+(list.length===1?' cheltuială':' cheltuieli')+' în '+esc(label(ym))+'</small></div>'+
      (fo&&src.firma>0?'<div class="xsrc"><span class="c">din Casă <b class="num">'+lei(src.casa)+'</b></span><span class="f">din Firmă <b class="num">'+lei(src.firma)+'</b></span></div>':'')+
      '<div class="xchips">'+Object.keys(by).sort(function(a,b){return by[b]-by[a]}).map(function(k){return '<span class="xchip">'+esc(catName(k))+' <b class="num">'+money0(by[k])+'</b></span>'}).join("")+'</div>'
     :'';
@@ -2590,7 +2864,7 @@ function openXp(x){
   var f=$("#xpForm"),vs=vehicles();
   $("#xpVeh").innerHTML='<option value="">—</option>'+vs.map(function(v){return '<option value="'+esc(v.id)+'">'+esc(vehName(v))+'</option>'}).join("");
   $("#xpVehL").hidden=!vs.length;
-  $("#xpAmt").value=x?String(x.amount).replace(".",","):"";
+  $("#xpAmt").value=x?decIn(x.amount):"";
   $("#xpCur").value=x&&x.cur==="EUR"?"EUR":"RON";
   $("#xpCat").value=x?x.cat:xpLastCat;
   $("#xpDate").value=x?x.date:(ym===ymNow()?iso(new Date()):ym+"-01");
@@ -2792,9 +3066,9 @@ function prHtml(p){
     '<div class="pbot">'+sel+ks+why+(note.length?'<span class="pnote">'+esc(note.join(" · "))+'</span>':'')+'</div></div></div>';
 }
 function fxHtml(f){
-  var prev=f.prev&&(f.prev.rate>0||f.prev.exch!=null)?'<small>în tabel era: curs '+(f.prev.rate>0?String(f.prev.rate).replace(".",","):"–")+', schimbat '+(f.prev.exch!=null?eur(f.prev.exch):"–")+'</small>':'';
+  var prev=f.prev&&(f.prev.rate>0||f.prev.exch!=null)?'<small>în tabel era: curs '+(f.prev.rate>0?decIn(f.prev.rate):"–")+', schimbat '+(f.prev.exch!=null?eur(f.prev.exch):"–")+'</small>':'';
   return '<div class="fxrow" data-fid="'+esc(f.id)+'"><div class="pck"><input type="checkbox" data-fc="1"'+(f.include?' checked':'')+' aria-label="Include schimbul valutar"></div>'+
-    '<div><b>Schimb valutar: '+eur(f.eur)+' la cursul '+String(f.rate).replace(".",",")+'</b>'+
+    '<div><b>Schimb valutar: '+eur(f.eur)+' la cursul '+decIn(f.rate)+'</b>'+
     '<small>în '+esc(label(f.ym))+(f.n>1?' · '+f.n+' operațiuni':'')+' · se trece în Firmă: cursul lunii și „EUR schimbați”'+(f.same?' · deja trecut așa':'')+'</small>'+prev+'</div></div>';
 }
 function impCounts(){
@@ -3057,6 +3331,9 @@ $("#impFile").addEventListener("change",function(){var f=this.files&&this.files[
 })();
 
 /* ================= Pornire: întâi desenează, apoi conectează ================= */
+/* limba: lista de alegere (Setări / login) + traducerea ecranului în engleză */
+document.querySelectorAll("select[data-lang]").forEach(function(s){s.value=LANG;s.addEventListener("change",function(){setLang(this.value)})});
+i18nData();i18nStart();
 (function(){
   try{items=JSON.parse(localStorage.getItem("fin_items")||"[]")||[]}catch(e){items=[]}
   try{meta=JSON.parse(localStorage.getItem("fin_meta")||"{}")||{}}catch(e){meta={}}
@@ -3116,6 +3393,7 @@ async function connectDb(db,user){
     });
     meta=m;startBal=sb;rules=rl;imports=imps;bals=bl;
     mods=readMods(stg);if(!snap.metadata||!snap.metadata.fromCache)metaDef=true;
+    if(metaDef)syncLang(!!stg);
     if(!modOn(tab))tab="general";
     if(wl&&!welcomed){welcomed=true;maybeAuto()}
     seedCar();
@@ -3291,7 +3569,7 @@ function renderWelcome(){
   return show;
 }
 /* asistentul de la prima intrare: alegi modulele, moneda firmei, și vezi pe loc ce rânduri primești */
-function wizState(){var r=document.querySelector('input[name=wFx]:checked');return readMods({firma:$("#wFirma").checked,transport:$("#wTransport").checked,fx:r&&r.value==="EUR"?"EUR":"RON",tpl:2,since:ymNow()})}
+function wizState(){var r=document.querySelector('input[name=wFx]:checked');return readMods({firma:$("#wFirma").checked,transport:$("#wTransport").checked,fx:r&&r.value==="EUR"?"EUR":"RON",tpl:2,since:ymNow(),lang:LANG})}
 function renderWiz(){
   var s=wizState(),car=s.transport&&$("#wCar").checked;
   $("#wFxBox").hidden=!s.firma;$("#wCarL").hidden=!s.transport;$("#wMonth").textContent=label(ymNow());
