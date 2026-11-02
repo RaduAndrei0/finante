@@ -727,7 +727,7 @@ details.fold[open]>summary{margin-bottom:10px}
         </div>
         <div class="gh"><span>Element</span><span>Tip</span><span>Zi</span><span style="text-align:right">Sumă</span><span>Monedă</span><span>Status</span><span>Notă</span><span></span></div>
         <div class="grid" id="gridF"></div>
-        <div class="foot"><span id="firmaFoot">Rândurile noi pornesc pe „De făcut”. Digi, încasarea și salariul net se copiază în luna nouă. Decontarea grădiniței se pune singură la cât ai plătit la Grădiniță luna trecută.</span></div>
+        <div class="foot"><span id="firmaFoot">Luna nouă pornește cu aceleași rânduri, pe „De făcut” și fără sume: le treci tu când le afli.</span></div>
       </section>
       <div id="impWrap">
       <section class="panel" id="impPanel" aria-labelledby="himp">
@@ -857,7 +857,7 @@ This typically indicates that your device does not have a healthy Internet conne
 <script>
 (function(){"use strict";
 var TARGET="web";
-var BUILD_ID="web 1.0 · 2026-11-02 11:20 UTC";
+var BUILD_ID="web 1.0 · 2026-11-02 11:35 UTC";
 var WHERE_DB="Datele tale stau în contul tău Google, într-un proiect Firebase (Google Cloud, regiunea Frankfurt). Pe telefon rămâne doar o copie temporară, ca să meargă și fără net.";
 var MONTHS=["ianuarie","februarie","martie","aprilie","mai","iunie","iulie","august","septembrie","octombrie","noiembrie","decembrie"];
 var GROUPS=["Casă","Firmă"], KINDS=["Plată","Încasare","Transfer","Memento"];
@@ -865,7 +865,7 @@ var TABS=["general","casa","firma","transport","mai"], TAB_ALIAS={luna:"general"
 /* module: Casă e mereu pornită; Firmă și Transport se pot opri din Setări (datele nu se șterg, doar se ascund) */
 /* fx: moneda în care încasează firma ("EUR" = cu curs și schimb în lei; "RON" = doar lei). tpl: 2 = cont creat cu asistentul (rânduri-model generice) */
 var mods={firma:true,transport:true,fx:"EUR",tpl:0};
-function readMods(o){o=o||{};var r={firma:o.firma!==false,transport:o.transport!==false,fx:o.fx==="RON"?"RON":"EUR",tpl:o.tpl>=2?2:0,fuelMin:o.fuelMin>=0&&o.fuelMin<100000?Math.round(o.fuelMin):250,casaImp:o.casaImp===true};if(/^\d{4}-\d{2}$/.test(o.since||""))r.since=o.since;return r}
+function readMods(o){o=o||{};var r={firma:o.firma!==false,transport:o.transport!==false,fx:o.fx==="RON"?"RON":"EUR",tpl:o.tpl>=2?2:0,fuelMin:o.fuelMin>=0&&o.fuelMin<100000?Math.round(o.fuelMin):250,casaImp:o.casaImp===true,mig:o.mig>0?Math.round(o.mig):0};if(/^\d{4}-\d{2}$/.test(o.since||""))r.since=o.since;return r}
 /* luna în care ți-ai făcut contul: ce avea ziua deja trecută nu se arată ca întârziat (nu știm dacă l-ai plătit deja) */
 function freshMonth(m){return !!mods.since&&m===mods.since}
 function fxRon(){return mods.firma!==false&&mods.fx==="RON"}
@@ -900,7 +900,6 @@ var DEFAULTS=[
  {key:"comron",group:"Firmă",name:"Taxă lunară ING (cont lei)",kind:"Plată",day:30},
  {key:"comtx",group:"Firmă",name:"Comisioane plăți în lei (0,51/plată)",kind:"Plată"}
 ];
-var FIXED={digi:1,accu:1,sal:1,decon:1,comeur:1,comron:1,chirie:1,net:1,salc:1};
 /* rândurile-model pentru conturile noi (asistentul de la prima intrare): generice, fără bănci sau nume anume */
 var TPL_C=[
  {key:"chirie",name:"Chirie sau rată casă",kind:"Plată",day:5},
@@ -1081,12 +1080,22 @@ function firmMonth(k){
   var ex=ex0!=null?ex0:((ie>0&&rr)?need:0);
   return {k:k,rr:rr,ie:ie,ir:ir,oE:oE,oR:oR,ex0:ex0,need:need,ex:ex||0};
 }
+/* doar ce s-a întâmplat (rânduri bifate); schimbul: cel trecut de tine, altfel cât au cerut plățile în lei deja făcute */
+function firmDone(k){
+  var rr=rateFor(k),mi=items.filter(function(x){return x.ym===k&&x.group==="Firmă"&&x.status==="Gata"});
+  var inc=mi.filter(function(x){return x.kind==="Încasare"}),outs=mi.filter(isOut);
+  var ie=sum(inc,function(x){return curOf(x)==="EUR"?x.amount:0}), ir=sum(inc,function(x){return curOf(x)==="RON"?x.amount:0});
+  var oE=sum(outs,function(x){return curOf(x)==="EUR"?x.amount:0}), oR=sum(outs,function(x){return curOf(x)==="RON"?x.amount:0});
+  var ex0=(meta[k]&&meta[k].exch!=null)?meta[k].exch:null;
+  var ex=ex0!=null?ex0:((ie>0&&rr)?Math.max((oR-ir)/rr,0):0);
+  return {rr:rr,ie:ie,ir:ir,oE:oE,oR:oR,ex:ex||0};
+}
 /* soldul firmei reportat: EUR rămași + lei rămași, de la „luna de pornire” până la luna m inclusiv */
 function firmRun(m){
   var e=startBal.eur||0,r=startBal.ron||0,since=startBal.since||"",nr=false;
   if(since&&m<since)return {eur:e,ron:r,noRate:false};
   allMonths().filter(function(k){return k<=m&&(!since||k>=since)}).forEach(function(k){
-    var f=firmMonth(k);
+    var f=firmDone(k);
     e+=f.ie-f.oE-f.ex;
     r+=(f.rr?f.ex*f.rr:0)+f.ir-f.oR;
     if(f.ex>0&&!f.rr)nr=true;   /* s-au schimbat EUR, dar nu știm cursul: leii nu pot fi socotiți */
@@ -1111,8 +1120,7 @@ function buildMonth(target){
   var tpl=mods.tpl>=2,model=tpl?tplRows():DEFAULTS;
   /* comisioanele băncii nu se mai pun dinainte: apar doar din extras, cu suma reală */
   var src=prevYm?monthItems(prevYm).filter(function(x){return !x.src&&!AUTOPAID[x.key]}).sort(function(a,b){return (a.order||0)-(b.order||0)}):model.filter(function(d){return !AUTOPAID[d.key]}).map(function(d,i){return {key:d.key,group:d.group,name:d.name,kind:d.kind,day:d.day==null?null:d.day,note:"",order:i,cur:d.cur||null}});
-  var gradAmt=0;src.forEach(function(z){if(z.key==="gradi"&&z.amount>0)gradAmt=z.amount});
-  return src.map(function(s,i){var key=s.key||("x"+rid());var fee=BANKFEE[key];return {id:target+"_"+key,key:key,ym:target,group:s.group,name:s.name,kind:s.kind,day:s.day==null?null:s.day,amount:(key==="decon"&&gradAmt>0)?gradAmt:((FIXED[key]&&s.amount>0)?s.amount:(fee?fee.amount:null)),status:AUTOPAID[key]?"Așteaptă":"De făcut",note:s.note||"",order:i,cur:s.cur||(fee?fee.cur:null)}});
+  return src.map(function(s,i){var key=s.key||("x"+rid());var fee=BANKFEE[key];return {id:target+"_"+key,key:key,ym:target,group:s.group,name:s.name,kind:s.kind,day:s.day==null?null:s.day,amount:null,status:AUTOPAID[key]?"Așteaptă":"De făcut",note:s.note||"",order:i,cur:s.cur||(fee?fee.cur:null)}});
 }
 function createMonth(target){
   if(!canWrite){return}
@@ -1127,9 +1135,16 @@ function cleanFees(){
   var now=ymNow(),ids=items.filter(function(x){return AUTOPAID[x.key]&&x.ym>=now&&x.ym>="2026-11"&&!x.src&&!(x.hs&&x.hs.length)}).map(function(x){return x.id});
   if(ids.length)delMany(ids);
 }
+/* o singură dată (ținut minte în setări, pe toate dispozitivele): în noiembrie 2026 sumele nebifate puse dinainte se golesc */
+function migNov(){
+  if(!metaDef||mods.mig>=1||ymNow()<"2026-11")return;
+  var fx=items.filter(function(x){return x.ym==="2026-11"&&!x.src&&x.status!=="Gata"&&x.amount!=null&&!(x.hs&&x.hs.length)}).map(function(x){return Object.assign({},x,{amount:null})});
+  putSettings({mig:1});
+  if(fx.length)putMany(fx);
+}
 function maybeAuto(){
   if(!firstDefinitive||!canWrite||!acctReady())return;
-  cleanFees();
+  cleanFees();migNov();
   if(ym!==ymNow()||autoTried[ym])return;
   if(monthItems(ym).length)return;
   autoTried[ym]=1;createMonth(ym);
@@ -1944,7 +1959,7 @@ function renderFirmaRon(m,f){
 function renderFirma(){
   var m=monthItems(ym),r=rateFor(ym),f=firmMonth(ym),ro=fxRon();
   $("#ratePanel").hidden=ro;$("#foldX").hidden=ro;$("#bnrLink").hidden=ro;
-  $("#firmaFoot").textContent=mods.tpl>=2?"Rândurile noi pornesc pe „De făcut”. Încasarea, salariul și chiria se copiază în luna nouă cu aceeași sumă.":FIRMA_FOOT;
+  $("#firmaFoot").textContent=FIRMA_FOOT;
   if(ro){renderFirmaRon(m,f);renderFilters("Firmă");renderGrid("Firmă");return}
   /* cursul și schimbul apar doar în lunile cu euro */
   var hasEur=m.some(function(x){return x.group==="Firmă"&&curOf(x)==="EUR"})||!!ownRate(ym)||!!(meta[ym]&&meta[ym].exch!=null);
