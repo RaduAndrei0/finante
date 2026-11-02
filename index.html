@@ -550,6 +550,18 @@ details.fold[open]>summary{margin-bottom:10px}
 
 .toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(86px + env(safe-area-inset-bottom,0px));z-index:40;background:var(--fg);color:var(--bg);border-radius:10px;padding:10px 16px;font-size:13px;max-width:min(92vw,420px);text-align:center;box-shadow:0 6px 24px rgba(0,0,0,.25)}
 @media (min-width:900px){.toast{bottom:24px}}
+.toast.act{display:flex;align-items:center;gap:14px;text-align:left;min-width:min(92vw,340px)}
+.toast.act>span{flex:1;min-width:0}
+.toast .tundo{background:transparent;border:1px solid currentColor;color:inherit;border-radius:8px;padding:6px 12px;font:inherit;font-weight:600;cursor:pointer;white-space:nowrap}
+.toast.act[hidden]{display:none}
+.news .nv{padding:10px 0;border-top:1px solid var(--line)}
+.news .nv:first-child{border-top:0;padding-top:4px}
+.news .nvh{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 8px}
+.news .nvh small{color:var(--muted);margin-left:auto;font-size:12.5px}
+.news .nv.cur .nvh b{color:var(--auto)}
+.news ul{margin:6px 0 0;padding-left:20px;display:flex;flex-direction:column;gap:3px;color:var(--fg)}
+.news li{font-size:14px;line-height:1.45}
+.verline{display:flex;flex-wrap:wrap;align-items:center;gap:6px}
 </style>
 <style>
 /* ----- versiunea web: poarta de login, contul, bun venit ----- */
@@ -598,6 +610,7 @@ details.fold[open]>summary{margin-bottom:10px}
     <div class="sub">Casă și firmă, o lună pe rând.</div>
     <div class="gmsg" id="gmsg" role="status">Se verifică contul…</div>
     <button class="btn gbtn" id="gsign" type="button" hidden><svg viewBox="0 0 48 48" aria-hidden="true"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg><span>Intră cu Google</span></button>
+    <button class="btn" id="gout" type="button" hidden>Ieși din cont</button>
     <label class="glang" data-notr>🌐 <select data-lang="1" aria-label="Limba / Language" data-notr><option value="ro">Română</option><option value="en">English</option></select></label>
     <p class="gnote2">Datele tale stau în contul tău Google (Firebase, Frankfurt). Doar contul tău are acces la ele.</p>
   </div>
@@ -811,6 +824,11 @@ details.fold[open]>summary{margin-bottom:10px}
         </div>
         <p class="note">Soldul firmei se adună de la luna aleasă încoace. Lunile dinainte (de exemplu importate din extrase vechi) apar în istoric și în totalul pe an, dar nu schimbă soldul.</p>
       </section>
+      <details class="panel fold" id="news">
+        <summary><h2>Ce e nou</h2></summary>
+        <p class="note verline">Versiunea <b id="verLbl" data-notr></b></p>
+        <div class="news" id="newsList" data-notr></div>
+      </details>
       <section class="panel" id="acct">
         <h2>Contul și datele</h2>
         <p class="note" id="whereData" style="margin-top:4px"></p>
@@ -829,7 +847,7 @@ details.fold[open]>summary{margin-bottom:10px}
           <div><b>Pune aplicația pe ecranul telefonului</b><small id="instNote">Se deschide ca o aplicație, fără bara browserului.</small></div>
           <button class="btn pri" id="instBtn" type="button" hidden>Instalează</button>
         </div>
-        <p class="note">Versiunea aplicației: <span id="buildId" class="num"></span></p>
+        <p class="note verline">Versiunea aplicației: <button type="button" class="linkbtn" id="buildId" data-notr></button></p>
       </section>
 
     </section>
@@ -861,7 +879,7 @@ This typically indicates that your device does not have a healthy Internet conne
 <script>
 (function(){"use strict";
 var TARGET="web";
-var BUILD_ID="web 1.0 · 2026-11-02 12:44 UTC";
+var BUILD_ID="build 2026-11-02 13:02 UTC";
 var WHERE_DB="Datele tale stau în contul tău Google, într-un proiect Firebase (Google Cloud, regiunea Frankfurt). Pe telefon rămâne doar o copie temporară, ca să meargă și fără net.";
 var MONTHS=["ianuarie","februarie","martie","aprilie","mai","iunie","iulie","august","septembrie","octombrie","noiembrie","decembrie"];
 var GROUPS=["Casă","Firmă"], KINDS=["Plată","Încasare","Transfer","Memento"];
@@ -961,7 +979,15 @@ var meta={}, startBal={eur:0,ron:0,since:""}, rules=[], imports=[], bals={}, S={
 
 /* ---------- stocare: baza de date a paginii; altfel doar acest browser ---------- */
 var toastT=null;
-function toast(t){var el=$("#toast");if(!el)return;el.textContent=t;el.hidden=false;clearTimeout(toastT);toastT=setTimeout(function(){el.hidden=true},4500)}
+/* mesaj cu „Anulează” (după o ștergere): 8 secunde ca să aduci înapoi ce ai șters */
+function toastUndo(t,fn){
+  var el=$("#toast");if(!el)return;
+  el.innerHTML='<span>'+esc(t)+'</span><button type="button" class="tundo">Anulează</button>';el.hidden=false;el.classList.add("act");
+  clearTimeout(toastT);
+  el.querySelector(".tundo").onclick=function(){el.hidden=true;el.classList.remove("act");clearTimeout(toastT);fn()};
+  toastT=setTimeout(function(){el.hidden=true;el.classList.remove("act")},8000);
+}
+function toast(t){var el=$("#toast");if(!el)return;el.classList.remove("act");el.textContent=t;el.hidden=false;clearTimeout(toastT);toastT=setTimeout(function(){el.hidden=true},4500)}
 function saveState(t){var el=$("#savestate");if(el)el.textContent=t;if(/^(Nu s-a|Conexiune|Doar citire)/.test(t))toast(t)}
 /* plățile lunii (facturi, grădiniță, chirie…) = rândurile tale; ce vine din extrase (magazine, benzinărie…) e „alte cheltuieli” */
 function isBill(x){return !x.src}
@@ -1332,7 +1358,9 @@ I18N.en={
 /* mesaje de eroare de salvare */
 "Doar citire: nu ai drept de scriere.":"Read only: you don't have write access.","Ai acces doar de citire la această pagină.":"You only have read access to this page.","Salvat în acest browser":"Saved in this browser",
 "Firestore a refuzat scrierea. În Firebase, la Firestore → Rules, publică regulile primite de la mine.":"Firestore refused the write. In Firebase, under Firestore → Rules, publish the rules I gave you.","Firestore nu te lasă să citești datele. În Firebase, la Firestore → Rules, verifică să fie publicate regulile primite de la mine.":"Firestore won't let you read the data. In Firebase, under Firestore → Rules, check the rules are published.",
-"scade azi":"due today","treci kilometrajul":"enter the mileage","Plăți Casă":"Home payments","Plăți Firmă":"Business payments","· Plătit":"· Paid","· Încasat":"· Received","· CSV.":"· CSV.","transfer bancar":"bank transfer","Debit":"Debit","Credit":"Credit",
+"scade azi":"due today","treci kilometrajul":"enter the mileage","Anulează":"Undo","Ieși din cont":"Sign out","Ce e nou":"What's new","Versiunea":"Version","Cheltuiala a fost ștearsă.":"Expense deleted.","Versiunea aplicației:":"App version:","Rândul":"The row","Scadența":"The due date",
+"Aplicația e privată deocamdată: contul ăsta nu are acces. Intră cu contul principal.":"The app is private for now: this account has no access. Sign in with the main account.",
+"Plăți Casă":"Home payments","Plăți Firmă":"Business payments","· Plătit":"· Paid","· Încasat":"· Received","· CSV.":"· CSV.","transfer bancar":"bank transfer","Debit":"Debit","Credit":"Credit",
 "contează doar ce e bifat ca făcut":"only checked rows count","se adună de la o lună la alta":"carries over month to month","venit minus plăți":"income minus payments",
 "✓ Nimic de plătit în următoarele 5 zile.":"✓ Nothing to pay in the next 5 days.","✓ Totul e bifat pentru luna asta.":"✓ Everything is checked for this month."
 };
@@ -1372,7 +1400,7 @@ I18N.enP=[
  [/^Ce a fost plata la (.+)$/,"What was the payment at $1"],[/^din extras: (.+)$/,"from statement: $1"],
  [/^Kilometraj actual: (.+)$/,function(m,a){return "Current mileage: "+tx(a)}],
  [/^Către (.+)$/,"To $1"],[/^Plăți în (\w+) \(card\)$/,"Card payments in $1"],
- [/^Ziua (\d+)$/,"Day $1"],[/^Ce n-ai bifat în (.+), în ordinea zilei\.$/,"What you haven't checked in $1, by day."],[/^se adaugă la (.+) din tabel$/,"adds to $1 in the table"],[/^ref\. (.+)$/,"ref. $1"],
+ [/^Ziua (\d+)$/,"Day $1"],[/^„(.+)” a fost (șters|ștearsă)\.$/,function(m,a){return "“"+tx(a)+"” deleted."}],[/^Ce n-ai bifat în (.+), în ordinea zilei\.$/,"What you haven't checked in $1, by day."],[/^se adaugă la (.+) din tabel$/,"adds to $1 in the table"],[/^ref\. (.+)$/,"ref. $1"],
  [/^(.+), (încă .+ km|depășit cu .+ km|treci kilometrajul)$/,function(m,a,b){return (trText(a)||a).trim()+", "+(trText(b)||b).trim()}],
  [/^(întârziat cu|expirat de) (\d+) (zi|zile)$/,function(m,a,n,u){return (a==="expirat de"?"expired "+n+" day"+(n==="1"?"":"s")+" ago":n+" day"+(n==="1"?"":"s")+" overdue")}],[/^Total pe (\d+) \(lei\)$/,"Total for $1 (lei)"],[/^Cheltuieli · (.+)$/,"Expenses · $1"],[/^Deschide (.+)$/,"Open $1"],[/^Am pus cheltuiala în (.+)\.$/,"Expense added to $1."],
  [/^Nu există încă nimic pentru (.+)\.$/,"Nothing yet for $1."],[/^Nicio cheltuială în (.+)\. Apasă „\+ Cheltuială” când alimentezi sau iei un Uber\.$/,"No expenses in $1. Tap “+ Expense” when you fill up or take an Uber."],
@@ -1423,6 +1451,47 @@ I18N.enP=[
 /* la urmă: listă de bucăți despărțite cu „ · ”: traduce ce știe, lasă restul (nume, note) cum sunt */
 I18N.enP.push([/^.+ · .+$/,function(s){var ps=s.split(" · "),any=false,out=ps.map(function(p){var t=trSeg(p);if(t!=null){any=true;return t}return p});return any?out.join(" · "):s},1]);
 function trTail(b){return String(b||"").replace(/ · pune cursul lunii \(sus\), ca să se socotească și leii din schimb/," · enter the month's rate (above) so the lei from the exchange count too").replace(/ · lipsește cursul unei luni cu schimb, mai în urmă/," · a month with an exchange is missing its rate, further back")}
+
+/* ================= Versiuni și „Ce e nou” =================
+   Versiune mare (3.0) = schimbare importantă; mică (2.1) = funcție nouă; reparație (2.1.1) = corectură.
+   Cea mai nouă versiune e prima din listă. */
+var CHANGELOG=[
+ {v:"2.1",d:"2026-11-02",
+  ro:["Versiuni și „Ce e nou”: vezi aici ce s-a schimbat la fiecare versiune","„Anulează” după ștergere: un rând, o cheltuială sau o scadență ștearsă din greșeală revine dintr-o atingere","Dacă intră un cont Google fără acces, aplicația îi spune clar că e privată"],
+  en:["Versions and “What's new”: see here what changed in each version","“Undo” after deleting: a row, expense or due date deleted by mistake comes back with one tap","If a Google account without access signs in, the app clearly says it's private"]},
+ {v:"2.0",d:"2026-11-02",t:{ro:"English",en:"English"},
+  ro:["Aplicația merge și în engleză: Mai mult → Setări → „Limba / Language” sau 🌐 pe ecranul de login","Limba se ține minte în cont, pe toate dispozitivele","Sumele și datele în formatul limbii alese"],
+  en:["The app now works in English: More → Settings → “Limba / Language” or 🌐 on the sign-in screen","The language is saved in your account, on every device","Amounts and dates in the chosen language's format"]},
+ {v:"1.5",d:"2026-11-02",t:{ro:"Simplificare",en:"Simpler"},
+  ro:["Rânduri curate și pe calculator: o linie scurtă, se deschid la atingere","Memento-urile separat, la „De nu uitat”","Moneda apare doar unde contează (Firmă cu euro)","La Casă, fără extras: doar plățile lunare și ce rămâne; cu extras: venit, cheltuieli și soldul din cont","Soldul de la Casă se preia singur lună de lună","Luna nouă pornește fără sume; comisioanele băncii vin doar din extras","Soldul firmei se mișcă doar din ce e bifat"],
+  en:["Clean rows on desktop too: one short line, they open when tapped","Reminders listed separately, under “Don't forget”","Currency only shows where it matters (Business paid in euro)","Home without a statement: just monthly payments and what's left; with a statement: income, spending and the account balance","The Home balance carries over month to month","A new month starts without amounts; bank fees come only from the statement","The business balance only moves with checked rows"]},
+ {v:"1.4",d:"2026-10-28",t:{ro:"Plăți lunare separat",en:"Monthly payments apart"},
+  ro:["Cercul arată doar facturile lunii, nu și cumpărăturile","„Fă-l plată lunară” pentru un rând din extras","Rândurile din extras sunt plătite: fără butoane de status","Extrasele la Casă sunt opționale (Setări)"],
+  en:["The chart shows only the month's bills, not shopping","“Make it a monthly payment” for a statement row","Statement rows are already paid: no status buttons","Statements for Home are optional (Settings)"]},
+ {v:"1.3",d:"2026-10-28",t:{ro:"Extrase mai deștepte",en:"Smarter statements"},
+  ro:["Benzinăria: peste prag e plin (și apare în Transport), sub prag mărunțișuri","Detalii pe fiecare rând din extras: ce, unde, cât","„Mută în…” alt magazin, ține minte alegerea","Aplicația se poate instala pe telefon și merge și fără net","Import CSV de la orice bancă"],
+  en:["Petrol stations: over the threshold is a full tank (also in Transport), under it small items","Details on every statement row: what, where, how much","“Move to…” another category, remembered for next time","The app can be installed on your phone and works offline","CSV import from any bank"]},
+ {v:"1.2",d:"2026-10-27",t:{ro:"Extrase Salt",en:"Salt statements"},
+  ro:["Import extras Salt Bank la Casă, pe categorii","Memento zilnic pe telefon pentru scadențe"],
+  en:["Salt Bank statement import for Home, by category","Daily phone reminder for due dates"]},
+ {v:"1.1",d:"2026-10-27",t:{ro:"Setări și Transport",en:"Settings and Transport"},
+  ro:["Module pe care le pornești sau oprești","Tabul Transport: vehicule, scadențe, revizii, cheltuieli, „plătit din”","Ghid la prima intrare"],
+  en:["Modules you can turn on or off","Transport tab: vehicles, due dates, services, expenses, “paid from”","A guide on first sign-in"]},
+ {v:"1.0",d:"2026-10-26",t:{ro:"Aplicația pe web",en:"The app on the web"},
+  ro:["Login cu Google, datele în contul tău (Firebase)","Datele vechi mutate, copie de siguranță JSON"],
+  en:["Google sign-in, data in your own account (Firebase)","Old data moved over, JSON backup copy"]}
+];
+CHANGELOG[0].t={ro:"Ce e nou și anulare",en:"What's new and undo"};
+var APP_VER=CHANGELOG[0].v;
+function verLabel(){return "v"+APP_VER+" · "+fmtD(CHANGELOG[0].d)}
+function renderNews(){
+  var el=$("#newsList");if(!el||el.getAttribute("data-done")===LANG)return;
+  el.setAttribute("data-done",LANG);
+  el.innerHTML=CHANGELOG.map(function(c,i){
+    var t=c.t?(c.t[LANG]||c.t.ro):"",it=c[LANG]||c.ro;
+    return '<div class="nv'+(i?'':' cur')+'"><div class="nvh"><b>v'+esc(c.v)+'</b>'+(t?' · '+esc(t):'')+'<small>'+esc(fmtD(c.d))+'</small></div><ul>'+it.map(function(x){return '<li>'+esc(x)+'</li>'}).join("")+'</ul></div>';
+  }).join("");
+}
 
 /* ================= Extrase ING Business: citire (funcții pure, testate în Node) ================= */
 var IMP_DATE=/^(\d{2})\.(\d{2})\.(\d{4})$/;
@@ -2427,7 +2496,8 @@ function renderSettings(){
   $("#startPanel").hidden=mods.firma===false;
 }
 function renderMai(){
-  renderSettings();renderYear();
+  renderSettings();renderYear();renderNews();
+  var vl=$("#verLbl");if(vl){vl.textContent=verLabel();vl.title=BUILD_ID}
   var se=$("#seur"),sr=$("#sron"),sm=$("#sinceM");
   if(document.activeElement!==se)se.value=startBal.eur?decIn(startBal.eur):"";
   if(document.activeElement!==sr)sr.value=startBal.ron?decIn(startBal.ron):"";
@@ -2558,6 +2628,7 @@ var delArm={id:null,t:null};
       }
       clearTimeout(delArm.t);delArm.id=null;
       del(id);if(it.group==="Firmă")syncFee(it.ym);
+      toastUndo("„"+(it.name||"Rândul")+"” a fost șters.",function(){put(it);if(it.group==="Firmă")syncFee(it.ym)});
     }
   });
   el.addEventListener("focusout",function(){setTimeout(function(){if(pendingRender&&!inTyping(q))renderGrid(g)},0)});
@@ -2800,7 +2871,7 @@ $("#vehs").addEventListener("click",function(e){
   var row=e.target.closest(".car-r");if(!row)return;
   var it=car.find(function(x){return x.id===row.getAttribute("data-id")});if(!it)return;
   if(e.target.closest("[data-ctog]")){carOpen=carOpen===it.id?null:it.id;renderCarList();return}
-  if(e.target.closest("[data-cdel]")){delCar(it.id);return}
+  if(e.target.closest("[data-cdel]")){delCar(it.id);toastUndo("„"+(it.name||"Scadența")+"” a fost ștearsă.",function(){putCar(it)});return}
   if(e.target.closest("[data-act=renew]")&&canWrite)renewCar(it);
 });
 $("#vehs").addEventListener("focusout",function(){setTimeout(function(){if(pendingCar&&!inTyping("#vehs"))renderCarList()},0)});
@@ -2903,7 +2974,7 @@ $("#xpList").addEventListener("click",function(e){
   var id=li.getAttribute("data-x"),x=xps.find(function(o){return o.id===id});if(!x)return;
   if(e.target.closest("[data-xdel]")){
     if(!canWrite)return;
-    if(xpDelArm===id){clearTimeout(xpDelT);delX(id);return}
+    if(xpDelArm===id){clearTimeout(xpDelT);delX(id);toastUndo("Cheltuiala a fost ștearsă.",function(){putX(x)});return}
     xpDelArm=id;clearTimeout(xpDelT);xpDelT=setTimeout(function(){xpDelArm=null;if(tab==="transport")renderXp()},4000);renderXp();return;
   }
   if(canWrite)openXp(x);
@@ -3465,7 +3536,11 @@ function fbCol(cref){
 }
 function fbDb(uid){var base=FB.fs.collection("users").doc(uid);return {collection:function(n){return fbCol(base.collection(n))}}}
 function webListenErr(err){
-  if(err&&err.code==="permission-denied")fbBanner("Firestore nu te lasă să citești datele. În Firebase, la Firestore → Rules, verifică să fie publicate regulile primite de la mine.");
+  if(err&&err.code==="permission-denied"){
+    fbBanner("Firestore nu te lasă să citești datele. În Firebase, la Firestore → Rules, verifică să fie publicate regulile primite de la mine.");
+    /* aplicația e privată: un cont fără acces vede un mesaj clar și poate ieși */
+    if(!FB.signingOut){gateShow("Aplicația e privată deocamdată: contul ăsta nu are acces. Intră cu contul principal.",false,true);$("#gout").hidden=false}
+  }
 }
 
 /* ---------- poarta de login ---------- */
@@ -3494,7 +3569,8 @@ function signInErr(e){
     :"Nu am reușit să te loghez ("+(c||(e&&e.message)||"eroare")+").";
 }
 (function(){
-  $("#buildId").textContent=BUILD_ID;
+  $("#buildId").textContent=verLabel()+" · "+L("ce e nou ›","what's new ›");$("#buildId").title=BUILD_ID;
+  $("#buildId").addEventListener("click",function(){var n=$("#news");if(n){n.open=true;try{n.scrollIntoView({behavior:"smooth",block:"start"})}catch(e){}}});
   $("#impNote").textContent="Rândurile importate se salvează în contul tău (Firebase). PDF-ul rămâne pe telefon, nu se trimite nicăieri.";
   if(!window.firebase||!firebase.initializeApp){
     gateShow("Nu s-a putut încărca Firebase. Verifică internetul și reîncarcă pagina.",false,true);saveState("Fără conexiune");return;
@@ -3539,6 +3615,7 @@ function signInErr(e){
     ev.prompt();(ev.userChoice||Promise.resolve()).then(function(){instShow()},function(){instShow()});
   });
   instShow();
+  $("#gout").addEventListener("click",function(){this.disabled=true;$("#signOut").click()});
   window.addEventListener("online",function(){saveState("Salvat")});
   window.addEventListener("offline",function(){saveState("Salvat")});
 })();
