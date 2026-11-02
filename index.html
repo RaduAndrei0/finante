@@ -91,6 +91,8 @@ h1{font-family:var(--f-display);font-size:24px;font-weight:700;letter-spacing:-.
 
 /* cifre */
 .kpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+.kpis.two{grid-template-columns:repeat(2,minmax(0,1fr))}
+.kpis.three{grid-template-columns:repeat(3,minmax(0,1fr))}
 .kpi{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px 14px;min-width:0}
 .kpi .l{font-size:11.5px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
 .kpi .v{font-family:var(--f-mono);font-size:22px;font-weight:500;margin-top:5px;overflow-wrap:anywhere}
@@ -338,6 +340,7 @@ details.fold[open]>summary{margin-bottom:10px}
 
 @media (max-width:899px){
   .kpis{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .kpis.three{grid-template-columns:repeat(2,minmax(0,1fr))} .kpis.three .kpi:last-child{grid-column:1 / -1}
   .stb{height:52px} .stb svg{width:26px;height:26px}
   .gmain{min-height:52px}
   .gr.done .gname{text-decoration:line-through;text-decoration-thickness:1px}
@@ -854,7 +857,7 @@ This typically indicates that your device does not have a healthy Internet conne
 <script>
 (function(){"use strict";
 var TARGET="web";
-var BUILD_ID="web 1.0 · 2026-11-02 09:40 UTC";
+var BUILD_ID="web 1.0 · 2026-11-02 11:20 UTC";
 var WHERE_DB="Datele tale stau în contul tău Google, într-un proiect Firebase (Google Cloud, regiunea Frankfurt). Pe telefon rămâne doar o copie temporară, ca să meargă și fără net.";
 var MONTHS=["ianuarie","februarie","martie","aprilie","mai","iunie","iulie","august","septembrie","octombrie","noiembrie","decembrie"];
 var GROUPS=["Casă","Firmă"], KINDS=["Plată","Încasare","Transfer","Memento"];
@@ -1106,12 +1109,10 @@ function buildMonth(target){
   var prevYm=null;
   items.forEach(function(x){if(x.ym<target&&!x.src&&(!prevYm||x.ym>prevYm))prevYm=x.ym});
   var tpl=mods.tpl>=2,model=tpl?tplRows():DEFAULTS;
-  var src=prevYm?monthItems(prevYm).filter(function(x){return !x.src}).sort(function(a,b){return (a.order||0)-(b.order||0)}):model.map(function(d,i){return {key:d.key,group:d.group,name:d.name,kind:d.kind,day:d.day==null?null:d.day,note:"",order:i,cur:d.cur||null}});
-  /* comisioanele băncii (ale contului vechi) apar și dacă luna precedentă nu le avea; conturile noi nu le primesc */
-  var have={};src.forEach(function(z){have[z.key]=1});
-  if(!tpl)DEFAULTS.forEach(function(d){if(AUTOPAID[d.key]&&!have[d.key])src.push({key:d.key,group:d.group,name:d.name,kind:d.kind,day:d.day==null?null:d.day,note:"",order:src.length,cur:d.cur||null})});
+  /* comisioanele băncii nu se mai pun dinainte: apar doar din extras, cu suma reală */
+  var src=prevYm?monthItems(prevYm).filter(function(x){return !x.src&&!AUTOPAID[x.key]}).sort(function(a,b){return (a.order||0)-(b.order||0)}):model.filter(function(d){return !AUTOPAID[d.key]}).map(function(d,i){return {key:d.key,group:d.group,name:d.name,kind:d.kind,day:d.day==null?null:d.day,note:"",order:i,cur:d.cur||null}});
   var gradAmt=0;src.forEach(function(z){if(z.key==="gradi"&&z.amount>0)gradAmt=z.amount});
-  return src.map(function(s,i){var key=s.key||("x"+rid());var fee=BANKFEE[key];return {id:target+"_"+key,key:key,ym:target,group:s.group,name:s.name,kind:s.kind,day:s.day==null?null:s.day,amount:(key==="decon"&&gradAmt>0)?gradAmt:((FIXED[key]&&s.amount>0)?s.amount:(fee?fee.amount:null)),status:AUTOPAID[key]?"Gata":"De făcut",note:s.note||"",order:i,cur:s.cur||(fee?fee.cur:null)}});
+  return src.map(function(s,i){var key=s.key||("x"+rid());var fee=BANKFEE[key];return {id:target+"_"+key,key:key,ym:target,group:s.group,name:s.name,kind:s.kind,day:s.day==null?null:s.day,amount:(key==="decon"&&gradAmt>0)?gradAmt:((FIXED[key]&&s.amount>0)?s.amount:(fee?fee.amount:null)),status:AUTOPAID[key]?"Așteaptă":"De făcut",note:s.note||"",order:i,cur:s.cur||(fee?fee.cur:null)}});
 }
 function createMonth(target){
   if(!canWrite){return}
@@ -1119,8 +1120,16 @@ function createMonth(target){
   if(mode==="db"&&!firstDefinitive){toast("Aștept răspunsul bazei de date. Luna se poate crea doar cu internet.");return}
   putMany(buildMonth(target),"Se creează luna…");syncFee(target)
 }
+/* o singură dată: comisioanele puse dinainte în noiembrie 2026 și după (nu din extras) se scot; vin din extras */
+var feesCleaned=false;
+function cleanFees(){
+  if(feesCleaned)return;feesCleaned=true;
+  var now=ymNow(),ids=items.filter(function(x){return AUTOPAID[x.key]&&x.ym>=now&&x.ym>="2026-11"&&!x.src&&!(x.hs&&x.hs.length)}).map(function(x){return x.id});
+  if(ids.length)delMany(ids);
+}
 function maybeAuto(){
   if(!firstDefinitive||!canWrite||!acctReady())return;
+  cleanFees();
   if(ym!==ymNow()||autoTried[ym])return;
   if(monthItems(ym).length)return;
   autoTried[ym]=1;createMonth(ym);
@@ -1792,12 +1801,12 @@ function renderUpcoming(){
   var cur=ym===ymNow(),today=new Date().getDate(),m;
   if(cur){
     var p=ym.split("-").map(Number),dim=new Date(p[0],p[1],0).getDate(),nxt=shift(ym,1);
-    var a=monthItems(ym).filter(function(x){return grpOn(x.group)&&x.status!=="Gata"&&x.day!=null&&x.day-today<=5&&!(freshMonth(ym)&&x.day<today)}).map(function(x){return {x:x,d:x.day-today}});
-    var b=monthItems(nxt).filter(function(x){return grpOn(x.group)&&x.status!=="Gata"&&x.day!=null&&x.day+dim-today<=5}).map(function(x){return {x:x,d:x.day+dim-today}});
+    var a=monthItems(ym).filter(function(x){return grpOn(x.group)&&x.status!=="Gata"&&!AUTOPAID[x.key]&&x.day!=null&&x.day-today<=5&&!(freshMonth(ym)&&x.day<today)}).map(function(x){return {x:x,d:x.day-today}});
+    var b=monthItems(nxt).filter(function(x){return grpOn(x.group)&&x.status!=="Gata"&&!AUTOPAID[x.key]&&x.day!=null&&x.day+dim-today<=5}).map(function(x){return {x:x,d:x.day+dim-today}});
     m=a.concat(b).sort(function(u,v){return u.d-v.d||(u.x.order||0)-(v.x.order||0)});
     $("#upchint").textContent="Ce ai de făcut în următoarele 5 zile, plus ce a rămas întârziat. Azi e "+today+".";
   }else{
-    m=monthItems(ym).filter(function(x){return grpOn(x.group)&&x.status!=="Gata"}).sort(function(a,b){var da=a.day==null?99:a.day,db=b.day==null?99:b.day;return da-db||(a.order||0)-(b.order||0)}).map(function(x){return {x:x,d:null}});
+    m=monthItems(ym).filter(function(x){return grpOn(x.group)&&x.status!=="Gata"&&!AUTOPAID[x.key]}).sort(function(a,b){var da=a.day==null?99:a.day,db=b.day==null?99:b.day;return da-db||(a.order||0)-(b.order||0)}).map(function(x){return {x:x,d:null}});
     $("#upchint").textContent="Ce n-ai bifat în "+label(ym)+", în ordinea zilei.";
   }
   $("#upchint").hidden=!m.length;
@@ -1854,6 +1863,26 @@ function renderCal(){
 }
 
 /* ---------- Casă ---------- */
+/* banii lunii la Casă: venitul bifat (transferurile Firmei + încasările Casei) și plățile Casei */
+function casaFlow(k){
+  var m=monthItems(k),r=rateFor(k),bl=bals[k];
+  var vin=m.filter(function(x){return x.status==="Gata"&&((x.kind==="Transfer"&&x.group==="Firmă")||(x.group==="Casă"&&x.kind==="Încasare"))});
+  var out=m.filter(function(x){return x.group==="Casă"&&isOut(x)});
+  var v=sum(vin,function(x){return ron(x,r)});
+  /* cu extras: toate plățile (sunt toate reale); fără extras: doar ce ai bifat */
+  var p=bl?sum(out,function(x){return ron(x,r)}):sum(out.filter(function(x){return x.status==="Gata"}),function(x){return ron(x,r)});
+  return {v:v,p:p,own:bl?bl.own:0};
+}
+/* soldul la început de lună: din extrasul lunii; altfel din luna trecută (soldul ei final, sau estimarea ei) */
+function casaOpen(k,depth){
+  depth=depth||0;
+  if(bals[k])return bals[k].open;
+  if(depth>24)return null;
+  var pk=shift(k,-1),po=casaOpen(pk,depth+1);
+  if(bals[pk])return bals[pk].close;
+  if(po==null)return null;
+  var f=casaFlow(pk);return r2(po+f.v-f.p+f.own);
+}
 var FIRMA_FOOT=(document.getElementById("firmaFoot")||{}).textContent||"";
 function renderCasa(){
   $("#casaHint").textContent=mods.tpl>=2?(mods.firma===false?"din salariu și alte venituri":"din salariul primit de la firmă și alte venituri"):"din salariu net, decontare și diurne";
@@ -1867,18 +1896,34 @@ function renderCasa(){
   var cOut=m.filter(function(x){return x.group==="Casă"&&isOut(x)});
   var cTot=sum(cOut,function(x){return ron(x,r)}), cPaid=sum(cOut.filter(function(x){return x.status==="Gata"}),function(x){return ron(x,r)});
   var cBill=sum(cOut.filter(isBill),function(x){return ron(x,r)}),cEx=cTot-cBill;
+  var bOut=cOut.filter(isBill),bPaid=sum(bOut.filter(function(x){return x.status==="Gata"}),function(x){return ron(x,r)}),bLeft=Math.max(cBill-bPaid,0),bN=bOut.filter(function(x){return x.status!=="Gata"&&x.amount>0}).length;
+  /* fără extras: plățile lunare + soldul preluat din luna trecută (estimat). Restul calculelor apar după extras */
+  var bl=bals[ym],full=!!bl||m.some(function(x){return x.group==="Casă"&&x.src});
   var c='';
-  c+=kpi("good","Venit casă",lei(venitDone),"primit din "+lei(venit)+" așteptat (salariu, decontare, diurne"+(other>0?", alte venituri":"")+") · contează doar ce e bifat ca făcut");
-  c+=kpi("","Plătit acasă",lei(cPaid),cEx>0.005?"plăți lunare "+lei(cBill)+" · alte cheltuieli "+lei(Math.round(cEx*100)/100):"din "+lei(cTot)+" de plătit");
-  c+=kpi(cTot-cPaid>0?"bad":"","Rămas de plătit",lei(cTot-cPaid),cOut.filter(function(x){return x.status!=="Gata"&&x.amount>0}).length+" plăți nebifate");
-  /* banii mutați între conturile tale nu sunt venit, dar intră/ies din cont: îi adunăm separat, din extras */
-  var bl=bals[ym],own=bl?bl.own:0,rest=venitDone-cTot+own,sub;
-  if(bl){
-    sub="venit minus plăți"+(Math.abs(own)>=0.005?(own>0?" + "+lei(own)+" aduși din alt cont al tău":" − "+lei(-own)+" mutați în alt cont al tău"):"")+" · în cont la "+fmtD(bl.to)+": <b>"+lei(bl.close)+"</b>";
-    var gap=r2(bl.open+rest-bl.close);
-    if(Math.abs(gap)>=0.5)sub+=" · față de extras diferă cu "+lei(Math.abs(gap))+" (vreo plată trecută de mână, din alt cont?)";
-  }else sub="venit primit minus toate plățile de acasă";
-  c+=kpi(rest>=0?"good":"bad","Rămâne acasă",lei(rest),sub);
+  if(!full){
+    var op=casaOpen(ym);
+    c+=kpi("","Plăți lunare",lei(bPaid),"plătit din "+lei(cBill));
+    c+=kpi(bLeft>0?"bad":"good","Rămas de plătit",lei(bLeft),bN?plural(bN,"plată nebifată","plăți nebifate"):"totul e bifat");
+    if(op!=null){
+      var fl=casaFlow(ym),est=r2(op+fl.v-fl.p),pl=label(shift(ym,-1)).split(" ")[0].toLowerCase();
+      c+=kpi(est>=0?"good":"bad","Rămâne acasă",lei(est),"estimat: "+lei(op)+" rămași din "+esc(pl)+" + venit primit "+lei(fl.v)+" − plăți bifate "+lei(fl.p)+" · cumpărăturile cu cardul intră când încarci extrasul");
+      $("#kpisC").className="kpis three";
+    }else $("#kpisC").className="kpis two";
+  }else{
+    $("#kpisC").className="kpis";
+    c+=kpi("good","Venit casă",lei(venitDone),"primit din "+lei(venit)+" așteptat (salariu, decontare, diurne"+(other>0?", alte venituri":"")+") · contează doar ce e bifat ca făcut");
+    c+=kpi("","Plătit acasă",lei(cPaid),cEx>0.005?"plăți lunare "+lei(cBill)+" · alte cheltuieli "+lei(Math.round(cEx*100)/100):"din "+lei(cTot)+" de plătit");
+    c+=kpi(bLeft>0?"bad":"","Rămas de plătit",lei(bLeft),bN?plural(bN,"plată nebifată","plăți nebifate"):"totul e bifat");
+    /* cu extras: pornim de la soldul de la începutul lunii; banii mutați între conturile tale intră separat */
+    var own=bl?bl.own:0,rest=venitDone-cTot+own,sub,val=rest;
+    if(bl){
+      val=r2(bl.open+rest);
+      sub="sold la început de lună "+lei(bl.open)+" + venit − plăți"+(Math.abs(own)>=0.005?(own>0?" + "+lei(own)+" aduși din alt cont al tău":" − "+lei(-own)+" mutați în alt cont al tău"):"");
+      var gap=r2(val-bl.close);
+      sub+=Math.abs(gap)>=0.5?" · extrasul arată "+lei(bl.close)+" la "+fmtD(bl.to)+", diferă cu "+lei(Math.abs(gap))+" (vreo plată trecută de mână, din alt cont?)":" · la fel ca în extras, la "+fmtD(bl.to)+" ✓";
+    }else sub="venitul lunii minus toate plățile de acasă";
+    c+=kpi(val>=0?"good":"bad","Rămâne acasă",lei(val),sub);
+  }
   $("#kpisC").innerHTML=c;
   renderFilters("Casă");renderGrid("Casă");
 }
@@ -2853,7 +2898,7 @@ async function applyImport(){
         if(p.cat!=="fee"&&row.key&&!row.src&&(p.manual||p.why!=="regulă"))newRules.push({p:rulePattern(p),k:row.key});
       }else{
         var nm=(p.name||"").trim()||"Tranzacție";
-        var kk=p.acc&&p.key?p.key:"i"+p.hs[0],id=p.ym+"_"+kk;
+        var kk=(p.acc||p.cat==="fee")&&p.key?p.key:"i"+p.hs[0],id=p.ym+"_"+kk;
         newRows.push({id:id,key:kk,ym:p.ym,group:IMP.group,name:nm,kind:p.dir>0?"Încasare":p.kind,day:p.day,amount:p.amount,status:"Gata",note:p.note||"",order:nextOrd(p.ym),cur:p.cur,date:p.date,src:"imp",hs:p.hs.slice(),locked:null,tx:p.tx||[]});
         if(!p.acc&&(nm!==p.gname||(p.dir<0&&p.kind!==p.kind0)))newRules.push({p:rulePattern(p),n:nm,kd:p.dir>0?"Încasare":p.kind});
       }
