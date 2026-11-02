@@ -254,11 +254,34 @@ details.fold[open]>summary{margin-bottom:10px}
 :root[data-theme="dark"] .btn.auto{color:#17123D}
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .btn.pri{color:#06202B}:root:not([data-theme="light"]) .btn.auto{color:#17123D}}
 .grid{display:flex;flex-direction:column}
-.gh,.gr{display:grid;grid-template-columns:minmax(150px,2.2fr) 106px 62px 112px 74px 118px minmax(100px,1.4fr) 34px;gap:8px;align-items:center}
-.gh{font-size:11.5px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;padding:0 0 6px}
-.gr{padding:5px 0;border-top:1px solid var(--line)}
-.gr.newkind{margin-top:12px;padding-top:12px;border-top:2px solid var(--line)}
-.gr input,.gr select{width:100%;min-width:0;background:var(--surface);border:1px solid transparent;border-radius:7px;padding:6px 8px}
+/* rândurile lunii: o linie scurtă (bifă, nume, sumă); atingi rândul și se deschide formularul */
+.gh{display:none}
+.grid{gap:6px}
+.gr{display:block;border:1px solid var(--line);border-radius:12px;background:var(--surface);padding:0;margin:0;overflow:hidden}
+.gsec{font-size:11.5px;color:var(--muted);text-transform:uppercase;letter-spacing:.07em;font-weight:600;margin:10px 2px 2px}
+.gsec:first-child{margin-top:0}
+.impgrp>.gr{margin-top:6px}
+.gsum{display:grid;grid-template-columns:52px minmax(0,1fr) auto;align-items:center}
+.stb{width:52px;height:50px;background:transparent;border:0;display:flex;align-items:center;justify-content:center;color:var(--muted);cursor:pointer}
+.stb svg{width:24px;height:24px;display:block}
+.stb.s1{color:var(--warn)} .stb.s2{color:var(--ok)}
+.gmain{text-align:left;background:transparent;border:0;padding:8px 6px 8px 0;min-width:0;min-height:50px;display:flex;flex-direction:column;justify-content:center;color:var(--fg);cursor:pointer}
+.gname{display:block;font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.gr.done .gname{color:var(--muted)}
+.gmeta{display:block;font-size:12px;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.gamt{padding:0 14px 0 8px;font-family:var(--f-mono);font-size:14px;white-space:nowrap;text-align:right}
+.gamt.none{color:var(--muted)}
+.gamt.pos{color:var(--ok)}
+.gform{display:none;padding:10px 12px 12px;border-top:1px solid var(--line)}
+.gr.open .gform{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:8px 10px}
+.gform .nmc,.gform .stc,.gform .notec,.gform .xc{grid-column:1 / 3}
+.gr .lab{display:block;font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin:0 0 3px 2px}
+.gr .xc{justify-self:end}
+.gr .xc .x{padding:7px 14px;border:1px solid var(--line);font-size:14px;color:var(--bad)}
+.gr .xc .x::after{content:" Șterge rândul"}
+.gr .xc .x.arm::after{content:" Sigur? Apasă din nou"}
+.gr.hastx .gform .notec{display:none}
+.gr input,.gr select{width:100%;min-width:0;background:var(--surface);border:1px solid var(--line);border-radius:7px;padding:8px 10px}
 .gr input:hover,.gr select:hover{border-color:var(--line)}
 .gr input:focus,.gr select:focus{border-color:var(--firma);background:var(--surface)}
 .gr input[disabled]{color:var(--muted);background:transparent}
@@ -266,9 +289,7 @@ details.fold[open]>summary{margin-bottom:10px}
 .gr .x{background:transparent;border:0;color:var(--muted);border-radius:7px;font-size:18px;line-height:1;padding:5px}
 .gr .x:hover{color:var(--bad);background:var(--badbg)}
 .gr .x.arm{color:var(--bad);background:var(--badbg)}
-.gr .lab{display:none}
 .gr.done input.nm{color:var(--muted)}
-.gform{display:contents}
 .impgrp{margin-top:12px;border-top:2px solid var(--line)}
 .impgrp>summary{list-style:none;cursor:pointer;display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 10px;padding:12px 2px 10px}
 .impgrp>summary::-webkit-details-marker{display:none}
@@ -284,7 +305,7 @@ details.fold[open]>summary{margin-bottom:10px}
 .impgrp .ig1{font-weight:600}
 .impgrp .ig2{color:var(--muted);font-size:13px}
 .dbtn{background:transparent;border:1px solid var(--line);border-radius:7px;padding:6px 10px;color:var(--fg);text-align:left;cursor:pointer;width:100%}
-.txd{grid-column:1 / -1;margin:2px 0 8px;padding:8px 10px;border-radius:10px;background:var(--surface2);display:flex;flex-direction:column;gap:2px}
+.txd{margin:0;padding:8px 12px;border-top:1px solid var(--line);background:var(--surface2);display:flex;flex-direction:column;gap:2px}
 .txl{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1.6fr) auto auto;gap:4px 12px;align-items:center;padding:5px 0;border-bottom:1px solid var(--line)}
 .txl:last-child{border-bottom:0}
 .txl .tm{font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
@@ -292,14 +313,11 @@ details.fold[open]>summary{margin-bottom:10px}
 .txl .ta{font-family:var(--f-mono);font-size:13px;white-space:nowrap;text-align:right}
 .txl .tmv{background:var(--surface);border:1px solid var(--line);border-radius:7px;padding:4px 6px;color:var(--fg);font-size:12.5px;max-width:170px}
 @media (max-width:899px){
-  .gr.hastx .gform .notec{display:none}
-  .txd{margin:0;border-radius:0;border-top:1px solid var(--line)}
   .txl{grid-template-columns:minmax(0,1fr) auto}
   .txl .tn{grid-column:1 / 2}
   .txl .tmv{grid-column:1 / 3;max-width:none;justify-self:stretch}
   .impgrp .grid,.impgrp .gr{margin-top:8px}
 }
-.gsum{display:none}
 .nmw{position:relative}
 .nmw .sw2{position:absolute;left:9px;top:50%;width:10px;height:10px;border-radius:50%;transform:translateY(-50%);pointer-events:none}
 .nmw input{padding-left:26px!important}
@@ -320,33 +338,26 @@ details.fold[open]>summary{margin-bottom:10px}
 
 @media (max-width:899px){
   .kpis{grid-template-columns:repeat(2,minmax(0,1fr))}
-  .gh{display:none}
-  .grid{gap:8px}
-  .gr,.gr.newkind{display:block;border:1px solid var(--line);border-radius:12px;background:var(--surface);padding:0;margin:0;overflow:hidden}
-  .gr.newkind{margin-top:6px}
-  .gsum{display:grid;grid-template-columns:52px minmax(0,1fr) auto;align-items:center}
-  .stb{width:52px;height:52px;background:transparent;border:0;display:flex;align-items:center;justify-content:center;color:var(--muted)}
-  .stb svg{width:26px;height:26px;display:block}
-  .stb.s1{color:var(--warn)} .stb.s2{color:var(--ok)}
-  .gmain{text-align:left;background:transparent;border:0;padding:9px 6px 9px 0;min-width:0;min-height:52px;display:flex;flex-direction:column;justify-content:center}
-  .gname{display:block;font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-  .gr.done .gname{color:var(--muted);text-decoration:line-through;text-decoration-thickness:1px}
-  .gmeta{display:block;font-size:12px;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-  .gamt{padding:0 14px 0 8px;font-family:var(--f-mono);font-size:14px;white-space:nowrap;text-align:right}
-  .gamt.none{color:var(--muted)}
-  .gamt.pos{color:var(--ok)}
-  .gform{display:none;padding:10px 12px 12px;border-top:1px solid var(--line)}
-  .gr.open .gform{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:8px 10px}
-  .gform .nmc,.gform .stc,.gform .notec,.gform .xc{grid-column:1 / 3}
-  .gr .lab{display:block;font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin:0 0 3px 2px}
-  .gr input,.gr select{border-color:var(--line);padding:9px 10px;font-size:15px}
-  .gr .xc{justify-self:end}
-  .gr .xc .x{padding:7px 14px;border:1px solid var(--line);font-size:14px;color:var(--bad)}
-  .gr .xc .x::after{content:" Șterge rândul"}
-  .gr .xc .x.arm::after{content:" Sigur? Apasă din nou"}
+  .stb{height:52px} .stb svg{width:26px;height:26px}
+  .gmain{min-height:52px}
+  .gr.done .gname{text-decoration:line-through;text-decoration-thickness:1px}
+  .gr input,.gr select{padding:9px 10px;font-size:15px}
   .sg button{height:40px}
   .donutrow{grid-template-columns:minmax(0,1fr);justify-items:center}
   .legend{width:100%}
+}
+@media (min-width:900px){
+  .gr.open .gform{grid-template-columns:minmax(180px,2.2fr) 120px 70px 120px 90px 136px minmax(120px,1.2fr) auto;align-items:end;gap:8px 10px}
+  .gr.open .gform.nocur{grid-template-columns:minmax(180px,2.2fr) 120px 70px 120px 136px minmax(120px,1.2fr) auto}
+  .gform .nmc,.gform .stc,.gform .notec,.gform .xc{grid-column:auto}
+  .gr .xc .x::after{content:""}
+  .gr .xc .x{padding:8px 12px;font-size:16px}
+  .gr:hover{border-color:color-mix(in srgb,var(--muted) 45%,var(--line))}
+  .gamt{font-size:14.5px}
+  .gmain{flex-direction:row;align-items:baseline;justify-content:flex-start;gap:12px;min-height:44px}
+  .gname{flex:0 1 auto;min-width:0}
+  .gmeta{flex:1 1 auto;min-width:0}
+  .stb{height:44px} .stb svg{width:22px;height:22px}
 }
 @media (max-width:520px){
   .kpi .v{font-size:19px}
@@ -843,7 +854,7 @@ This typically indicates that your device does not have a healthy Internet conne
 <script>
 (function(){"use strict";
 var TARGET="web";
-var BUILD_ID="web 1.0 · 2026-10-28 12:29 UTC";
+var BUILD_ID="web 1.0 · 2026-11-02 09:40 UTC";
 var WHERE_DB="Datele tale stau în contul tău Google, într-un proiect Firebase (Google Cloud, regiunea Frankfurt). Pe telefon rămâne doar o copie temporară, ca să meargă și fără net.";
 var MONTHS=["ianuarie","februarie","martie","aprilie","mai","iunie","iulie","august","septembrie","octombrie","noiembrie","decembrie"];
 var GROUPS=["Casă","Firmă"], KINDS=["Plată","Încasare","Transfer","Memento"];
@@ -940,7 +951,7 @@ try{var sv=localStorage.getItem("fin_ym");if(/^\d{4}-\d{2}$/.test(sv||""))ym=sv}
 var tab="general", items=[], canWrite=true, mode="local", firstDefinitive=false, autoTried={}, pendingRender=false, openId=null, draft=null;
 var pressing=false, pressFlush=false, pressT=null;
 var col=null, mcol=null, ccol=null, writeQ=Promise.resolve();
-var meta={}, startBal={eur:0,ron:0,since:""}, rules=[], imports=[], S={};
+var meta={}, startBal={eur:0,ron:0,since:""}, rules=[], imports=[], bals={}, S={};
 
 /* ---------- stocare: baza de date a paginii; altfel doar acest browser ---------- */
 var toastT=null;
@@ -951,7 +962,7 @@ function isBill(x){return !x.src}
 function canBill(x){var k=String(x.key||"");return !!x.src&&k.indexOf("cat_")!==0&&k.indexOf("own_")!==0}
 function clean(it){var o={};["ym","group","name","kind","day","amount","status","note","key","order","cur","date","src","hs","locked","tx"].forEach(function(k){o[k]=it[k]==null?null:it[k]});return o}
 function persistLocal(){try{localStorage.setItem("fin_items",JSON.stringify(items))}catch(e){}}
-function persistMisc(){try{localStorage.setItem("fin_settings",JSON.stringify(mods));localStorage.setItem("fin_meta",JSON.stringify(meta));localStorage.setItem("fin_start",JSON.stringify(startBal));localStorage.setItem("fin_rules",JSON.stringify(rules));localStorage.setItem("fin_imps",JSON.stringify(imports))}catch(e){}}
+function persistMisc(){try{localStorage.setItem("fin_settings",JSON.stringify(mods));localStorage.setItem("fin_meta",JSON.stringify(meta));localStorage.setItem("fin_start",JSON.stringify(startBal));localStorage.setItem("fin_rules",JSON.stringify(rules));localStorage.setItem("fin_imps",JSON.stringify(imports));localStorage.setItem("fin_bals",JSON.stringify(bals))}catch(e){}}
 function retry(fn,n){n=n==null?3:n;return Promise.resolve().then(fn).catch(function(e){var c=e&&e.code;if(n>0&&(c==="resource_exhausted"||c==="resource-exhausted"||c==="unavailable"))return new Promise(function(r){setTimeout(r,250+Math.random()*450)}).then(function(){return retry(fn,n-1)});throw e})}
 function chunkRun(list,fn,size){size=size||6;var p=Promise.resolve();for(var i=0;i<list.length;i+=size)(function(part){p=p.then(function(){return Promise.all(part.map(function(x){return retry(function(){return fn(x)})}))})})(list.slice(i,i+size));return p}
 /* scrierile merg una după alta; rezultatul poate fi așteptat de cine a cerut scrierea */
@@ -1005,6 +1016,13 @@ function putMeta(m,patch){
   if(mode==="db"&&mcol&&canWrite)pr=queue(function(){return empty?mcol.doc(m).delete():mcol.doc(m).set(d)});
   else persistMisc();
   render();return pr;
+}
+/* soldul contului personal, luat din extras (Casă): la început și la sfârșit de lună + banii mutați între conturile tale */
+function cleanBal(b){return {open:+b.open||0,close:+b.close||0,to:String(b.to||""),own:+b.own||0,iban:String(b.iban||"").slice(-4)}}
+function putBals(list){
+  list.forEach(function(b){bals[b.ym]=cleanBal(b)});
+  if(mode==="db"&&mcol&&canWrite)return queue(function(){return chunkRun(list,function(b){return mcol.doc("bal_"+b.ym).set(cleanBal(b))})});
+  persistMisc();return Promise.resolve();
 }
 function putRate(m,v){return putMeta(m,{rate:v})}
 function putStart(patch){
@@ -1782,7 +1800,8 @@ function renderUpcoming(){
     m=monthItems(ym).filter(function(x){return grpOn(x.group)&&x.status!=="Gata"}).sort(function(a,b){var da=a.day==null?99:a.day,db=b.day==null?99:b.day;return da-db||(a.order||0)-(b.order||0)}).map(function(x){return {x:x,d:null}});
     $("#upchint").textContent="Ce n-ai bifat în "+label(ym)+", în ordinea zilei.";
   }
-  if(!m.length){$("#upc").innerHTML='<li class="empty" style="display:block">'+(cur?"Nimic în următoarele 5 zile.":"Totul e bifat pentru luna asta.")+'</li>';return}
+  $("#upchint").hidden=!m.length;
+  if(!m.length){$("#upc").innerHTML='<li class="empty" style="display:block">✓ '+(cur?"Nimic de plătit în următoarele 5 zile.":"Totul e bifat pentru luna asta.")+'</li>';return}
   var h='';
   m.slice(0,12).forEach(function(o){
     var x=o.x,rel="",cls="";
@@ -1852,7 +1871,14 @@ function renderCasa(){
   c+=kpi("good","Venit casă",lei(venitDone),"primit din "+lei(venit)+" așteptat (salariu, decontare, diurne"+(other>0?", alte venituri":"")+") · contează doar ce e bifat ca făcut");
   c+=kpi("","Plătit acasă",lei(cPaid),cEx>0.005?"plăți lunare "+lei(cBill)+" · alte cheltuieli "+lei(Math.round(cEx*100)/100):"din "+lei(cTot)+" de plătit");
   c+=kpi(cTot-cPaid>0?"bad":"","Rămas de plătit",lei(cTot-cPaid),cOut.filter(function(x){return x.status!=="Gata"&&x.amount>0}).length+" plăți nebifate");
-  c+=kpi(venitDone-cTot>=0?"good":"bad","Rămâne acasă",lei(venitDone-cTot),"venit primit minus toate plățile de acasă");
+  /* banii mutați între conturile tale nu sunt venit, dar intră/ies din cont: îi adunăm separat, din extras */
+  var bl=bals[ym],own=bl?bl.own:0,rest=venitDone-cTot+own,sub;
+  if(bl){
+    sub="venit minus plăți"+(Math.abs(own)>=0.005?(own>0?" + "+lei(own)+" aduși din alt cont al tău":" − "+lei(-own)+" mutați în alt cont al tău"):"")+" · în cont la "+fmtD(bl.to)+": <b>"+lei(bl.close)+"</b>";
+    var gap=r2(bl.open+rest-bl.close);
+    if(Math.abs(gap)>=0.5)sub+=" · față de extras diferă cu "+lei(Math.abs(gap))+" (vreo plată trecută de mână, din alt cont?)";
+  }else sub="venit primit minus toate plățile de acasă";
+  c+=kpi(rest>=0?"good":"bad","Rămâne acasă",lei(rest),sub);
   $("#kpisC").innerHTML=c;
   renderFilters("Casă");renderGrid("Casă");
 }
@@ -1875,6 +1901,9 @@ function renderFirma(){
   $("#ratePanel").hidden=ro;$("#foldX").hidden=ro;$("#bnrLink").hidden=ro;
   $("#firmaFoot").textContent=mods.tpl>=2?"Rândurile noi pornesc pe „De făcut”. Încasarea, salariul și chiria se copiază în luna nouă cu aceeași sumă.":FIRMA_FOOT;
   if(ro){renderFirmaRon(m,f);renderFilters("Firmă");renderGrid("Firmă");return}
+  /* cursul și schimbul apar doar în lunile cu euro */
+  var hasEur=m.some(function(x){return x.group==="Firmă"&&curOf(x)==="EUR"})||!!ownRate(ym)||!!(meta[ym]&&meta[ym].exch!=null);
+  $("#ratePanel").hidden=!hasEur;$("#bnrLink").hidden=!hasEur;
   var rin=$("#rate"),an=$("#autonote");
   an.textContent=ownRate(ym)?"":(r?"Cursul e moștenit din luna anterioară. Pune-l pe cel din ziua schimbului.":"Pune cursul din ziua în care schimbi banii.");
   if(document.activeElement!==rin){var o=ownRate(ym);rin.value=o?String(o).replace(".",","):"";rin.placeholder=r?("moștenit: "+String(r).replace(".",",")):"ex. 5,19"}
@@ -1976,6 +2005,8 @@ function txdHtml(x){
     '</div>';
   }).join("")+(canWrite&&canBill(x)?'<div class="mkb"><button type="button" class="btn" data-mkbill="1">Fă-l plată lunară</button><small>Trece sus, la plățile lunii, și intră în cerc. Luna viitoare îl aștept și îl bifez singur din extras.</small></div>':'')+'</div>';
 }
+/* moneda contează doar la Firmă când încasezi în euro (sau pe un rând care e deja în EUR) */
+function showCur(x){return curOf(x)==="EUR"||(x.group==="Firmă"&&!fxRon())}
 function rowHtml(x){
   var si=x.status==="Gata"?2:x.status==="Așteaptă"?1:0, open=openId===x.id, memo=x.kind==="Memento";
   var amt=x.amount>0?money(x.amount)+(curOf(x)==="EUR"?" €":" lei"):"";
@@ -1991,12 +2022,12 @@ function rowHtml(x){
       '<button type="button" class="gmain" data-open="1" aria-expanded="'+open+'"><span class="gname">'+esc(x.name||"(fără nume)")+'</span><span class="gmeta">'+esc(mt.join(" · "))+'</span></button>'+
       '<span class="gamt'+(amt?(x.kind==="Încasare"?' pos':''):' none')+'">'+(amt||"–")+'</span>'+
     '</div>'+
-    '<div class="gform">'+
+    '<div class="gform'+(showCur(x)?'':' nocur')+'">'+
       '<div class="nmc"><span class="lab">Element</span><div class="nmw"><i class="sw2" style="background:'+colorOf(x)+'"></i><input class="nm" data-f="name" value="'+esc(x.name)+'" aria-label="Element"></div></div>'+
       '<div><span class="lab">Tip</span><select data-f="kind" aria-label="Tip">'+opts(KINDS,x.kind)+'</select></div>'+
       '<div><span class="lab">Zi</span><input class="num" data-f="day" inputmode="numeric" value="'+(x.day==null?"":x.day)+'" aria-label="Ziua" placeholder="–"></div>'+
       '<div><span class="lab">Sumă</span><input class="num amt" data-f="amount" inputmode="decimal" value="'+(x.amount==null?"":String(x.amount).replace(".",","))+'" aria-label="Sumă"'+(memo?' disabled placeholder="–"':' placeholder="0"')+'></div>'+
-      '<div><span class="lab">Monedă</span><select data-f="cur" aria-label="Monedă">'+opts(["RON","EUR"],curOf(x))+'</select></div>'+
+      (showCur(x)?'<div><span class="lab">Monedă</span><select data-f="cur" aria-label="Monedă">'+opts(["RON","EUR"],curOf(x))+'</select></div>':'')+
       (x.src?'<div class="stc"><span class="lab">Status</span><span class="stx">'+IC.ok+(x.kind==="Încasare"?"Încasat":"Plătit")+'</span></div>'
         :'<div class="stc"><span class="lab">Status</span><div class="sg" role="group" aria-label="Status">'+stBtns(x)+'</div></div>')+
       (hasTx?'<div class="notec"><span class="lab">Detalii</span><button type="button" class="dbtn" data-open="1" aria-expanded="'+open+'">'+plural(x.tx.length,"plată","plăți")+' '+(open?'▴':'▾')+'</button></div>'
@@ -2022,11 +2053,11 @@ function renderGrid(g){
   /* rândurile tale (planificate) sus; cele venite din extrase într-un grup pliat, după sumă */
   var plan=list.filter(isBill),rt=rateFor(ym);
   var imp=list.filter(function(x){return !isBill(x)}).sort(function(a,b){return ron(b,rt)-ron(a,rt)});
-  var h='',prevM=null;
-  plan.forEach(function(x){
-    var isM=x.kind==="Memento",nk=prevM===true&&!isM;prevM=isM;
-    h+=rowHtml(x).replace('<div class="gr','<div class="gr'+(nk?' newkind':''));
-  });
+  /* memento-urile (fără sumă) separat, deasupra plăților */
+  var memo=plan.filter(function(x){return x.kind==="Memento"}),rest=plan.filter(function(x){return x.kind!=="Memento"});
+  var h='';
+  if(memo.length)h+='<div class="gsec">De nu uitat</div>'+memo.map(rowHtml).join("")+(rest.length?'<div class="gsec">Plăți și încasări</div>':'');
+  h+=rest.map(rowHtml).join("");
   if(imp.length){
     var outS=sum(imp.filter(function(x){return x.kind!=="Încasare"}),function(x){return ron(x,rt)}),inS=sum(imp.filter(function(x){return x.kind==="Încasare"}),function(x){return ron(x,rt)});
     var op=!!IMPG_OPEN[g]||imp.some(function(x){return x.id===openId});
@@ -2649,11 +2680,26 @@ function seenMap(){
 }
 /* extrasul intră în grupul tabului în care ești: Casă (cont personal) sau Firmă */
 function impGroup(){return tab==="casa"?"Casă":"Firmă"}
+/* soldul pe luni din extras (doar extrasele verificate, care au soldul de început) */
+function stBals(st){
+  if(!st||st.opening==null||!st.check||!st.check.ok||!st.tx.length)return [];
+  var tx=st.tx.map(function(t,i){return {t:t,i:i}}).sort(function(a,b){return a.t.date<b.t.date?-1:a.t.date>b.t.date?1:a.i-b.i});
+  var run=st.opening,by={},order=[];
+  tx.forEach(function(o){
+    var t=o.t,m=t.date.slice(0,7),b=by[m];
+    if(!b){b=by[m]={ym:m,open:r2(run),close:0,own:0,to:"",iban:st.iban};order.push(m)}
+    run+=t.amount;b.close=r2(run);if(t.own)b.own=r2(b.own+t.amount);
+  });
+  order.forEach(function(m,i){var p=m.split("-").map(Number),last=m+"-"+String(new Date(p[0],p[1],0).getDate()).padStart(2,"0");by[m].to=(i===order.length-1&&st.to&&st.to<last)?st.to:last});
+  return order.map(function(m){return by[m]});
+}
 function buildPreview(){
   var st=IMP.st;
   IMP.group=impGroup();
   var out=buildProposals(st,IMP.group,{items:items,meta:meta,rules:rules,seen:seenMap(),xp:mods.transport!==false,fuelMin:mods.fuelMin,gasOv:IMP.gasOv});
   IMP.props=out.props;IMP.fx=out.fx;IMP.dupes=out.dupes;IMP.gas=out.gas||[];
+  /* extras deja importat: măcar ținem minte soldul din el */
+  if(IMP.group==="Casă"&&canWrite&&!IMP.props.length&&!IMP.fx.length){var bl=stBals(st);if(bl.length)putBals(bl)}
   renderPreview();
 }
 
@@ -2825,6 +2871,7 @@ async function applyImport(){
     if(newXs.length)await putXs(newXs);
     for(var i=0;i<fxRecs.length;i++)await putMeta(fxRecs[i].ym,{rate:fxRecs[i].rate,exch:fxRecs[i].exch});
     if(newRules.length)await saveRules(mergeRules(newRules));
+    if(IMP.group==="Casă")await putBals(stBals(st));
     syncFees(uniq(newRows.concat(upRows).map(function(r){return r.ym})));
     var months=uniq(newRows.concat(upRows).map(function(r){return r.ym}).concat(fxRecs.map(function(f){return f.ym}))).sort();
     var parts=[plural(newRows.length,"rând nou","rânduri noi"),plural(upRows.length,"bifat pe rând existent","bifate pe rânduri existente")];
@@ -2956,6 +3003,7 @@ $("#impFile").addEventListener("change",function(){var f=this.files&&this.files[
   try{var sb0=JSON.parse(localStorage.getItem("fin_start")||"null");if(sb0)startBal={eur:+sb0.eur||0,ron:+sb0.ron||0,since:/^\d{4}-\d{2}$/.test(sb0.since||"")?sb0.since:""}}catch(e){}
   try{rules=JSON.parse(localStorage.getItem("fin_rules")||"[]")||[]}catch(e){rules=[]}
   try{imports=JSON.parse(localStorage.getItem("fin_imps")||"[]")||[]}catch(e){imports=[]}
+  try{bals=JSON.parse(localStorage.getItem("fin_bals")||"{}")||{}}catch(e){bals={}}
   try{var ms0=JSON.parse(localStorage.getItem("fin_settings")||"null");if(ms0)mods=readMods(ms0)}catch(e){}
   var t0=(location.hash||"").replace("#","");t0=TAB_ALIAS[t0]||t0;
   if(TABS.indexOf(t0)<0){try{t0=localStorage.getItem("fin_tab")||""}catch(e){t0=""}t0=TAB_ALIAS[t0]||t0}
@@ -2987,7 +3035,7 @@ function listenErr(which){return function(err){
 }}
 function stopListening(){unsubs.forEach(function(f){try{f()}catch(e){}});unsubs=[]}
 async function connectDb(db,user){
-  mode="db";items=[];meta={};rules=[];imports=[];startBal={eur:0,ron:0,since:""};col=db.collection("items");
+  mode="db";items=[];meta={};rules=[];imports=[];bals={};startBal={eur:0,ron:0,since:""};col=db.collection("items");
   carEmpty=false;carSeeded=false;firstDefinitive=false;autoTried={};mods=readMods(null);metaDef=false;
   car=[];vehs=[];xps=[];carKm=null;carKmAt=null;carLoaded=false;
   if(user){try{var w=await Promise.resolve(user.can("data.write"));if(w===false)canWrite=false}catch(e){}}
@@ -2995,7 +3043,7 @@ async function connectDb(db,user){
   render();
   mcol=db.collection("meta");
   unsubs.push(mcol.onSnapshot(function(snap){
-    var m={},sb={eur:0,ron:0,since:""},rl=[],imps=[],wl=false,stg=null;
+    var m={},sb={eur:0,ron:0,since:""},rl=[],imps=[],wl=false,stg=null,bl={};
     snap.docs.forEach(function(d){
       var o=d.data(),id=d.id;if(!o)return;
       if(id==="welcome"){wl=true;return}
@@ -3003,9 +3051,10 @@ async function connectDb(db,user){
       if(id==="start"){sb={eur:+o.eur||0,ron:+o.ron||0,since:/^\d{4}-\d{2}$/.test(o.since||"")?o.since:""};return}
       if(id==="rules"){rl=Array.isArray(o.list)?o.list:[];return}
       if(id.indexOf("imp_")===0){var r=Object.assign({},o);r.id=id;imps.push(r);return}
+      if(id.indexOf("bal_")===0){if(/^\d{4}-\d{2}$/.test(id.slice(4)))bl[id.slice(4)]=cleanBal(o);return}
       if(/^\d{4}-\d{2}$/.test(id)&&(o.rate>0||o.exch!=null))m[id]=o;
     });
-    meta=m;startBal=sb;rules=rl;imports=imps;
+    meta=m;startBal=sb;rules=rl;imports=imps;bals=bl;
     mods=readMods(stg);if(!snap.metadata||!snap.metadata.fromCache)metaDef=true;
     if(!modOn(tab))tab="general";
     if(wl&&!welcomed){welcomed=true;maybeAuto()}
