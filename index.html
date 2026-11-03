@@ -1098,7 +1098,7 @@ This typically indicates that your device does not have a healthy Internet conne
 <script>
 (function(){"use strict";
 var TARGET="web";
-var BUILD_ID="build 2026-11-03 11:51 UTC";
+var BUILD_ID="build 2026-11-03 11:54 UTC";
 var WHERE_DB="Datele tale stau în contul tău Google, într-un proiect Firebase (Google Cloud, regiunea Frankfurt). Pe telefon rămâne doar o copie temporară, ca să meargă și fără net.";
 var MONTHS=["ianuarie","februarie","martie","aprilie","mai","iunie","iulie","august","septembrie","octombrie","noiembrie","decembrie"];
 var GROUPS=["Casă","Firmă"], KINDS=["Plată","Încasare","Transfer","Memento"];
@@ -1440,12 +1440,14 @@ function trText(s){
   return null;
 }
 var TR_ATTR=["placeholder","title","aria-label"];
+/* în engleză moneda românească apare ca „RON” (în română rămâne „lei”) */
+function enRon(t,orig){var o=t!=null?t:orig;if(o&&/\blei\b/.test(o)){o=o.replace(/\blei\b/g,"RON");I18N_OUT[o]=1;return o}return t}
 function trNode(n){
   if(LANG!=="en")return;
-  if(n.nodeType===3){var p=n.parentNode;if(!p||I18N_SKIP[p.nodeName]||(p.closest&&p.closest("[data-notr]")))return;var t=trText(n.nodeValue);if(t!=null&&t!==n.nodeValue)n.nodeValue=t;return}
+  if(n.nodeType===3){var p=n.parentNode;if(!p||I18N_SKIP[p.nodeName]||(p.closest&&p.closest("[data-notr]")))return;var t=enRon(trText(n.nodeValue),n.nodeValue);if(t!=null&&t!==n.nodeValue)n.nodeValue=t;return}
   if(n.nodeType!==1||I18N_SKIP[n.nodeName]||n.hasAttribute("data-notr"))return;
   if(n.nodeName==="OPTION"&&!n.hasAttribute("value"))n.setAttribute("value",n.textContent);   /* valoarea rămâne cea românească, se schimbă doar ce vezi */
-  for(var a=0;a<TR_ATTR.length;a++){var v=n.getAttribute(TR_ATTR[a]);if(v){var t2=trText(v);if(t2!=null&&t2!==v)n.setAttribute(TR_ATTR[a],t2)}}
+  for(var a=0;a<TR_ATTR.length;a++){var v=n.getAttribute(TR_ATTR[a]);if(v){var t2=enRon(trText(v),v);if(t2!=null&&t2!==v)n.setAttribute(TR_ATTR[a],t2)}}
   for(var c=n.firstChild;c;c=c.nextSibling)trNode(c);
 }
 function i18nStart(){
@@ -1682,8 +1684,8 @@ Object.assign(I18N.en,{"Setări":"Settings","Aspect și limbă":"Appearance and 
    Cea mai nouă versiune e prima din listă. */
 var CHANGELOG=[
  {v:"2.2",d:"2026-11-03",t:{ro:"Aspect nou și temă",en:"New look and theme"},
-  ro:["Temă luminoasă, întunecată sau după sistem: Mai mult → Aspect și limbă","Fiecare tab are stilul lui: Casă cald și rotund, Firmă drept ca un registru, Transport ca un drum","Setările sunt acum un meniu: alegi ce vrei să schimbi și intri pe pagina lui","Traduceri reparate în engleză la Casă și Firmă"],
-  en:["Light, dark or match-system theme: More → Appearance and language","Every tab has its own style: Home warm and rounded, Business straight like a ledger, Transport like a road","Settings are now a menu: pick what to change and open its page","Fixed English translations on Home and Business"]},
+  ro:["Temă luminoasă, întunecată sau după sistem: Mai mult → Aspect și limbă","Fiecare tab are stilul lui: Casă cald și rotund, Firmă drept ca un registru, Transport ca un drum","Setările sunt acum un meniu: alegi ce vrei să schimbi și intri pe pagina lui","Traduceri reparate în engleză la Casă și Firmă","În engleză, sumele în lei apar ca RON"],
+  en:["Light, dark or match-system theme: More → Appearance and language","Every tab has its own style: Home warm and rounded, Business straight like a ledger, Transport like a road","Settings are now a menu: pick what to change and open its page","Fixed English translations on Home and Business","In English, lei amounts show as RON"]},
  {v:"2.1",d:"2026-11-02",
   ro:["Versiuni și „Ce e nou”: vezi aici ce s-a schimbat la fiecare versiune","„Anulează” după ștergere: un rând, o cheltuială sau o scadență ștearsă din greșeală revine dintr-o atingere","Dacă intră un cont Google fără acces, aplicația îi spune clar că e privată"],
   en:["Versions and “What's new”: see here what changed in each version","“Undo” after deleting: a row, expense or due date deleted by mistake comes back with one tap","If a Google account without access signs in, the app clearly says it's private"]},

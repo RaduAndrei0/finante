@@ -8,6 +8,7 @@ Versiune mare (3.0) = schimbare importantă · mică (2.1) = funcție nouă · r
 - Fiecare tab are stilul lui: Casă cald și rotund, Firmă drept ca un registru, Transport ca un drum
 - Setările sunt acum un meniu: alegi ce vrei să schimbi și intri pe pagina lui
 - Traduceri reparate în engleză la Casă și Firmă
+- În engleză, sumele în lei apar ca RON
 
 *New look and theme · 3 November 2026*
 
@@ -15,6 +16,7 @@ Versiune mare (3.0) = schimbare importantă · mică (2.1) = funcție nouă · r
 - Every tab has its own style: Home warm and rounded, Business straight like a ledger, Transport like a road
 - Settings are now a menu: pick what to change and open its page
 - Fixed English translations on Home and Business
+- In English, lei amounts show as RON
 
 ## v2.1 · 2 noiembrie 2026 — Ce e nou și anulare
 
