@@ -2,6 +2,20 @@
 
 Versiune mare (3.0) = schimbare importantă · mică (2.1) = funcție nouă · reparație (2.1.1) = corectură.
 
+## v2.2 · 3 noiembrie 2026 — Aspect nou și temă
+
+- Temă luminoasă, întunecată sau după sistem: Mai mult → Aspect și limbă
+- Fiecare tab are stilul lui: Casă cald și rotund, Firmă drept ca un registru, Transport ca un drum
+- Setările sunt acum un meniu: alegi ce vrei să schimbi și intri pe pagina lui
+- Traduceri reparate în engleză la Casă și Firmă
+
+*New look and theme · 3 November 2026*
+
+- Light, dark or match-system theme: More → Appearance and language
+- Every tab has its own style: Home warm and rounded, Business straight like a ledger, Transport like a road
+- Settings are now a menu: pick what to change and open its page
+- Fixed English translations on Home and Business
+
 ## v2.1 · 2 noiembrie 2026 — Ce e nou și anulare
 
 - Versiuni și „Ce e nou”: vezi aici ce s-a schimbat la fiecare versiune

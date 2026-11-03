@@ -3,9 +3,9 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#F2F4F8" media="(prefers-color-scheme: light)">
-<meta name="theme-color" content="#0B111C" media="(prefers-color-scheme: dark)">
-<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20viewBox%3D'0%200%2048%2048'%3E%3Ccircle%20cx%3D'24'%20cy%3D'24'%20r%3D'18'%20fill%3D'none'%20stroke%3D'%23D5DCE8'%20stroke-width%3D'7'%2F%3E%3Ccircle%20cx%3D'24'%20cy%3D'24'%20r%3D'18'%20fill%3D'none'%20stroke%3D'%23C9701A'%20stroke-width%3D'7'%20stroke-linecap%3D'round'%20stroke-dasharray%3D'40%20113.1'%20transform%3D'rotate(-90%2024%2024)'%2F%3E%3Ccircle%20cx%3D'24'%20cy%3D'24'%20r%3D'18'%20fill%3D'none'%20stroke%3D'%2313799F'%20stroke-width%3D'7'%20stroke-linecap%3D'round'%20stroke-dasharray%3D'50%20113.1'%20stroke-dashoffset%3D'-52'%20transform%3D'rotate(-90%2024%2024)'%2F%3E%3C%2Fsvg%3E">
+<meta name="theme-color" content="#F5F3ED" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#131311" media="(prefers-color-scheme: dark)">
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20viewBox%3D'0%200%2048%2048'%3E%3Ccircle%20cx%3D'24'%20cy%3D'24'%20r%3D'18'%20fill%3D'none'%20stroke%3D'%23E0DBCF'%20stroke-width%3D'7'%2F%3E%3Ccircle%20cx%3D'24'%20cy%3D'24'%20r%3D'18'%20fill%3D'none'%20stroke%3D'%23C2542C'%20stroke-width%3D'7'%20stroke-linecap%3D'round'%20stroke-dasharray%3D'40%20113.1'%20transform%3D'rotate(-90%2024%2024)'%2F%3E%3Ccircle%20cx%3D'24'%20cy%3D'24'%20r%3D'18'%20fill%3D'none'%20stroke%3D'%232D52C9'%20stroke-width%3D'7'%20stroke-linecap%3D'round'%20stroke-dasharray%3D'50%20113.1'%20stroke-dashoffset%3D'-52'%20transform%3D'rotate(-90%2024%2024)'%2F%3E%3C%2Fsvg%3E">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="icon-180.png">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -14,36 +14,46 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}</style>
 <title>Finanțe Lunare</title>
+<script>try{var t=localStorage.getItem("fin_theme");if(t==="light"||t==="dark")document.documentElement.setAttribute("data-theme",t)}catch(e){}</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&family=Fraunces:opsz,wght@9..144,500;9..144,650&family=Barlow+Condensed:wght@500;600;700&display=swap">
 <style>
-/* Layout: aplicație cu bară de taburi jos pe telefon (General, Casă, Firmă, Extrase, Mai mult) și sus pe ecran mare. Casă = cald, Firmă = rece, Extrase = violet. */
+/* Layout: bară de taburi jos pe telefon, sus pe ecran mare. Fiecare tab are personalitatea lui (vezi 13-skin.css):
+   General = marca (verde-lime), Casă = cald și rotund, Firmă = rece și drept (registru), Transport = drum și bord, Setări = meniu. */
 :root{
-  --bg:#F2F4F8; --surface:#FFFFFF; --surface2:#E8ECF4; --line:#D5DCE8;
-  --fg:#121A2B; --muted:#586379;
-  --casa:#C9701A; --firma:#13799F; --auto:#5B4FC9;
-  --ok:#17875D; --warn:#A8730A; --bad:#C23B30;
-  --okbg:#DDF3E8; --warnbg:#FBEFCF; --badbg:#FADFDB; --neutralbg:#E8ECF4;
+  --bg0:#F5F3ED; --bg:var(--bg0); --surface:#FFFFFF; --surface2:#EEEBE3; --line:#E0DBCF;
+  --fg:#1C1A15; --muted:#6B6559;
+  --brand:#C8F03C; --brand-ink:#1A2200; --brand-fg:#4C6A00;
+  --casa:#C2542C; --firma:#2D52C9; --auto:#6A4FD0; --car:#F2B400; --car-ink:#141100;
+  --on-casa:#FFFFFF; --on-firma:#FFFFFF; --on-auto:#FFFFFF;
+  --ok:#1D8452; --warn:#A06700; --bad:#C3372C;
+  --okbg:#DFF2E6; --warnbg:#FAEFD2; --badbg:#FAE0DC; --neutralbg:#EEEBE3;
   --f-display:"Bricolage Grotesque","Segoe UI",system-ui,sans-serif;
   --f-body:"IBM Plex Sans","Segoe UI",system-ui,sans-serif;
   --f-mono:"IBM Plex Mono",ui-monospace,Consolas,monospace;
+  --f-casa:"Fraunces",Georgia,"Times New Roman",serif;
+  --f-car:"Barlow Condensed","Arial Narrow","Roboto Condensed",sans-serif;
 }
 @media (prefers-color-scheme: dark){
   :root:not([data-theme="light"]){
-    --bg:#0B111C; --surface:#121A29; --surface2:#1B2539; --line:#27334C;
-    --fg:#E9EEF7; --muted:#97A4BC;
-    --casa:#F2A650; --firma:#55C6EC; --auto:#A79BFF;
-    --ok:#4FD8A2; --warn:#F3C85F; --bad:#FF8074;
-    --okbg:#14352B; --warnbg:#382F14; --badbg:#3E1E1C; --neutralbg:#1B2539;
-    color-scheme:dark;
+  --bg0:#131311; --bg:var(--bg0); --surface:#1C1B18; --surface2:#262520; --line:#34322C;
+  --fg:#F1EEE6; --muted:#A39D8F;
+  --brand:#C8F03C; --brand-ink:#1A2200; --brand-fg:#C8F03C;
+  --casa:#F2875C; --firma:#88A3FF; --auto:#B3A0FF; --car:#FFB627; --car-ink:#141100;
+  --on-casa:#2A0E02; --on-firma:#0A1640; --on-auto:#1C1240;
+  --ok:#5AD39A; --warn:#F0C25A; --bad:#FF8577;
+  --okbg:#163326; --warnbg:#362C14; --badbg:#3D1F1B; --neutralbg:#262520;
+  color-scheme:dark;
   }
 }
 :root[data-theme="dark"]{
-  --bg:#0B111C; --surface:#121A29; --surface2:#1B2539; --line:#27334C;
-  --fg:#E9EEF7; --muted:#97A4BC;
-  --casa:#F2A650; --firma:#55C6EC; --auto:#A79BFF;
-  --ok:#4FD8A2; --warn:#F3C85F; --bad:#FF8074;
-  --okbg:#14352B; --warnbg:#382F14; --badbg:#3E1E1C; --neutralbg:#1B2539;
+  --bg0:#131311; --bg:var(--bg0); --surface:#1C1B18; --surface2:#262520; --line:#34322C;
+  --fg:#F1EEE6; --muted:#A39D8F;
+  --brand:#C8F03C; --brand-ink:#1A2200; --brand-fg:#C8F03C;
+  --casa:#F2875C; --firma:#88A3FF; --auto:#B3A0FF; --car:#FFB627; --car-ink:#141100;
+  --on-casa:#2A0E02; --on-firma:#0A1640; --on-auto:#1C1240;
+  --ok:#5AD39A; --warn:#F0C25A; --bad:#FF8577;
+  --okbg:#163326; --warnbg:#362C14; --badbg:#3D1F1B; --neutralbg:#262520;
   color-scheme:dark;
 }
 *{box-sizing:border-box}
@@ -250,11 +260,8 @@ details.fold[open]>summary{margin-bottom:10px}
 .btn{border:1px solid var(--line);background:var(--surface2);border-radius:9px;padding:8px 14px;font-weight:500;min-height:38px}
 .btn:hover{border-color:var(--muted)}
 .btn:disabled{opacity:.5;cursor:default}
-.btn.pri{background:var(--firma);border-color:var(--firma);color:#fff}
-.btn.auto{background:var(--auto);border-color:var(--auto);color:#fff}
-:root[data-theme="dark"] .btn.pri{color:#06202B}
-:root[data-theme="dark"] .btn.auto{color:#17123D}
-@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .btn.pri{color:#06202B}:root:not([data-theme="light"]) .btn.auto{color:#17123D}}
+.btn.pri{background:var(--firma);border-color:var(--firma);color:var(--on-firma)}
+.btn.auto{background:var(--auto);border-color:var(--auto);color:var(--on-auto)}
 .grid{display:flex;flex-direction:column}
 /* rândurile lunii: o linie scurtă (bifă, nume, sumă); atingi rândul și se deschide formularul */
 .gh{display:none}
@@ -600,6 +607,169 @@ details.fold[open]>summary{margin-bottom:10px}
 .inst{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin:14px 0 4px;padding:12px 14px;border-radius:12px;background:var(--surface2)}
 .inst>div{display:flex;flex-direction:column;gap:2px;min-width:0;flex:1 1 220px}
 .inst small{color:var(--muted);font-size:13px}
+
+/* ================= Personalitatea fiecărui tab =================
+   body[data-view] = tabul deschis. Casă și Firmă au același schelet (antet mare, cifre, rânduri),
+   dar Casă e caldă și rotundă (serif, colțuri moi), Firmă e rece și dreaptă (registru, colțuri drepte, mono).
+   Transport e altă lume: drum și bord de mașină. Setări = meniu. General = marca (lime). */
+
+/* ---------- marca ---------- */
+.top h1{position:relative;display:inline-block;isolation:isolate}
+.top h1::after{content:"";position:absolute;left:-3px;right:-5px;bottom:.12em;height:.42em;background:var(--brand);z-index:-1;border-radius:3px;transform:skewX(-10deg)}
+.monthnav{border-radius:14px}
+.monthnav .cur{font-family:var(--f-display);font-weight:700;letter-spacing:-.01em}
+.chip#gotoday{border-color:var(--brand-fg);color:var(--brand-fg)}
+
+/* bara de taburi: tabul ales are culoarea lui */
+.tabbar button[data-tab="general"]{--tc:var(--brand-fg)}
+.tabbar button[data-tab="mai"]{--tc:var(--fg)}
+.tabbar button[data-tab="transport"]{--tc:var(--car-txt,var(--auto))}
+.tabbar button[aria-selected="true"]{font-weight:600}
+@media (max-width:899px){
+  .tabbar button{border-radius:12px}
+  .tabbar button[aria-selected="true"]{background:color-mix(in srgb,var(--tc,var(--fg)) 13%,transparent)}
+  .tabbar button[aria-selected="true"]::before{display:none}
+}
+@media (min-width:900px){
+  .tabbar{border-radius:14px}
+  .tabbar button[aria-selected="true"]{background:color-mix(in srgb,var(--tc,var(--fg)) 13%,var(--surface))}
+}
+
+/* ---------- General ---------- */
+body[data-view="general"] .gcard{border-radius:18px}
+body[data-view="general"] #upcPanel{border-radius:18px}
+body[data-view="general"] #upcPanel>h2{display:inline-flex;align-self:flex-start;position:relative;isolation:isolate}
+body[data-view="general"] #upcPanel>h2::after{content:"";position:absolute;left:-2px;right:-3px;bottom:.08em;height:.36em;background:var(--brand);z-index:-1;border-radius:2px;opacity:.85}
+body[data-view="general"] .upc .d{background:var(--surface2);font-weight:500}
+body[data-view="general"] #calwrap{border-radius:18px}
+
+/* ---------- antetul mare (Casă, Firmă, Transport) ---------- */
+.hero{position:relative;overflow:hidden;isolation:isolate;min-height:92px;align-items:flex-end;padding:18px 18px 16px;border:1px solid var(--hline,var(--line));border-radius:var(--hr,16px);background:var(--hbg,var(--surface))}
+.hero .horn{position:absolute;inset:0;z-index:-1;pointer-events:none}
+.hero h2{font-size:30px;line-height:1.05}
+.hero h2 i{display:none}
+.hero .hintline{max-width:34ch}
+
+/* ---------- Casă: cald, rotund, ca acasă ---------- */
+body[data-view="casa"]{--bg:color-mix(in srgb,var(--casa) 6%,var(--bg0))}
+#tab-casa{--r:20px}
+#tab-casa .hero{--hr:24px;--hbg:color-mix(in srgb,var(--casa) 13%,var(--surface));--hline:color-mix(in srgb,var(--casa) 22%,var(--line))}
+#tab-casa .hero .horn{background:
+  radial-gradient(circle at 92% 135%,color-mix(in srgb,var(--casa) 40%,transparent) 0 78px,transparent 79px),
+  radial-gradient(circle at 74% -40%,color-mix(in srgb,var(--casa) 20%,transparent) 0 66px,transparent 67px),
+  radial-gradient(circle at 100% 0,color-mix(in srgb,var(--brand) 26%,transparent) 0 26px,transparent 27px)}
+#tab-casa .hero h2{font-family:var(--f-casa);font-weight:650;font-size:34px;letter-spacing:-.015em;color:var(--casa)}
+#tab-casa .hero .hintline{color:color-mix(in srgb,var(--casa) 55%,var(--muted))}
+#tab-casa .panel,#tab-casa .kpi{border-radius:var(--r)}
+#tab-casa .kpi{border-color:color-mix(in srgb,var(--casa) 14%,var(--line))}
+#tab-casa .kpi:first-child{background:color-mix(in srgb,var(--casa) 10%,var(--surface))}
+#tab-casa .kpi .l{text-transform:none;letter-spacing:0;font-size:12.5px;font-weight:500}
+#tab-casa .panel h2,#tab-casa .panel summary h2{font-family:var(--f-casa);font-weight:650;letter-spacing:-.01em}
+#tab-casa .gr{border-radius:16px}
+#tab-casa .gsec{font-family:var(--f-casa);font-style:italic;font-size:15px;font-weight:500;text-transform:none;letter-spacing:0;color:var(--casa)}
+#tab-casa .btn,#tab-casa .chip,#tab-casa .filters select{border-radius:999px}
+#tab-casa #addC{background:var(--casa);border-color:var(--casa);color:var(--on-casa)}
+#tab-casa .impgrp>summary{border-radius:16px}
+#tab-casa .gr input:focus,#tab-casa .gr select:focus{border-color:var(--casa)}
+
+/* ---------- Firmă: rece, drept, ca un registru ---------- */
+body[data-view="firma"]{--bg:color-mix(in srgb,var(--firma) 5%,var(--bg0))}
+#tab-firma{--r:6px}
+#tab-firma .hero{--hr:6px;--hbg:var(--surface);--hline:color-mix(in srgb,var(--firma) 26%,var(--line));border-left:6px solid var(--firma)}
+#tab-firma .hero .horn{background-image:
+  linear-gradient(color-mix(in srgb,var(--firma) 11%,transparent) 1px,transparent 1px),
+  linear-gradient(90deg,color-mix(in srgb,var(--firma) 11%,transparent) 1px,transparent 1px);
+  background-size:18px 18px;background-position:-1px -1px;
+  -webkit-mask-image:linear-gradient(100deg,transparent 30%,#000 85%);mask-image:linear-gradient(100deg,transparent 30%,#000 85%)}
+#tab-firma .hero h2{font-family:var(--f-mono);font-weight:600;font-size:26px;text-transform:uppercase;letter-spacing:.08em;color:var(--firma)}
+#tab-firma .hero .rlink{border-radius:4px;font-family:var(--f-mono);font-size:12.5px}
+#tab-firma .panel,#tab-firma .kpi{border-radius:var(--r)}
+#tab-firma .kpi{border-left:3px solid var(--firma)}
+#tab-firma .kpi .l{font-family:var(--f-mono);font-size:11px;letter-spacing:.08em}
+#tab-firma .panel h2,#tab-firma .panel summary h2{font-family:var(--f-body);font-weight:600;font-size:17px;letter-spacing:-.005em}
+#tab-firma .gr{border-radius:5px}
+#tab-firma .grid{gap:4px}
+#tab-firma .gsec{font-family:var(--f-mono);font-size:11px;letter-spacing:.1em;color:var(--firma);display:flex;align-items:center;gap:10px}
+#tab-firma .gsec::after{content:"";flex:1;height:1px;background:color-mix(in srgb,var(--firma) 25%,var(--line))}
+#tab-firma .btn,#tab-firma .chip,#tab-firma .filters select,#tab-firma .rate input,#tab-firma .gr input,#tab-firma .gr select,#tab-firma .impgrp>summary,#tab-firma .drop,#tab-firma .pr{border-radius:4px}
+#tab-firma .gamt{font-weight:500}
+
+/* ---------- Transport: drum și bord ---------- */
+body[data-view="transport"]{
+  --bg:#E3E2DB; --surface:#F8F7F2; --surface2:#ECEBE3; --line:#C9C6BA; --fg:#141414; --muted:#5C5A53;
+  --auto:#8A6100; --car-txt:#8A6100; --on-auto:#141100; --neutralbg:#ECEBE3}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) body[data-view="transport"]{
+  --bg:#0A0C0F; --surface:#12161B; --surface2:#1A2027; --line:#29323C; --fg:#E7ECF1; --muted:#8B97A5;
+  --auto:#FFB627; --car-txt:#FFB627; --on-auto:#141100; --neutralbg:#1A2027}}
+:root[data-theme="dark"] body[data-view="transport"]{
+  --bg:#0A0C0F; --surface:#12161B; --surface2:#1A2027; --line:#29323C; --fg:#E7ECF1; --muted:#8B97A5;
+  --auto:#FFB627; --car-txt:#FFB627; --on-auto:#141100; --neutralbg:#1A2027}
+#tab-transport .hero{--hr:6px;--hbg:#1C1E22;--hline:#1C1E22;min-height:112px;padding-bottom:30px;color:#F2F2EE}
+#tab-transport .hero .horn{background:
+  repeating-linear-gradient(90deg,var(--car) 0 30px,transparent 30px 52px) left calc(100% - 13px)/100% 4px no-repeat,
+  repeating-linear-gradient(-45deg,var(--car) 0 10px,#141414 10px 20px) left top/100% 7px no-repeat,
+  radial-gradient(ellipse at 85% 10%,rgba(255,255,255,.08),transparent 60%)}
+#tab-transport .hero h2{font-family:var(--f-car);font-weight:700;font-size:40px;text-transform:uppercase;letter-spacing:.03em;color:#F6F5F0}
+#tab-transport .hero .hintline{font-family:var(--f-car);font-size:15px;font-weight:500;text-transform:uppercase;letter-spacing:.12em;color:#B9BEC5}
+#tab-transport .panel{border-radius:4px;box-shadow:0 1px 0 var(--line)}
+#tab-transport .panel h2,#tab-transport .tablehead h2{font-family:var(--f-car);font-weight:700;font-size:22px;text-transform:uppercase;letter-spacing:.04em;display:flex;align-items:center;gap:9px}
+#tab-transport .panel>h2::before,#tab-transport .tablehead h2::before{content:"";width:10px;height:10px;background:var(--car);transform:rotate(45deg);flex:none}
+#tab-transport .btn{border-radius:3px;font-family:var(--f-car);font-size:16px;font-weight:600;text-transform:uppercase;letter-spacing:.05em}
+#tab-transport .btn.auto{background:var(--car);border-color:var(--car);color:var(--car-ink)}
+#tab-transport .xptot b{font-family:var(--f-car);font-size:38px;font-weight:700;letter-spacing:.01em;color:var(--fg)}
+#tab-transport .xchip{border-radius:3px;font-family:var(--f-car);font-size:14px;letter-spacing:.03em}
+#tab-transport .vname{font-family:var(--f-car);font-size:24px;font-weight:700;text-transform:uppercase;letter-spacing:.03em}
+#tab-transport .vhead i{border-radius:2px;background:var(--car);transform:rotate(45deg)}
+#tab-transport .car-r .ctitle b{font-family:var(--f-car);font-size:17px;font-weight:600;letter-spacing:.02em}
+#tab-transport .car-r .pill{border-radius:3px;font-family:var(--f-car);font-size:14.5px;letter-spacing:.02em}
+#tab-transport .carkm input,#tab-transport .xpform input,#tab-transport .xpform select,#tab-transport .car-r input,#tab-transport .car-r select,#tab-transport .vkind{border-radius:3px}
+#tab-transport .xpform{border-radius:4px}
+#tab-transport .vname::placeholder{text-transform:none;letter-spacing:0;font-family:var(--f-body);font-size:16px;font-weight:500}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) #tab-transport .xptot b{color:var(--car);text-shadow:0 0 18px color-mix(in srgb,var(--car) 45%,transparent)}}
+:root[data-theme="dark"] #tab-transport .xptot b{color:var(--car);text-shadow:0 0 18px color-mix(in srgb,var(--car) 45%,transparent)}
+
+/* ---------- Setări: meniu ---------- */
+.setwrap{display:flex;flex-direction:column;gap:14px}
+.setmenu{display:flex;flex-direction:column;gap:14px}
+.settitle{font-family:var(--f-display);font-size:28px;margin:4px 2px 0;letter-spacing:-.01em}
+.smgrp{background:var(--surface);border:1px solid var(--line);border-radius:18px;overflow:hidden}
+.smi{display:grid;grid-template-columns:38px minmax(0,1fr) 12px;gap:12px;align-items:center;width:100%;min-height:62px;padding:11px 16px 11px 14px;background:transparent;border:0;border-top:1px solid var(--line);text-align:left;color:var(--fg)}
+.smi:first-child{border-top:0}
+.smi[hidden]{display:none!important}
+.smi:hover{background:var(--surface2)}
+.smi:focus-visible{outline:2px solid var(--fg);outline-offset:-3px;border-radius:14px}
+.smic{width:38px;height:38px;border-radius:11px;display:flex;align-items:center;justify-content:center;color:var(--ic);background:color-mix(in srgb,var(--ic) 15%,transparent)}
+.smic svg{width:21px;height:21px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.smic svg .f{fill:currentColor;stroke:none}
+.smt{min-width:0;display:flex;flex-direction:column;gap:1px}
+.smt b{font-weight:600;font-size:15px}
+.smt small{color:var(--muted);font-size:12.5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.chev{width:8px;height:8px;border-right:2px solid var(--muted);border-top:2px solid var(--muted);transform:rotate(45deg);justify-self:end}
+.setpages{min-width:0}
+.subpage{display:flex;flex-direction:column;gap:12px;min-width:0}
+.spback{align-self:flex-start;display:inline-flex;align-items:center;gap:6px;background:transparent;border:0;padding:6px 4px;font-weight:600;font-size:15px;color:var(--brand-fg)}
+.spback::before{content:"";width:9px;height:9px;border-left:2.2px solid currentColor;border-bottom:2.2px solid currentColor;transform:rotate(45deg);margin-left:3px}
+.subpage .panel{border-radius:18px;padding:16px}
+.setrow{display:flex;flex-direction:column;gap:8px;padding:14px 0 4px;border-top:1px solid var(--line);margin-top:12px}
+.setrow:first-of-type{border-top:0;margin-top:4px;padding-top:6px}
+.srl{font-size:11.5px;color:var(--muted);text-transform:uppercase;letter-spacing:.07em;font-weight:500}
+.srh{color:var(--muted);font-size:12.5px;line-height:1.45}
+#langL{margin:0;flex-direction:column;align-items:flex-start;gap:8px}
+#langL select{min-width:180px;padding:9px 10px;font-size:14.5px}
+.seg{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:4px;background:var(--surface2);border:1px solid var(--line);border-radius:14px;padding:4px;max-width:440px}
+.seg label{cursor:pointer;min-width:0;display:block}
+.seg span{display:flex;flex-direction:column;align-items:center;gap:5px;padding:11px 4px 9px;border-radius:10px;font-size:13px;font-weight:500;color:var(--muted);text-align:center;line-height:1.2}
+.seg svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.seg label:hover span{color:var(--fg)}
+.seg input:checked+span{background:var(--surface);color:var(--fg);box-shadow:0 1px 3px rgba(0,0,0,.14),0 0 0 1px var(--line)}
+.seg input:checked+span svg{color:var(--brand-fg)}
+.seg input:focus-visible+span{outline:2px solid var(--fg);outline-offset:1px}
+@media (min-width:900px){
+  .setwrap{display:grid;grid-template-columns:300px minmax(0,1fr);gap:20px;align-items:start}
+  .setmenu{position:sticky;top:calc(64px + env(safe-area-inset-top,0px))}
+  .spback{display:none}
+  .smi[aria-current="page"]{background:var(--surface2);box-shadow:inset 3px 0 0 var(--brand-fg)}
+}
 </style>
 </head>
 <body>
@@ -707,7 +877,7 @@ details.fold[open]>summary{margin-bottom:10px}
 
     <!-- ============ CASĂ ============ -->
     <section class="tab" id="tab-casa" data-tab="casa" role="tabpanel" aria-labelledby="tb-casa" hidden>
-      <div class="rowhead"><h2><i style="background:var(--casa)"></i>Casă</h2><span class="hintline" id="casaHint">din salariu net, decontare și diurne</span></div>
+      <div class="rowhead hero hc"><span class="horn" aria-hidden="true"></span><h2><i style="background:var(--casa)"></i>Casă</h2><span class="hintline" id="casaHint">din salariu net, decontare și diurne</span></div>
       <div class="kpis" id="kpisC"></div>
       <section class="panel">
         <div class="tablehead">
@@ -722,7 +892,7 @@ details.fold[open]>summary{margin-bottom:10px}
 
     <!-- ============ FIRMĂ ============ -->
     <section class="tab" id="tab-firma" data-tab="firma" role="tabpanel" aria-labelledby="tb-firma" hidden>
-      <div class="rowhead"><h2><i style="background:var(--firma)"></i>Firmă</h2><a class="rlink" id="bnrLink" href="https://www.bnr.ro/Cursul-de-schimb-5691.aspx" target="_blank" rel="noopener">Curs BNR ↗</a></div>
+      <div class="rowhead hero hf"><span class="horn" aria-hidden="true"></span><h2><i style="background:var(--firma)"></i>Firmă</h2><a class="rlink" id="bnrLink" href="https://www.bnr.ro/Cursul-de-schimb-5691.aspx" target="_blank" rel="noopener">Curs BNR ↗</a></div>
       <section class="panel" id="ratePanel">
         <div class="ratebox">
           <label class="rate">Curs EUR/RON <input id="rate" class="num" inputmode="decimal" placeholder="ex. 5,05" aria-label="Curs EUR/RON"></label>
@@ -767,7 +937,7 @@ details.fold[open]>summary{margin-bottom:10px}
 
     <!-- ============ TRANSPORT ============ -->
     <section class="tab" id="tab-transport" data-tab="transport" role="tabpanel" aria-labelledby="tb-transport" hidden>
-      <div class="rowhead"><h2><i style="background:var(--auto)"></i>Transport</h2></div>
+      <div class="rowhead hero ht"><span class="horn" aria-hidden="true"></span><h2><i style="background:var(--auto)"></i>Transport</h2><span class="hintline">scadențe · revizii · drumuri</span></div>
       <section class="panel" id="xpPanel" aria-labelledby="xpTitle">
         <div class="tablehead">
           <h2 id="xpTitle">Cheltuieli</h2>
@@ -796,25 +966,57 @@ details.fold[open]>summary{margin-bottom:10px}
     </section>
     </section>
 
-    <!-- ============ MAI MULT ============ -->
+    <!-- ============ MAI MULT: meniu de setări; pe telefon o pagină pe rând, pe ecran mare meniul în stânga ============ -->
     <section class="tab" id="tab-mai" data-tab="mai" role="tabpanel" aria-labelledby="tb-mai" hidden>
+      <div class="setwrap">
+      <nav class="setmenu" id="setMenu" aria-label="Setări">
+        <h2 class="settitle">Setări</h2>
+        <div class="smgrp">
+          <button type="button" class="smi" data-sp="look"><span class="smic" style="--ic:var(--brand-fg)"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="7.5"/><path class="f" d="M12 4.5a7.5 7.5 0 0 1 0 15z"/></svg></span><span class="smt"><b>Aspect și limbă</b><small id="smLook"></small></span><i class="chev" aria-hidden="true"></i></button>
+          <button type="button" class="smi" data-sp="mods"><span class="smic" style="--ic:var(--ok)"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="6" width="17" height="5" rx="2.5"/><circle class="f" cx="17.5" cy="8.5" r="1.6"/><rect x="3.5" y="13" width="17" height="5" rx="2.5"/><circle class="f" cx="6.5" cy="15.5" r="1.6"/></svg></span><span class="smt"><b>Ce urmărești</b><small id="smMods"></small></span><i class="chev" aria-hidden="true"></i></button>
+          <button type="button" class="smi" data-sp="start" id="smStartB"><span class="smic" style="--ic:var(--firma)"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 19.5h16M6 16.5v-6M10 16.5v-9M14 16.5v-5M18 16.5V6"/></svg></span><span class="smt"><b>Sold de pornire firmă</b><small id="smStart"></small></span><i class="chev" aria-hidden="true"></i></button>
+        </div>
+        <div class="smgrp">
+          <button type="button" class="smi" data-sp="year"><span class="smic" style="--ic:var(--casa)"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="5" width="16" height="15" rx="2"/><path d="M4 9.5h16M8.5 3v4M15.5 3v4"/></svg></span><span class="smt"><b>Total pe an</b><small id="smYear"></small></span><i class="chev" aria-hidden="true"></i></button>
+          <button type="button" class="smi" data-sp="news"><span class="smic" style="--ic:var(--auto)"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.5l2.3 5.2 5.7.5-4.3 3.8 1.3 5.5L12 15.6l-5 2.9 1.3-5.5L4 9.2l5.7-.5z"/></svg></span><span class="smt"><b>Ce e nou</b><small id="smNews" data-notr></small></span><i class="chev" aria-hidden="true"></i></button>
+          <button type="button" class="smi" data-sp="acct"><span class="smic" style="--ic:var(--muted)"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8.5" r="3.6"/><path d="M5 19.5c1.2-3.4 3.8-5 7-5s5.8 1.6 7 5"/></svg></span><span class="smt"><b>Contul și datele</b><small id="smAcct"></small></span><i class="chev" aria-hidden="true"></i></button>
+        </div>
+      </nav>
+      <div class="setpages">
+      <div class="subpage" data-page="look" hidden>
+        <button type="button" class="spback" data-spback>Setări</button>
+        <section class="panel" aria-labelledby="hlook">
+          <h2 id="hlook">Aspect și limbă</h2>
+          <div class="setrow">
+            <span class="srl">Temă</span>
+            <div class="seg" id="themeSeg" role="radiogroup" aria-label="Temă">
+              <label><input type="radio" name="theme" value="system" class="vh"><span><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="5" width="17" height="11.5" rx="1.8"/><path d="M9 20h6M12 16.5V20"/></svg>După sistem</span></label>
+              <label><input type="radio" name="theme" value="light" class="vh"><span><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3.8"/><path d="M12 3v2M12 19v2M3 12h2M19 12h2M5.6 5.6l1.4 1.4M17 17l1.4 1.4M5.6 18.4L7 17M17 7l1.4-1.4"/></svg>Luminos</span></label>
+              <label><input type="radio" name="theme" value="dark" class="vh"><span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19.5 14.5A7.5 7.5 0 0 1 9.5 4.5a7.5 7.5 0 1 0 10 10z"/></svg>Întunecat</span></label>
+            </div>
+            <small class="srh" id="themeHint">„După sistem” urmează setarea telefonului sau a calculatorului: ziua luminos, noaptea întunecat, dacă așa ai pus acolo.</small>
+          </div>
+          <div class="setrow">
+            <label class="setsel" id="langL" data-notr><span class="srl" data-notr>Limba / Language</span> <select data-lang="1" aria-label="Limba / Language" data-notr><option value="ro">Română</option><option value="en">English</option></select></label>
+          </div>
+        </section>
+      </div>
+      <div class="subpage" data-page="mods" hidden>
+        <button type="button" class="spback" data-spback>Setări</button>
       <section class="panel" id="setPanel" aria-labelledby="hset">
-        <h2 id="hset">Setări · ce urmărești</h2>
+        <h2 id="hset">Ce urmărești</h2>
         <div class="hint">Casă e mereu pornită. Când oprești un modul, datele lui nu se șterg: doar se ascund, și revin când îl pornești din nou.</div>
         <div class="mods">
           <label class="mod"><input type="checkbox" class="vh" id="modFirma"><span class="tgl" aria-hidden="true"></span><span class="mt"><b>Firmă / PFA</b><small>facturi, taxe, curs EUR, extrase de cont, sold reportat</small></span></label>
-          <label class="setsel" id="langL" data-notr>Limba / Language <select data-lang="1" aria-label="Limba / Language" data-notr><option value="ro">Română</option><option value="en">English</option></select></label>
           <label class="setsel" id="modFxL">Firma încasează în <select id="modFx"><option value="EUR">euro (cu curs și schimb în lei)</option><option value="RON">lei</option></select></label>
           <label class="mod"><input type="checkbox" class="vh" id="modCasaImp"><span class="tgl" aria-hidden="true"></span><span class="mt"><b>Extrase și la Casă</b><small>încarci extrasul contului personal la final de lună, pentru tot istoricul (la Firmă e mereu)</small></span></label>
           <label class="mod"><input type="checkbox" class="vh" id="modTransport"><span class="tgl" aria-hidden="true"></span><span class="mt"><b>Transport</b><small>mașina: scadențe, revizii, kilometraj</small></span></label>
           <label class="setsel" id="fuelMinL">La benzinărie, plinul pornește de la <input id="fuelMin" class="num" inputmode="numeric" style="width:84px;text-align:right"> lei <small style="flex-basis:100%">Din extras nu se vede ce ai luat: sub suma asta, plata e trecută la mărunțișuri (țigări, cafea).</small></label>
         </div>
       </section>
-      <section class="panel">
-        <h2 id="yrt">Total pe an</h2>
-        <div class="hint">Cât ai de plată pe fiecare lună, la Casă și la Firmă (fără încasări).</div>
-        <div class="histwrap" id="yr"></div>
-      </section>
+      </div>
+      <div class="subpage" data-page="start" hidden>
+        <button type="button" class="spback" data-spback>Setări</button>
       <section class="panel" id="startPanel">
         <h2>Sold de pornire firmă</h2>
         <div class="setgrid">
@@ -824,11 +1026,25 @@ details.fold[open]>summary{margin-bottom:10px}
         </div>
         <p class="note">Soldul firmei se adună de la luna aleasă încoace. Lunile dinainte (de exemplu importate din extrase vechi) apar în istoric și în totalul pe an, dar nu schimbă soldul.</p>
       </section>
-      <details class="panel fold" id="news">
-        <summary><h2>Ce e nou</h2></summary>
+      </div>
+      <div class="subpage" data-page="year" hidden>
+        <button type="button" class="spback" data-spback>Setări</button>
+      <section class="panel">
+        <h2 id="yrt">Total pe an</h2>
+        <div class="hint">Cât ai de plată pe fiecare lună, la Casă și la Firmă (fără încasări).</div>
+        <div class="histwrap" id="yr"></div>
+      </section>
+      </div>
+      <div class="subpage" data-page="news" hidden>
+        <button type="button" class="spback" data-spback>Setări</button>
+      <section class="panel" id="news">
+        <h2>Ce e nou</h2>
         <p class="note verline">Versiunea <b id="verLbl" data-notr></b></p>
         <div class="news" id="newsList" data-notr></div>
-      </details>
+      </section>
+      </div>
+      <div class="subpage" data-page="acct" hidden>
+        <button type="button" class="spback" data-spback>Setări</button>
       <section class="panel" id="acct">
         <h2>Contul și datele</h2>
         <p class="note" id="whereData" style="margin-top:4px"></p>
@@ -850,6 +1066,9 @@ details.fold[open]>summary{margin-bottom:10px}
         <p class="note verline">Versiunea aplicației: <button type="button" class="linkbtn" id="buildId" data-notr></button></p>
       </section>
 
+      </div>
+      </div>
+      </div>
     </section>
   </main>
 </div>
@@ -879,7 +1098,7 @@ This typically indicates that your device does not have a healthy Internet conne
 <script>
 (function(){"use strict";
 var TARGET="web";
-var BUILD_ID="build 2026-11-02 13:02 UTC";
+var BUILD_ID="build 2026-11-03 11:37 UTC";
 var WHERE_DB="Datele tale stau în contul tău Google, într-un proiect Firebase (Google Cloud, regiunea Frankfurt). Pe telefon rămâne doar o copie temporară, ca să meargă și fără net.";
 var MONTHS=["ianuarie","februarie","martie","aprilie","mai","iunie","iulie","august","septembrie","octombrie","noiembrie","decembrie"];
 var GROUPS=["Casă","Firmă"], KINDS=["Plată","Încasare","Transfer","Memento"];
@@ -1428,7 +1647,8 @@ I18N.enP=[
  [/^sold la început de lună (.+) \+ venit − plăți(?: \+ (.+) aduși din alt cont al tău| − (.+) mutați în alt cont al tău)?$/,function(m,a,b,c){return "start-of-month balance "+a+" + income − payments"+(b?" + "+b+" brought from another of your accounts":c?" − "+c+" moved to another of your accounts":"")}],
  [/^la fel ca în extras, la (.+) ✓$/,"same as the statement, on $1 ✓"],
  [/^extrasul arată (.+) la (.+), diferă cu (.+) \(vreo plată trecută de mână, din alt cont\?\)$/,"the statement shows $1 on $2, a difference of $3 (a payment entered by hand, from another account?)"],
- [/^estimat: (.+) rămași din (\S+) \+ venit primit (.+) − plăți bifate ([^·]+)$/,function(m,a,b,c,d){return "estimate: "+a+" left from "+capF(b)+" + income received "+c+" − checked payments "+d}],
+ [/^estimat: (.+) rămași din (\S+) \+ venit primit (.+?) − plăți bifate ([^·]+?)( · cumpărăturile cu cardul intră când încarci extrasul)?$/,function(m,a,b,c,d,e){return "estimate: "+a+" left from "+capF(b)+" + income received "+c+" − checked payments "+d+(e?" · card purchases come in when you load the statement":"")}],
+ [/^la cursul (\S+) ca să acoperi plățile firmei · treci sus cât ai schimbat efectiv$/,"at the rate $1, to cover the business payments · enter above how much you actually exchanged"],
  [/^cumpărăturile cu cardul intră când încarci extrasul$/,"card purchases come in when you load the statement"],
  [/^luna asta ([+−].+) · se adună de la o lună la alta(.*)$/,function(m,a,b){return "this month "+a+" · carries over month to month"+trTail(b)}],
  [/^în cont · luna asta ([+−].+) · se adună de la o lună la alta(.*)$/,function(m,a,b){return "in the account · this month "+a+" · carries over month to month"+trTail(b)}],
@@ -1451,11 +1671,19 @@ I18N.enP=[
 /* la urmă: listă de bucăți despărțite cu „ · ”: traduce ce știe, lasă restul (nume, note) cum sunt */
 I18N.enP.push([/^.+ · .+$/,function(s){var ps=s.split(" · "),any=false,out=ps.map(function(p){var t=trSeg(p);if(t!=null){any=true;return t}return p});return any?out.join(" · "):s},1]);
 function trTail(b){return String(b||"").replace(/ · pune cursul lunii \(sus\), ca să se socotească și leii din schimb/," · enter the month's rate (above) so the lei from the exchange count too").replace(/ · lipsește cursul unei luni cu schimb, mai în urmă/," · a month with an exchange is missing its rate, further back")}
+/* meniul de setări și tema */
+Object.assign(I18N.en,{"Setări":"Settings","Aspect și limbă":"Appearance and language","Ce urmărești":"What you track","Temă":"Theme",
+"După sistem":"Match system","Luminos":"Light","Întunecat":"Dark",
+"„După sistem” urmează setarea telefonului sau a calculatorului: ziua luminos, noaptea întunecat, dacă așa ai pus acolo.":"“Match system” follows your phone or computer setting: light by day, dark at night, if that's how you set it there.",
+"scadențe · revizii · drumuri":"due dates · services · trips"});
 
 /* ================= Versiuni și „Ce e nou” =================
    Versiune mare (3.0) = schimbare importantă; mică (2.1) = funcție nouă; reparație (2.1.1) = corectură.
    Cea mai nouă versiune e prima din listă. */
 var CHANGELOG=[
+ {v:"2.2",d:"2026-11-03",t:{ro:"Aspect nou și temă",en:"New look and theme"},
+  ro:["Temă luminoasă, întunecată sau după sistem: Mai mult → Aspect și limbă","Fiecare tab are stilul lui: Casă cald și rotund, Firmă drept ca un registru, Transport ca un drum","Setările sunt acum un meniu: alegi ce vrei să schimbi și intri pe pagina lui","Traduceri reparate în engleză la Casă și Firmă"],
+  en:["Light, dark or match-system theme: More → Appearance and language","Every tab has its own style: Home warm and rounded, Business straight like a ledger, Transport like a road","Settings are now a menu: pick what to change and open its page","Fixed English translations on Home and Business"]},
  {v:"2.1",d:"2026-11-02",
   ro:["Versiuni și „Ce e nou”: vezi aici ce s-a schimbat la fiecare versiune","„Anulează” după ștergere: un rând, o cheltuială sau o scadență ștearsă din greșeală revine dintr-o atingere","Dacă intră un cont Google fără acces, aplicația îi spune clar că e privată"],
   en:["Versions and “What's new”: see here what changed in each version","“Undo” after deleting: a row, expense or due date deleted by mistake comes back with one tap","If a Google account without access signs in, the app clearly says it's private"]},
@@ -1481,7 +1709,7 @@ var CHANGELOG=[
   ro:["Login cu Google, datele în contul tău (Firebase)","Datele vechi mutate, copie de siguranță JSON"],
   en:["Google sign-in, data in your own account (Firebase)","Old data moved over, JSON backup copy"]}
 ];
-CHANGELOG[0].t={ro:"Ce e nou și anulare",en:"What's new and undo"};
+CHANGELOG[1].t={ro:"Ce e nou și anulare",en:"What's new and undo"};
 var APP_VER=CHANGELOG[0].v;
 function verLabel(){return "v"+APP_VER+" · "+fmtD(CHANGELOG[0].d)}
 function renderNews(){
@@ -1492,6 +1720,75 @@ function renderNews(){
     return '<div class="nv'+(i?'':' cur')+'"><div class="nvh"><b>v'+esc(c.v)+'</b>'+(t?' · '+esc(t):'')+'<small>'+esc(fmtD(c.d))+'</small></div><ul>'+it.map(function(x){return '<li>'+esc(x)+'</li>'}).join("")+'</ul></div>';
   }).join("");
 }
+
+/* ================= Tema (după sistem / luminos / întunecat) și meniul de setări =================
+   Tema se ține minte pe fiecare dispozitiv (telefonul poate fi întunecat, calculatorul luminos).
+   Se aplică și din <head>, înainte să apară pagina, ca să nu clipească. */
+var THEME="system";
+try{var _t=localStorage.getItem("fin_theme");if(_t==="light"||_t==="dark")THEME=_t}catch(e){}
+function themeName(t){return t==="light"?L("Luminos","Light"):t==="dark"?L("Întunecat","Dark"):L("După sistem","Match system")}
+function applyTheme(t){
+  THEME=t==="light"||t==="dark"?t:"system";
+  try{if(THEME==="system")localStorage.removeItem("fin_theme");else localStorage.setItem("fin_theme",THEME)}catch(e){}
+  var r=document.documentElement;
+  if(THEME==="system")r.removeAttribute("data-theme");else r.setAttribute("data-theme",THEME);
+  paintBar();
+}
+/* bara de sus a telefonului ia culoarea paginii (și a tabului deschis) */
+function paintBar(){
+  try{
+    var c=getComputedStyle(document.body).backgroundColor;
+    document.querySelectorAll('meta[name="theme-color"]').forEach(function(m){
+      if(!m.hasAttribute("data-def"))m.setAttribute("data-def",m.getAttribute("content")||"");
+      m.setAttribute("content",c||m.getAttribute("data-def"));
+    });
+  }catch(e){}
+}
+function setView(t){
+  if(document.body.getAttribute("data-view")!==t){document.body.setAttribute("data-view",t);paintBar()}
+}
+
+/* meniul de setări: pe telefon o pagină pe rând (cu „‹ Setări” înapoi), pe ecran mare meniul în stânga și pagina în dreapta */
+var setPage=null;
+function setWide(){try{return window.matchMedia("(min-width:900px)").matches}catch(e){return false}}
+function renderSetNav(){
+  var sb=$("#smStartB");if(sb)sb.hidden=mods.firma===false;
+  if(setPage==="start"&&mods.firma===false)setPage=null;
+  var wide=setWide(),pg=setPage||(wide?"look":null);
+  $("#setMenu").hidden=!wide&&!!pg;
+  document.querySelectorAll("#tab-mai .subpage").forEach(function(p){p.hidden=p.getAttribute("data-page")!==pg});
+  document.querySelectorAll("#setMenu .smi").forEach(function(b){b.setAttribute("aria-current",b.getAttribute("data-sp")===pg?"page":"false")});
+  document.querySelectorAll('#themeSeg input').forEach(function(i){i.checked=i.value===THEME});
+  var on=[L("Casă","Home")];if(mods.firma!==false)on.push(L("Firmă","Business"));if(mods.transport!==false)on.push("Transport");
+  var tx=function(q,v){var e=$(q);if(e){e.textContent=v;e.setAttribute("data-notr","")}};
+  tx("#smLook",themeName(THEME)+" · "+LANGS[LANG]);
+  tx("#smMods",on.join(", ")+(mods.casaImp?L(" · extrase la Casă"," · Home statements"):""));
+  tx("#smStart",startBal.since?L("de la ","from ")+label(startBal.since):L("de la prima lună","from the first month"));
+  tx("#smYear",ym.slice(0,4));
+  tx("#smNews",verLabel());
+  var am=$("#acctMail"),mt=am&&am.textContent&&am.textContent!=="—"?am.textContent:"";
+  tx("#smAcct",mt||(mode==="db"?L("copie, export, import","backup, export, import"):L("doar în acest browser","only in this browser")));
+}
+function openSetPage(p){
+  setPage=p||null;dropDraft&&dropDraft();
+  renderSetNav();
+  if(!setWide()){try{window.scrollTo(0,0)}catch(e){}}
+  var pg=p&&document.querySelector('#tab-mai .subpage[data-page="'+p+'"] .spback');
+  if(pg&&!setWide())try{pg.focus({preventScroll:true})}catch(e){}
+}
+document.addEventListener("click",function(e){
+  var b=e.target.closest&&e.target.closest("#tab-mai [data-sp]");
+  if(b){openSetPage(b.getAttribute("data-sp"));return}
+  if(e.target.closest&&e.target.closest("#tab-mai [data-spback]")){
+    var from=setPage;openSetPage(null);
+    var m=from&&document.querySelector('#setMenu [data-sp="'+from+'"]');if(m)try{m.focus({preventScroll:true})}catch(er){}
+  }
+});
+document.addEventListener("change",function(e){
+  if(e.target&&e.target.name==="theme"&&e.target.closest("#themeSeg")){applyTheme(e.target.value);renderSetNav()}
+});
+try{window.matchMedia("(min-width:900px)").addEventListener("change",function(){if(tab==="mai")renderSetNav()})}catch(e){}
+try{window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change",function(){paintBar()})}catch(e){}
 
 /* ================= Extrase ING Business: citire (funcții pure, testate în Node) ================= */
 var IMP_DATE=/^(\d{2})\.(\d{2})\.(\d{4})$/;
@@ -2095,6 +2392,7 @@ function setTab(t,noScroll){
   t=TAB_ALIAS[t]||t;
   if(TABS.indexOf(t)<0||!modOn(t))t="general";
   dropDraft();
+  if(t==="mai")setPage=null;
   tab=t;
   try{localStorage.setItem("fin_tab",t)}catch(e){}
   try{history.replaceState(null,"","#"+t)}catch(e){}
@@ -2105,6 +2403,7 @@ function renderTabs(){
   document.querySelectorAll(".tabbar button").forEach(function(b){var t=b.getAttribute("data-tab");b.hidden=!modOn(t);b.setAttribute("aria-selected",t===tab?"true":"false")});
   document.querySelectorAll("main .tab").forEach(function(s){s.hidden=s.getAttribute("data-tab")!==tab});
   document.querySelector(".monthbar").hidden=false;
+  setView(tab);
 }
 function renderMonth(){
   $("#curm").textContent=label(ym);
@@ -2496,7 +2795,7 @@ function renderSettings(){
   $("#startPanel").hidden=mods.firma===false;
 }
 function renderMai(){
-  renderSettings();renderYear();renderNews();
+  renderSettings();renderYear();renderNews();renderSetNav();
   var vl=$("#verLbl");if(vl){vl.textContent=verLabel();vl.title=BUILD_ID}
   var se=$("#seur"),sr=$("#sron"),sm=$("#sinceM");
   if(document.activeElement!==se)se.value=startBal.eur?decIn(startBal.eur):"";
