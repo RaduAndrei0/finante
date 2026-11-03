@@ -23,7 +23,7 @@
 :root{
   --bg0:#F5F3ED; --bg:var(--bg0); --surface:#FFFFFF; --surface2:#EEEBE3; --line:#E0DBCF;
   --fg:#1C1A15; --muted:#6B6559;
-  --brand:#C8F03C; --brand-ink:#1A2200; --brand-fg:#4C6A00;
+  --brand:#2F6F5E; --brand-ink:#FFFFFF; --brand-fg:#2F6F5E;
   --casa:#C2542C; --firma:#2D52C9; --auto:#6A4FD0; --car:#F2B400; --car-ink:#141100;
   --on-casa:#FFFFFF; --on-firma:#FFFFFF; --on-auto:#FFFFFF;
   --ok:#1D8452; --warn:#A06700; --bad:#C3372C;
@@ -38,7 +38,7 @@
   :root:not([data-theme="light"]){
   --bg0:#131311; --bg:var(--bg0); --surface:#1C1B18; --surface2:#262520; --line:#34322C;
   --fg:#F1EEE6; --muted:#A39D8F;
-  --brand:#C8F03C; --brand-ink:#1A2200; --brand-fg:#C8F03C;
+  --brand:#7CC9B3; --brand-ink:#0B231C; --brand-fg:#7CC9B3;
   --casa:#F2875C; --firma:#88A3FF; --auto:#B3A0FF; --car:#FFB627; --car-ink:#141100;
   --on-casa:#2A0E02; --on-firma:#0A1640; --on-auto:#1C1240;
   --ok:#5AD39A; --warn:#F0C25A; --bad:#FF8577;
@@ -49,7 +49,7 @@
 :root[data-theme="dark"]{
   --bg0:#131311; --bg:var(--bg0); --surface:#1C1B18; --surface2:#262520; --line:#34322C;
   --fg:#F1EEE6; --muted:#A39D8F;
-  --brand:#C8F03C; --brand-ink:#1A2200; --brand-fg:#C8F03C;
+  --brand:#7CC9B3; --brand-ink:#0B231C; --brand-fg:#7CC9B3;
   --casa:#F2875C; --firma:#88A3FF; --auto:#B3A0FF; --car:#FFB627; --car-ink:#141100;
   --on-casa:#2A0E02; --on-firma:#0A1640; --on-auto:#1C1240;
   --ok:#5AD39A; --warn:#F0C25A; --bad:#FF8577;
@@ -615,7 +615,7 @@ details.fold[open]>summary{margin-bottom:10px}
 
 /* ---------- marca ---------- */
 .top h1{position:relative;display:inline-block;isolation:isolate}
-.top h1::after{content:"";position:absolute;left:-3px;right:-5px;bottom:.12em;height:.42em;background:var(--brand);z-index:-1;border-radius:3px;transform:skewX(-10deg)}
+.top h1::after{content:"";position:absolute;left:0;right:0;bottom:-4px;height:3px;border-radius:2px;background:linear-gradient(90deg,var(--casa),var(--firma));z-index:-1;opacity:.85}
 .monthnav{border-radius:14px}
 .monthnav .cur{font-family:var(--f-display);font-weight:700;letter-spacing:-.01em}
 .chip#gotoday{border-color:var(--brand-fg);color:var(--brand-fg)}
@@ -639,7 +639,7 @@ details.fold[open]>summary{margin-bottom:10px}
 body[data-view="general"] .gcard{border-radius:18px}
 body[data-view="general"] #upcPanel{border-radius:18px}
 body[data-view="general"] #upcPanel>h2{display:inline-flex;align-self:flex-start;position:relative;isolation:isolate}
-body[data-view="general"] #upcPanel>h2::after{content:"";position:absolute;left:-2px;right:-3px;bottom:.08em;height:.36em;background:var(--brand);z-index:-1;border-radius:2px;opacity:.85}
+body[data-view="general"] #upcPanel>h2::after{content:none}
 body[data-view="general"] .upc .d{background:var(--surface2);font-weight:500}
 body[data-view="general"] #calwrap{border-radius:18px}
 
@@ -657,7 +657,7 @@ body[data-view="casa"]{--bg:color-mix(in srgb,var(--casa) 6%,var(--bg0))}
 #tab-casa .hero .horn{background:
   radial-gradient(circle at 92% 135%,color-mix(in srgb,var(--casa) 40%,transparent) 0 78px,transparent 79px),
   radial-gradient(circle at 74% -40%,color-mix(in srgb,var(--casa) 20%,transparent) 0 66px,transparent 67px),
-  radial-gradient(circle at 100% 0,color-mix(in srgb,var(--brand) 26%,transparent) 0 26px,transparent 27px)}
+  radial-gradient(circle at 100% 0,color-mix(in srgb,var(--casa) 14%,transparent) 0 26px,transparent 27px)}
 #tab-casa .hero h2{font-family:var(--f-casa);font-weight:650;font-size:34px;letter-spacing:-.015em;color:var(--casa)}
 #tab-casa .hero .hintline{color:color-mix(in srgb,var(--casa) 55%,var(--muted))}
 #tab-casa .panel,#tab-casa .kpi{border-radius:var(--r)}
@@ -1098,7 +1098,7 @@ This typically indicates that your device does not have a healthy Internet conne
 <script>
 (function(){"use strict";
 var TARGET="web";
-var BUILD_ID="build 2026-11-03 11:37 UTC";
+var BUILD_ID="build 2026-11-03 11:51 UTC";
 var WHERE_DB="Datele tale stau în contul tău Google, într-un proiect Firebase (Google Cloud, regiunea Frankfurt). Pe telefon rămâne doar o copie temporară, ca să meargă și fără net.";
 var MONTHS=["ianuarie","februarie","martie","aprilie","mai","iunie","iulie","august","septembrie","octombrie","noiembrie","decembrie"];
 var GROUPS=["Casă","Firmă"], KINDS=["Plată","Încasare","Transfer","Memento"];
