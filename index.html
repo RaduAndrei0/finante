@@ -770,6 +770,13 @@ body[data-view="transport"]{
   .spback{display:none}
   .smi[aria-current="page"]{background:var(--surface2);box-shadow:inset 3px 0 0 var(--brand-fg)}
 }
+
+/* texte scrise din CSS: în engleză (traducerea din pagină nu ajunge la ::after) */
+html[lang="en"] .gr .xc .x::after{content:" Delete row"}
+html[lang="en"] .gr .xc .x.arm::after{content:" Sure? Tap again"}
+html[lang="en"] .impgrp>summary::after{content:"Show ▾"!important}
+html[lang="en"] .impgrp[open]>summary::after{content:"Hide ▴"!important}
+@media (min-width:900px){html[lang="en"] .gr .xc .x::after{content:""}}
 </style>
 </head>
 <body>
@@ -1098,7 +1105,7 @@ This typically indicates that your device does not have a healthy Internet conne
 <script>
 (function(){"use strict";
 var TARGET="web";
-var BUILD_ID="build 2026-11-03 11:54 UTC";
+var BUILD_ID="build 2026-11-03 17:51 UTC";
 var WHERE_DB="Datele tale stau în contul tău Google, într-un proiect Firebase (Google Cloud, regiunea Frankfurt). Pe telefon rămâne doar o copie temporară, ca să meargă și fără net.";
 var MONTHS=["ianuarie","februarie","martie","aprilie","mai","iunie","iulie","august","septembrie","octombrie","noiembrie","decembrie"];
 var GROUPS=["Casă","Firmă"], KINDS=["Plată","Încasare","Transfer","Memento"];
@@ -1683,6 +1690,9 @@ Object.assign(I18N.en,{"Setări":"Settings","Aspect și limbă":"Appearance and 
    Versiune mare (3.0) = schimbare importantă; mică (2.1) = funcție nouă; reparație (2.1.1) = corectură.
    Cea mai nouă versiune e prima din listă. */
 var CHANGELOG=[
+ {v:"2.2.1",d:"2026-11-03",t:{ro:"Corecturi",en:"Fixes"},
+  ro:["În engleză, butonul „Șterge rândul” și „Arată / Ascunde” apar acum în engleză"],
+  en:["In English, the “Delete row” button and “Show / Hide” now appear in English"]},
  {v:"2.2",d:"2026-11-03",t:{ro:"Aspect nou și temă",en:"New look and theme"},
   ro:["Temă luminoasă, întunecată sau după sistem: Mai mult → Aspect și limbă","Fiecare tab are stilul lui: Casă cald și rotund, Firmă drept ca un registru, Transport ca un drum","Setările sunt acum un meniu: alegi ce vrei să schimbi și intri pe pagina lui","Traduceri reparate în engleză la Casă și Firmă","În engleză, sumele în lei apar ca RON"],
   en:["Light, dark or match-system theme: More → Appearance and language","Every tab has its own style: Home warm and rounded, Business straight like a ledger, Transport like a road","Settings are now a menu: pick what to change and open its page","Fixed English translations on Home and Business","In English, lei amounts show as RON"]},

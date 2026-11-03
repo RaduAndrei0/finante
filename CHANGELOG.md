@@ -2,6 +2,14 @@
 
 Versiune mare (3.0) = schimbare importantă · mică (2.1) = funcție nouă · reparație (2.1.1) = corectură.
 
+## v2.2.1 · 3 noiembrie 2026 — Corecturi
+
+- În engleză, butonul „Șterge rândul” și „Arată / Ascunde” apar acum în engleză
+
+*Fixes · 3 November 2026*
+
+- In English, the “Delete row” button and “Show / Hide” now appear in English
+
 ## v2.2 · 3 noiembrie 2026 — Aspect nou și temă
 
 - Temă luminoasă, întunecată sau după sistem: Mai mult → Aspect și limbă
