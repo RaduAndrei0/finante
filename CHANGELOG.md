@@ -6,20 +6,22 @@ Versiune mare (3.0) = schimbare importantă · mică (2.1) = funcție nouă · r
 
 - Luna nouă pornește cu note goale la plăți și încasări; memento-urile își păstrează nota, iar cu 📌 fixezi orice notă
 - Pe rândurile potrivite din extras apare „Din extras”: cine a plătit și ce scrie la plată, separat de nota ta
-- Transport: vehiculul cu marcă, model, an și tip (scrii tu ce fel e), fără meniu mereu deschis
+- Transport: un singur „+ Vehicul”; alegi tipul (sau scrii tu ce fel e) și treci marca, modelul, anul și numărul de înmatriculare, apoi alegi ce urmărești
 - Fiecare scadență are intervalul ei în luni și/sau km, cu șabloane: revizie, distribuție, AdBlue, frâne, bujii, baterie și altele
 - Kilometrajul e opțional: „Făcută” te întreabă la câți km, poți trece km și la plin, iar aplicația estimează când vine revizia
 - Firmă: soldul apare „estimat” până încarci extrasul lunii și „din extras” după; un avertisment îți amintește dacă lipsește
+- În General, „Urmează” arată și scadențele vehiculelor; atingi și te duce direct la ele
 - Texte generale, potrivite oricui
 
 *For everyone · 4 November 2026*
 
 - A new month starts with empty notes on payments and income; reminders keep their note, and 📌 pins any note
 - Rows matched with the statement show “From the statement”: who paid and the payment details, apart from your note
-- Transport: the vehicle with make, model, year and type (you name the kind), without an always-open menu
+- Transport: a single “+ Vehicle”; pick the type (or name the kind) and add make, model, year and registration number, then choose what to track
 - Each due item has its own interval in months and/or km, with templates: service, timing belt, AdBlue, brakes, spark plugs, battery and more
 - Mileage is optional: “Done” asks at what km, you can enter km when filling up, and the app estimates when the service is due
 - Business: the balance shows “estimated” until you load the month's statement and “from statement” after; a notice reminds you if it's missing
+- On Overview, “Coming up” also shows vehicle due items; tap one to jump straight to it
 - General wording that fits anyone
 
 ## v2.2.1 · 3 noiembrie 2026 — Corecturi

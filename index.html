@@ -833,6 +833,12 @@ html[lang="en"] .impgrp[open]>summary::after{content:"Hide ▴"!important}
 .stmiss .smi1{font-size:22px;line-height:1}
 .stmiss .smt1{flex:1 1 240px;min-width:0;display:flex;flex-direction:column;gap:2px}
 .stmiss .smt1 small{color:var(--muted);font-size:12.5px}
+
+/* „Urmează”: scadențele vehiculelor */
+.upc li.upcar{cursor:pointer}
+.upc li.upcar:hover .t b{text-decoration:underline}
+.upc .cki{display:flex;align-items:center;justify-content:center;color:var(--warn);width:22px;height:22px}
+.upc .cki svg{width:20px;height:20px}
 </style>
 </head>
 <body>
@@ -1025,8 +1031,8 @@ html[lang="en"] .impgrp[open]>summary::after{content:"Hide ▴"!important}
       <div id="vehs"></div>
       <section class="panel" aria-labelledby="hvadd">
         <h2 id="hvadd">Adaugă un vehicul</h2>
-        <div class="carbtns" id="vehadd" style="margin-top:8px"><button class="btn auto" type="button" data-vnew="auto">+ Mașină</button><button class="btn" type="button" data-vnew="moto">+ Motocicletă</button><button class="btn" type="button" data-vnew="alt">+ Alt vehicul</button></div>
-        <div class="foot"><span id="carsave"></span><span>„Reînnoit” mută data înainte cu intervalul. La revizie calculează și noii km. Anvelopele trec pe sezonul următor.</span></div>
+        <div class="carbtns" id="vehadd" style="margin-top:8px"><button class="btn auto" type="button" data-vnew="auto">+ Vehicul</button></div>
+        <div class="foot"><span id="carsave"></span><span>Alegi tipul și scrii detaliile, apoi adaugi ce vrei să urmărești. „Făcută” sau „Reînnoit” mută data înainte cu intervalul; unde contează km, te întreabă kilometrajul.</span></div>
       </section>
     </section>
     </section>
@@ -1163,7 +1169,7 @@ This typically indicates that your device does not have a healthy Internet conne
 <script>
 (function(){"use strict";
 var TARGET="web";
-var BUILD_ID="build 2026-11-04 08:32 UTC";
+var BUILD_ID="build 2026-11-04 08:58 UTC";
 var WHERE_DB="Datele tale stau în contul tău Google, într-un proiect Firebase (Google Cloud, regiunea Frankfurt). Pe telefon rămâne doar o copie temporară, ca să meargă și fără net.";
 var MONTHS=["ianuarie","februarie","martie","aprilie","mai","iunie","iulie","august","septembrie","octombrie","noiembrie","decembrie"];
 var GROUPS=["Casă","Firmă"], KINDS=["Plată","Încasare","Transfer","Memento"];
@@ -1233,7 +1239,7 @@ function tplRows(m){
 /* comisioane trase automat de bancă: pornesc bifate, sume fixe */
 var BANKFEE={comeur:{amount:6,cur:"EUR"},comron:{amount:40,cur:"RON"}}, AUTOPAID={comeur:1,comron:1,comtx:1};
 var KR={"Memento":0,"Încasare":1,"Plată":2,"Transfer":3};
-var IC={pin:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3.5h6l-1 5 3.5 3.5h-11L10 8.5z"/><path d="M12 12v8.5"/></svg>',x:'<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 4l8 8M12 4l-8 8"/></svg>',
+var IC={car:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 16.5v-4.2L6.6 7.3a1.5 1.5 0 0 1 1.4-.9h8a1.5 1.5 0 0 1 1.4.9l2.1 5v4.2z"/><path d="M4.5 12.3h15"/><circle cx="8" cy="16.6" r="1.7"/><circle cx="16" cy="16.6" r="1.7"/></svg>',pin:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3.5h6l-1 5 3.5 3.5h-11L10 8.5z"/><path d="M12 12v8.5"/></svg>',x:'<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 4l8 8M12 4l-8 8"/></svg>',
  clock:'<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="8" r="6"/><path d="M8 4.5V8l2.3 1.5"/></svg>',
  ok:'<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8.5l3.3 3.3L13 4.5"/></svg>',
  circle:'<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="8" cy="8" r="6.2"/></svg>',
@@ -1777,14 +1783,18 @@ Object.assign(I18N.en,{"Anul":"Year"});
 Object.assign(I18N.en,{"Niciun rând de plată în luna asta.":"No payment rows this month."});
 I18N.enP.push([/^plătit ([^·]+)$/,"paid $1"]);
 I18N.enP.unshift([/^ai deja · (vară \/ iarnă|după dată)$/,function(m,a){return "you have it · "+(a==="după dată"?"by date":"summer / winter")}]);
+Object.assign(I18N.en,{"+ Vehicul":"+ Vehicle","Nr. de înmatriculare":"Registration number","Numărul de înmatriculare":"Registration number","ex. TM 12 ABC":"e.g. AB12 CDE",
+"Alegi tipul și scrii detaliile, apoi adaugi ce vrei să urmărești. „Făcută” sau „Reînnoit” mută data înainte cu intervalul; unde contează km, te întreabă kilometrajul.":"Pick the type and fill in the details, then add what you want to track. “Done” or “Renewed” moves the date forward by the interval; where km matter, it asks for the mileage.",
+"Niciun vehicul încă. Apasă „+ Vehicul” mai jos, scrie ce e și alege ce vrei să urmărești (RCA, ITP, revizie și altele).":"No vehicles yet. Tap “+ Vehicle” below, say what it is and choose what to track (insurance, roadworthiness test, service and more)."});
+I18N.enP.unshift([/^Adăugat: (.+)\. Alege și altele sau apasă „Gata”\.$/,function(m,a){var t=trText(a);return "Added: "+(t==null?a:t)+". Pick more or tap “Done”."}]);
 
 /* ================= Versiuni și „Ce e nou” =================
    Versiune mare (3.0) = schimbare importantă; mică (2.1) = funcție nouă; reparație (2.1.1) = corectură.
    Cea mai nouă versiune e prima din listă. */
 var CHANGELOG=[
  {v:"2.3",d:"2026-11-04",t:{ro:"Pentru toată lumea",en:"For everyone"},
-  ro:["Luna nouă pornește cu note goale la plăți și încasări; memento-urile își păstrează nota, iar cu 📌 fixezi orice notă","Pe rândurile potrivite din extras apare „Din extras”: cine a plătit și ce scrie la plată, separat de nota ta","Transport: vehiculul cu marcă, model, an și tip (scrii tu ce fel e), fără meniu mereu deschis","Fiecare scadență are intervalul ei în luni și/sau km, cu șabloane: revizie, distribuție, AdBlue, frâne, bujii, baterie și altele","Kilometrajul e opțional: „Făcută” te întreabă la câți km, poți trece km și la plin, iar aplicația estimează când vine revizia","Firmă: soldul apare „estimat” până încarci extrasul lunii și „din extras” după; un avertisment îți amintește dacă lipsește","Texte generale, potrivite oricui"],
-  en:["A new month starts with empty notes on payments and income; reminders keep their note, and 📌 pins any note","Rows matched with the statement show “From the statement”: who paid and the payment details, apart from your note","Transport: the vehicle with make, model, year and type (you name the kind), without an always-open menu","Each due item has its own interval in months and/or km, with templates: service, timing belt, AdBlue, brakes, spark plugs, battery and more","Mileage is optional: “Done” asks at what km, you can enter km when filling up, and the app estimates when the service is due","Business: the balance shows “estimated” until you load the month's statement and “from statement” after; a notice reminds you if it's missing","General wording that fits anyone"]},
+  ro:["Luna nouă pornește cu note goale la plăți și încasări; memento-urile își păstrează nota, iar cu 📌 fixezi orice notă","Pe rândurile potrivite din extras apare „Din extras”: cine a plătit și ce scrie la plată, separat de nota ta","Transport: un singur „+ Vehicul”; alegi tipul (sau scrii tu ce fel e) și treci marca, modelul, anul și numărul de înmatriculare, apoi alegi ce urmărești","Fiecare scadență are intervalul ei în luni și/sau km, cu șabloane: revizie, distribuție, AdBlue, frâne, bujii, baterie și altele","Kilometrajul e opțional: „Făcută” te întreabă la câți km, poți trece km și la plin, iar aplicația estimează când vine revizia","Firmă: soldul apare „estimat” până încarci extrasul lunii și „din extras” după; un avertisment îți amintește dacă lipsește","În General, „Urmează” arată și scadențele vehiculelor; atingi și te duce direct la ele","Texte generale, potrivite oricui"],
+  en:["A new month starts with empty notes on payments and income; reminders keep their note, and 📌 pins any note","Rows matched with the statement show “From the statement”: who paid and the payment details, apart from your note","Transport: a single “+ Vehicle”; pick the type (or name the kind) and add make, model, year and registration number, then choose what to track","Each due item has its own interval in months and/or km, with templates: service, timing belt, AdBlue, brakes, spark plugs, battery and more","Mileage is optional: “Done” asks at what km, you can enter km when filling up, and the app estimates when the service is due","Business: the balance shows “estimated” until you load the month's statement and “from statement” after; a notice reminds you if it's missing","On Overview, “Coming up” also shows vehicle due items; tap one to jump straight to it","General wording that fits anyone"]},
  {v:"2.2.1",d:"2026-11-03",t:{ro:"Corecturi",en:"Fixes"},
   ro:["În engleză, butonul „Șterge rândul” și „Arată / Ascunde” apar acum în engleză"],
   en:["In English, the “Delete row” button and “Show / Hide” now appear in English"]},
@@ -2573,15 +2583,29 @@ function renderUpcoming(){
     m=monthItems(ym).filter(function(x){return grpOn(x.group)&&x.status!=="Gata"&&!AUTOPAID[x.key]}).sort(function(a,b){var da=a.day==null?99:a.day,db=b.day==null?99:b.day;return da-db||(a.order||0)-(b.order||0)}).map(function(x){return {x:x,d:null}});
     $("#upchint").textContent="Ce n-ai bifat în "+label(ym)+", în ordinea zilei.";
   }
+  /* scadențele vehiculelor care se apropie (sau au trecut) apar și aici, nu doar în Transport */
+  var cs=cur?carUpcoming():[];
+  m=m.concat(cs).sort(function(u,v){return (u.d==null?99:u.d)-(v.d==null?99:v.d)||(u.car?1:0)-(v.car?1:0)||((u.x&&u.x.order)||0)-((v.x&&v.x.order)||0)});
   $("#upchint").hidden=!m.length;
   if(!m.length){$("#upc").innerHTML='<li class="empty" style="display:block">✓ '+(cur?"Nimic de plătit în următoarele 5 zile.":"Totul e bifat pentru luna asta.")+'</li>';return}
   var h='';
-  m.slice(0,12).forEach(function(o){
+  m.slice(0,14).forEach(function(o){
+    if(o.car){
+      var c=o.car,dd=isoOk(c.it.due)?c.it.due:null;
+      h+='<li class="upcar" data-car="'+esc(c.it.id)+'" tabindex="0" role="button" aria-label="'+esc(vehName(c.v)+": "+(c.it.name||""))+'"><span class="ck cki" aria-hidden="true">'+IC.car+'</span><span class="d">'+(dd?+dd.slice(8,10):"–")+'</span><span class="t"><b>'+esc(c.it.name||"(fără nume)")+'</b><small>'+esc(vehName(c.v))+' · transport'+(c.s.sub?' · '+esc(c.s.sub):'')+'</small></span><span class="r '+(c.s.rank===3?'late':'now')+'">'+esc(c.s.text)+'</span></li>';
+      return;
+    }
     var x=o.x,rel="",cls="";
     if(o.d!=null){var d=o.d;if(d<0){rel="întârziat "+(-d)+(d===-1?" zi":" zile");cls="late"}else if(d===0){rel="azi";cls="now"}else rel="în "+d+(d===1?" zi":" zile")}
     h+='<li><input type="checkbox" class="ck" data-id="'+esc(x.id)+'" aria-label="Bifează: '+esc(x.name)+'"><span class="d">'+(x.day==null?"–":x.day)+'</span><span class="t"><b>'+esc(x.name)+'</b><small>'+x.group+' · '+x.kind.toLowerCase()+(x.amount>0?' · '+money(x.amount)+(curOf(x)==='EUR'?' €':' lei'):'')+'</small></span><span class="r '+cls+'">'+rel+'</span></li>';
   });
   $("#upc").innerHTML=h;
+}
+function carUpcoming(){
+  if(mods.transport===false||typeof vehicles!=="function")return [];
+  var out=[];
+  vehicles().forEach(function(v){carRows(v).forEach(function(r){if(r.s.rank>=2)out.push({car:{it:r.it,v:v,s:r.s},d:r.s.d<99999?r.s.d:0})})});
+  return out;
 }
 function renderLate(){
   var b=$("#late"),now=ymNow(),today=new Date().getDate();
@@ -3072,6 +3096,11 @@ $("#fuelMin").addEventListener("change",function(){var v=parseInt(this.value,10)
 /* Firmă: „Mergi la luna fără extras” */
 $("#firmStMiss").addEventListener("click",function(e){var b=e.target.closest("[data-goym]");if(b)setYm(b.getAttribute("data-goym"))});
 
+/* „Urmează”: o scadență de vehicul te duce în Transport, cu rândul deschis */
+function goCar(li){var id=li.getAttribute("data-car");carOpen=id;setTab("transport");setTimeout(function(){var r=document.querySelector('.car-r[data-id="'+id+'"]');if(r)try{r.scrollIntoView({block:"center"})}catch(e){}},30)}
+$("#upc").addEventListener("click",function(e){var li=e.target.closest("li[data-car]");if(li)goCar(li)});
+$("#upc").addEventListener("keydown",function(e){var li=e.target.closest("li[data-car]");if(li&&(e.key==="Enter"||e.key===" ")){e.preventDefault();goCar(li)}});
+
 /* ================= Transport: vehicule, scadențe și revizii =================
    Totul stă în colecția „car” (regulile Firestore rămân aceleași):
    - scadențele: documente cu câmpul „veh” (vehiculul lor); fără „veh” = vehiculul principal („veh_main”)
@@ -3103,11 +3132,11 @@ var CTPL=[
  {t:"Filtru habitaclu (polen)",kind:"revizie",every:12,everyKm:15000},{t:"Bujii",kind:"revizie",everyKm:60000},{t:"Baterie",kind:"revizie",every:60},
  {t:"Schimb anvelope",kind:"sezon",every:6},{t:"Altceva…",kind:"revizie",every:12,blank:1}
 ];
-var vEdit=null,cPick=null,renewAsk=null,carKmPrev=null;
+var vEdit=null,cPick=null,renewAsk=null,carKmPrev=null,carForce=false;
 var carOpen=null,carChg=false,car=CARDEF.map(function(d){return Object.assign({},d)}),carKm=null,carKmAt=null,carSeeded=false,pendingCar=false,vehs=[],carLoaded=false,vdelArm=null,vdelT=null;
 try{var lc=JSON.parse(localStorage.getItem("fin_car")||"null");if(lc&&lc.items){if(lc.items.length||Array.isArray(lc.vehs)){car=lc.items;carKm=lc.km||null;carKmAt=lc.at||null;vehs=Array.isArray(lc.vehs)?lc.vehs:[]}}}catch(e){}
 function cleanCar(it){var o={};["name","kind","due","dueKm","every","everyKm","remind","season","order","veh"].forEach(function(k){o[k]=it[k]==null?null:it[k]});return o}
-function cleanVeh(v){var o={};["name","kind","km","at","order","deleted","pay","year","kname","km0","at0"].forEach(function(k){o[k]=v[k]==null?null:v[k]});return o}
+function cleanVeh(v){var o={};["name","kind","km","at","order","deleted","pay","year","kname","km0","at0","plate"].forEach(function(k){o[k]=v[k]==null?null:v[k]});return o}
 function persistCar(){try{localStorage.setItem("fin_car",JSON.stringify({items:car,km:carKm,at:carKmAt,vehs:vehs,xps:xps}))}catch(e){}}
 function carSaveMsg(t){var el=$("#carsave");if(el)el.textContent=t}
 function carWrite(fn){
@@ -3124,8 +3153,8 @@ function vehOf(it){return it.veh||"veh_main"}
 function vehicles(){
   var out=[],md=vehMainDoc();
   if(!(md&&md.deleted)&&(md||car.some(function(it){return !it.veh})))
-    out.push({id:"veh_main",name:(md&&md.name)||"",kind:(md&&md.kind)||"auto",order:md&&md.order!=null?md.order:0,km:carKm,at:carKmAt,pay:(md&&md.pay)||null,year:(md&&md.year)||null,kname:(md&&md.kname)||null,km0:carKmPrev?carKmPrev.km:null,at0:carKmPrev?carKmPrev.at:null});
-  vehs.forEach(function(v){if(v.id!=="veh_main"&&!v.deleted)out.push({id:v.id,name:v.name||"",kind:v.kind||"auto",order:v.order||0,km:v.km>0?v.km:null,at:v.at||null,pay:v.pay||null,year:v.year||null,kname:v.kname||null,km0:v.km0||null,at0:v.at0||null})});
+    out.push({id:"veh_main",name:(md&&md.name)||"",kind:(md&&md.kind)||"auto",order:md&&md.order!=null?md.order:0,km:carKm,at:carKmAt,pay:(md&&md.pay)||null,plate:(md&&md.plate)||null,year:(md&&md.year)||null,kname:(md&&md.kname)||null,km0:carKmPrev?carKmPrev.km:null,at0:carKmPrev?carKmPrev.at:null});
+  vehs.forEach(function(v){if(v.id!=="veh_main"&&!v.deleted)out.push({id:v.id,name:v.name||"",kind:v.kind||"auto",order:v.order||0,km:v.km>0?v.km:null,at:v.at||null,pay:v.pay||null,plate:v.plate||null,year:v.year||null,kname:v.kname||null,km0:v.km0||null,at0:v.at0||null})});
   return out.sort(function(a,b){return (a.order||0)-(b.order||0)});
 }
 function vehById(id){return vehicles().find(function(v){return v.id===id})||null}
@@ -3150,8 +3179,9 @@ function vehTypeName(v){return v.kind==="alt"?(v.kname||"Alt vehicul"):v.kind===
 function addVeh(kind){
   var ord=vehicles().reduce(function(a,v){return Math.max(a,v.order||0)},0)+1,id="veh_"+rid();
   var v={id:id,name:"",kind:kind,order:ord,km:null,at:null};vEdit=id;
-  var defs=CARDEF.filter(function(d){return (VDEF[kind]||[]).indexOf(d.id)>=0}).map(function(d){return Object.assign({},d,{id:"c"+rid(),veh:id})});
-  vehs.push(v);car=car.concat(defs);vdelArm=null;
+  /* vehiculul nou pornește gol: alegi tu din șabloane ce vrei să urmărești */
+  var defs=[];
+  vehs.push(v);car=car.concat(defs);vdelArm=null;cPick=id;
   render();
   carWrite(function(){return Promise.all([ccol.doc(id).set(cleanVeh(v))].concat(defs.map(function(it){return ccol.doc(it.id).set(cleanCar(it))})))});
   var inp=document.querySelector('.veh[data-v="'+id+'"] .vname');if(inp){try{inp.scrollIntoView({block:"center"})}catch(e){}inp.focus()}
@@ -3201,8 +3231,10 @@ function carState(it,km){
   return {cls:cls,rank:rank,text:parts[0],sub:parts.slice(1).join(" · "),d:due?daysTo(due):99999};
 }
 function carRows(v){var km=estKm(v);return car.filter(function(it){return vehOf(it)===v.id}).map(function(it){return {it:it,s:carState(it,km)}}).sort(function(a,b){return (b.s.rank-a.s.rank)||(a.s.d-b.s.d)||((a.it.order||0)-(b.it.order||0))})}
+/* scadențele apar acum în „Urmează” (General); bannerul separat nu mai e nevoie */
 function renderCarBanner(){
-  var bar=$("#carbar"),parts=[],bad=false;
+  var bar=$("#carbar");if(bar){bar.hidden=true;return}
+  var parts=[],bad=false;
   if(mods.transport!==false)vehicles().forEach(function(v){
     var hot=carRows(v).filter(function(r){return r.s.rank>=2});if(!hot.length)return;
     if(hot.some(function(r){return r.s.rank===3}))bad=true;
@@ -3232,6 +3264,7 @@ function carRowHtml(r){
 }
 function vehHeadHtml(v){
   var ed=vEdit===v.id,ek=estKm(v),meta=[];
+  if(v.plate)meta.push(String(v.plate));
   if(v.year)meta.push(String(v.year));
   meta.push(vehTypeName(v));
   if(mods.firma!==false)meta.push(v.pay==="firma"?"plătit din Firmă":"plătit din Casă");
@@ -3242,6 +3275,7 @@ function vehHeadHtml(v){
   '</div>';
   return '<div class="carh vform">'+
     '<label class="vf wide">Marcă și model <input class="vname" data-vf="name" value="'+esc(v.name)+'" placeholder="ex. Dacia Logan" aria-label="Numele vehiculului"></label>'+
+    '<label class="vf">Nr. de înmatriculare <input data-vf="plate" value="'+esc(v.plate||"")+'" placeholder="ex. TM 12 ABC" autocapitalize="characters" aria-label="Numărul de înmatriculare"></label>'+
     '<label class="vf">An <input class="num" data-vf="year" inputmode="numeric" value="'+(v.year||"")+'" placeholder="ex. 2019" aria-label="Anul"></label>'+
     '<label class="vf">Tip <select class="vkind" data-vf="kind" aria-label="Tipul vehiculului">'+VKIND.map(function(k){return '<option value="'+k[0]+'"'+(v.kind===k[0]?" selected":"")+'>'+k[1]+'</option>'}).join("")+'</select></label>'+
     (v.kind==="alt"?'<label class="vf">Ce fel <input data-vf="kname" value="'+esc(v.kname||"")+'" placeholder="ex. rulotă, scuter, barcă" aria-label="Ce fel de vehicul"></label>':'')+
@@ -3257,24 +3291,24 @@ function pickHtml(v){
     var on=!t.blank&&have.indexOf(trData(t.t).toLowerCase())>=0||!t.blank&&have.indexOf(t.t.toLowerCase())>=0;
     var iv=[];if(t.every)iv.push(t.every%12===0&&t.every>=12?plural(t.every/12,"an","ani"):plural(t.every,"lună","luni"));if(t.everyKm)iv.push(money(t.everyKm)+" km");
     return '<button type="button" class="cpi'+(on?' have':'')+'" data-tpl="'+i+'"><b>'+esc(t.t)+'</b><small>'+esc(t.blank?"scrii tu ce și la cât timp":(on?"ai deja · ":"")+(t.kind==="sezon"?"vară / iarnă":iv.length?"la "+iv.join(" sau "):"după dată"))+'</small></button>';
-  }).join("")+'</div><p class="vhint">Intervalele sunt orientative. Cele corecte sunt în cartea service a vehiculului tău: le schimbi oricând pe rând.</p><button type="button" class="btn" data-pickx="1">Renunță</button></div>';
+  }).join("")+'</div><p class="vhint">Intervalele sunt orientative. Cele corecte sunt în cartea service a vehiculului tău: le schimbi oricând pe rând.</p><button type="button" class="btn auto" data-pickx="1">Gata</button></div>';
 }
-function renderCarList(){
+function renderCarList(force){
   if(pressing){pressFlush=true;return}
   /* nu redesenăm în timp ce scrii sau chiar când treci dintr-un câmp în altul (altfel câmpul atins ar dispărea) */
-  if(carChg||inTyping("#vehs")){pendingCar=true;return}
+  if(carChg||(!force&&inTyping("#vehs"))){pendingCar=true;return}
   var vs=vehicles(),h="";
   vs.forEach(function(v){
     var rows=carRows(v);
     h+='<section class="panel veh" data-v="'+esc(v.id)+'">'+vehHeadHtml(v)+
-      (rows.length?rows.map(carRowHtml).join(""):'<div class="empty">Nicio scadență încă. Apasă „+ Scadență” ca să adaugi prima.</div>')+
+      (rows.length?rows.map(carRowHtml).join(""):cPick===v.id?'':'<div class="empty">Nicio scadență încă. Apasă „+ Scadență” ca să adaugi prima.</div>')+
       (cPick===v.id?pickHtml(v):'')+
       '<div class="carbtns vbtns"><button class="btn auto" type="button" data-vpick="1">+ Scadență</button>'+
       '<button class="btn vdel'+(vdelArm===v.id?" armed":"")+'" type="button" data-vdel="1">'+(vdelArm===v.id?"Sigur? Se șterg și scadențele lui":"Șterge vehiculul")+'</button></div>'+
     '</section>';
   });
   if(!h)h=(mode==="db"&&!carLoaded)?'<section class="panel"><div class="empty">Se încarcă…</div></section>'
-    :'<section class="panel"><div class="empty">Niciun vehicul încă. Adaugă unul mai jos și primești direct scadențele obișnuite (RCA, ITP, revizie).</div></section>';
+    :'<section class="panel"><div class="empty">Niciun vehicul încă. Apasă „+ Vehicul” mai jos, scrie ce e și alege ce vrei să urmărești (RCA, ITP, revizie și altele).</div></section>';
   $("#vehs").innerHTML=h;
   pendingCar=false;
 }
@@ -3299,15 +3333,18 @@ function addCar(vid,t){
   var it={id:id,name:t.blank?"":trData(t.t),kind:t.kind,due:t.kind==="sezon"?nextDate(11,1):"",every:t.every||null,remind:30,order:ord,veh:vid==="veh_main"?null:vid};
   if(t.kind==="sezon")it.season="vară";
   if(t.kind==="revizie"){it.dueKm=null;it.everyKm=t.everyKm||null}
-  cPick=null;car.push(it);carOpen=id;
+  /* din șabloane poți alege mai multe deodată; „Altceva…” deschide rândul ca să scrii ce e */
+  if(t.blank){cPick=null;carOpen=id}
+  car.push(it);
   if(!t.blank&&mode==="db"&&ccol)carWrite(function(){return ccol.doc(id).set(cleanCar(it))});else if(!t.blank)persistCar();
   render();
-  var inp=document.querySelector('.car-r[data-id="'+id+'"] input[data-f="'+(t.blank?"name":"due")+'"]');if(inp)inp.focus();
+  if(t.blank){var inp=document.querySelector('.car-r[data-id="'+id+'"] input[data-f="name"]');if(inp)inp.focus()}
+  else toast("Adăugat: "+it.name+". Alege și altele sau apasă „Gata”.");
 }
 $("#vehadd").addEventListener("click",function(e){var b=e.target.closest("[data-vnew]");if(b&&canWrite)addVeh(b.getAttribute("data-vnew"))});
 $("#vehs").addEventListener("change",function(e){
   carChg=true;
-  try{onVehChange(e)}finally{setTimeout(function(){carChg=false;if(pendingCar&&!inTyping("#vehs"))renderCarList()},0)}
+  try{onVehChange(e)}finally{setTimeout(function(){carChg=false;var f=carForce;carForce=false;if(pendingCar&&(f||!inTyping("#vehs")))renderCarList(f)},0)}
 });
 function onVehChange(e){
   var t=e.target,sec=t.closest(".veh");if(!sec)return;
@@ -3319,7 +3356,8 @@ function onVehChange(e){
     var nv=Object.assign({},b);if(vf==="name")nv.name=t.value.trim();else if(vf==="pay")nv.pay=t.value==="firma"?"firma":"casa";
     else if(vf==="year"){var y=parseInt(t.value,10);nv.year=y>1900&&y<2100?y:null}
     else if(vf==="kname")nv.kname=t.value.trim()||null;
-    else nv.kind=t.value;
+    else if(vf==="plate")nv.plate=t.value.trim().toUpperCase().replace(/\s+/g," ")||null;
+    else{nv.kind=t.value;carForce=true}   /* tipul schimbă câmpurile (la „Alt vehicul” apare „Ce fel”): redesenăm imediat */
     putVeh(nv);return;
   }
   var row=t.closest(".car-r");if(!row||t.hasAttribute("data-ask"))return;
