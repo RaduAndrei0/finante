@@ -1169,7 +1169,7 @@ This typically indicates that your device does not have a healthy Internet conne
 <script>
 (function(){"use strict";
 var TARGET="web";
-var BUILD_ID="build 2026-11-04 08:58 UTC";
+var BUILD_ID="build 2026-11-04 10:12 UTC";
 var WHERE_DB="Datele tale stau în contul tău Google, într-un proiect Firebase (Google Cloud, regiunea Frankfurt). Pe telefon rămâne doar o copie temporară, ca să meargă și fără net.";
 var MONTHS=["ianuarie","februarie","martie","aprilie","mai","iunie","iulie","august","septembrie","octombrie","noiembrie","decembrie"];
 var GROUPS=["Casă","Firmă"], KINDS=["Plată","Încasare","Transfer","Memento"];
@@ -1773,7 +1773,7 @@ Object.assign(I18N.en,{"Păstrează nota în fiecare lună":"Keep the note every
 I18N.enP.unshift(
  [/^Lipsește extrasul firmei pe (.+)$/,function(m,a){return "The business statement for "+capF(a)+" is missing"}],
  [/^Mergi la (.+)$/,function(m,a){return "Go to "+capF(a)}],
- [/^la (.+) km$/,"at $1 km"],
+ [/^la ([\d.,]+) km$/,"at $1 km"],
  [/^(.+) sau la (.+) km$/,function(m,a,b){var t=trText(a);return (t==null?a:t)+" or at "+b+" km"}],
  [/^~(.+) km acum \(estimat\) · (.+) km la (.+)$/,"~$1 km now (estimated) · $2 km on $3"],
  [/^(.+) km la (\d.+)$/,"$1 km on $2"],
@@ -1787,14 +1787,15 @@ Object.assign(I18N.en,{"+ Vehicul":"+ Vehicle","Nr. de înmatriculare":"Registra
 "Alegi tipul și scrii detaliile, apoi adaugi ce vrei să urmărești. „Făcută” sau „Reînnoit” mută data înainte cu intervalul; unde contează km, te întreabă kilometrajul.":"Pick the type and fill in the details, then add what you want to track. “Done” or “Renewed” moves the date forward by the interval; where km matter, it asks for the mileage.",
 "Niciun vehicul încă. Apasă „+ Vehicul” mai jos, scrie ce e și alege ce vrei să urmărești (RCA, ITP, revizie și altele).":"No vehicles yet. Tap “+ Vehicle” below, say what it is and choose what to track (insurance, roadworthiness test, service and more)."});
 I18N.enP.unshift([/^Adăugat: (.+)\. Alege și altele sau apasă „Gata”\.$/,function(m,a){var t=trText(a);return "Added: "+(t==null?a:t)+". Pick more or tap “Done”."}]);
+Object.assign(I18N.en,{"Scuter":"Scooter","Rulotă":"Caravan","Remorcă":"Trailer","Autoutilitară":"Van","Camion":"Truck","Barcă":"Boat","Trotinetă electrică":"E-scooter","Bicicletă electrică":"E-bike","Tractor":"Tractor","Vehicul":"Vehicle","ex. mașină, rulotă, barcă":"e.g. car, caravan, boat","Tipul vehiculului":"Vehicle type","Motocicleta":"The motorcycle","Vehiculul":"The vehicle","Mașina":"The car"});
 
 /* ================= Versiuni și „Ce e nou” =================
    Versiune mare (3.0) = schimbare importantă; mică (2.1) = funcție nouă; reparație (2.1.1) = corectură.
    Cea mai nouă versiune e prima din listă. */
 var CHANGELOG=[
  {v:"2.3",d:"2026-11-04",t:{ro:"Pentru toată lumea",en:"For everyone"},
-  ro:["Luna nouă pornește cu note goale la plăți și încasări; memento-urile își păstrează nota, iar cu 📌 fixezi orice notă","Pe rândurile potrivite din extras apare „Din extras”: cine a plătit și ce scrie la plată, separat de nota ta","Transport: un singur „+ Vehicul”; alegi tipul (sau scrii tu ce fel e) și treci marca, modelul, anul și numărul de înmatriculare, apoi alegi ce urmărești","Fiecare scadență are intervalul ei în luni și/sau km, cu șabloane: revizie, distribuție, AdBlue, frâne, bujii, baterie și altele","Kilometrajul e opțional: „Făcută” te întreabă la câți km, poți trece km și la plin, iar aplicația estimează când vine revizia","Firmă: soldul apare „estimat” până încarci extrasul lunii și „din extras” după; un avertisment îți amintește dacă lipsește","În General, „Urmează” arată și scadențele vehiculelor; atingi și te duce direct la ele","Texte generale, potrivite oricui"],
-  en:["A new month starts with empty notes on payments and income; reminders keep their note, and 📌 pins any note","Rows matched with the statement show “From the statement”: who paid and the payment details, apart from your note","Transport: a single “+ Vehicle”; pick the type (or name the kind) and add make, model, year and registration number, then choose what to track","Each due item has its own interval in months and/or km, with templates: service, timing belt, AdBlue, brakes, spark plugs, battery and more","Mileage is optional: “Done” asks at what km, you can enter km when filling up, and the app estimates when the service is due","Business: the balance shows “estimated” until you load the month's statement and “from statement” after; a notice reminds you if it's missing","On Overview, “Coming up” also shows vehicle due items; tap one to jump straight to it","General wording that fits anyone"]},
+  ro:["Luna nouă pornește cu note goale la plăți și încasări; memento-urile își păstrează nota, iar cu 📌 fixezi orice notă","Pe rândurile potrivite din extras apare „Din extras”: cine a plătit și ce scrie la plată, separat de nota ta","Transport: un singur „+ Vehicul”; scrii tipul (mașină, rulotă, barcă, orice), marca, modelul, anul și numărul de înmatriculare, apoi alegi ce urmărești","Fiecare scadență are intervalul ei în luni și/sau km, cu șabloane: revizie, distribuție, AdBlue, frâne, bujii, baterie și altele","Kilometrajul e opțional: „Făcută” te întreabă la câți km, poți trece km și la plin, iar aplicația estimează când vine revizia","Firmă: soldul apare „estimat” până încarci extrasul lunii și „din extras” după; un avertisment îți amintește dacă lipsește","În General, „Urmează” arată și scadențele vehiculelor; atingi și te duce direct la ele","Texte generale, potrivite oricui"],
+  en:["A new month starts with empty notes on payments and income; reminders keep their note, and 📌 pins any note","Rows matched with the statement show “From the statement”: who paid and the payment details, apart from your note","Transport: a single “+ Vehicle”; write the type (car, caravan, boat, anything), make, model, year and registration number, then choose what to track","Each due item has its own interval in months and/or km, with templates: service, timing belt, AdBlue, brakes, spark plugs, battery and more","Mileage is optional: “Done” asks at what km, you can enter km when filling up, and the app estimates when the service is due","Business: the balance shows “estimated” until you load the month's statement and “from statement” after; a notice reminds you if it's missing","On Overview, “Coming up” also shows vehicle due items; tap one to jump straight to it","General wording that fits anyone"]},
  {v:"2.2.1",d:"2026-11-03",t:{ro:"Corecturi",en:"Fixes"},
   ro:["În engleză, butonul „Șterge rândul” și „Arată / Ascunde” apar acum în engleză"],
   en:["In English, the “Delete row” button and “Show / Hide” now appear in English"]},
@@ -2592,7 +2593,7 @@ function renderUpcoming(){
   m.slice(0,14).forEach(function(o){
     if(o.car){
       var c=o.car,dd=isoOk(c.it.due)?c.it.due:null;
-      h+='<li class="upcar" data-car="'+esc(c.it.id)+'" tabindex="0" role="button" aria-label="'+esc(vehName(c.v)+": "+(c.it.name||""))+'"><span class="ck cki" aria-hidden="true">'+IC.car+'</span><span class="d">'+(dd?+dd.slice(8,10):"–")+'</span><span class="t"><b>'+esc(c.it.name||"(fără nume)")+'</b><small>'+esc(vehName(c.v))+' · transport'+(c.s.sub?' · '+esc(c.s.sub):'')+'</small></span><span class="r '+(c.s.rank===3?'late':'now')+'">'+esc(c.s.text)+'</span></li>';
+      h+='<li class="upcar" data-car="'+esc(c.it.id)+'" tabindex="0" role="button" aria-label="'+esc(trData(vehName(c.v))+": "+trData(c.it.name||""))+'"><span class="ck cki" aria-hidden="true">'+IC.car+'</span><span class="d">'+(dd?+dd.slice(8,10):"–")+'</span><span class="t"><b>'+esc(c.it.name||"(fără nume)")+'</b><small>'+esc(vehName(c.v))+' · transport'+(c.s.sub?' · '+esc(c.s.sub):'')+'</small></span><span class="r '+(c.s.rank===3?'late':'now')+'">'+esc(c.s.text)+'</span></li>';
       return;
     }
     var x=o.x,rel="",cls="";
@@ -3158,7 +3159,7 @@ function vehicles(){
   return out.sort(function(a,b){return (a.order||0)-(b.order||0)});
 }
 function vehById(id){return vehicles().find(function(v){return v.id===id})||null}
-function vehName(v){return v.name||(v.kind==="moto"?"Motocicleta":v.kind==="alt"?"Vehiculul":"Mașina")}
+function vehName(v){return v.name||v.kname||(v.kind==="moto"?"Motocicleta":v.kind==="alt"?"Vehiculul":"Mașina")}
 function putVeh(v){
   var i=vehs.findIndex(function(o){return o.id===v.id});if(i>=0)vehs[i]=v;else vehs.push(v);
   render();carWrite(function(){return ccol.doc(v.id).set(cleanVeh(v))});
@@ -3175,7 +3176,9 @@ function putKm(vid,v){
 /* kilometrajul estimat azi, din ultimele două citiri (măcar două săptămâni între ele); altfel ultimul trecut */
 function kmRate(v){if(!(v&&v.km>0&&v.km0>0&&v.at&&v.at0))return 0;var d=dayN(v.at)-dayN(v.at0);return d>=14&&v.km>v.km0?(v.km-v.km0)/d:0}
 function estKm(v){if(!v||!(v.km>0))return null;var r=kmRate(v);if(!r||!v.at)return v.km;return Math.round(v.km+r*Math.max(0,-daysTo(v.at)))}
-function vehTypeName(v){return v.kind==="alt"?(v.kname||"Alt vehicul"):v.kind==="moto"?"Motocicletă":"Mașină"}
+/* tipul îl scrie omul (mașină, motocicletă, rulotă, barcă, elicopter…); vechiul „kind” rămâne doar ca rezervă */
+function vehTypeName(v){return v.kname||(v.kind==="alt"?"Vehicul":v.kind==="moto"?"Motocicletă":"Mașină")}
+var VTYPES=["Mașină","Motocicletă","Scuter","Rulotă","Remorcă","Autoutilitară","Camion","Barcă","Trotinetă electrică","Bicicletă electrică","Tractor"];
 function addVeh(kind){
   var ord=vehicles().reduce(function(a,v){return Math.max(a,v.order||0)},0)+1,id="veh_"+rid();
   var v={id:id,name:"",kind:kind,order:ord,km:null,at:null};vEdit=id;
@@ -3277,8 +3280,8 @@ function vehHeadHtml(v){
     '<label class="vf wide">Marcă și model <input class="vname" data-vf="name" value="'+esc(v.name)+'" placeholder="ex. Dacia Logan" aria-label="Numele vehiculului"></label>'+
     '<label class="vf">Nr. de înmatriculare <input data-vf="plate" value="'+esc(v.plate||"")+'" placeholder="ex. TM 12 ABC" autocapitalize="characters" aria-label="Numărul de înmatriculare"></label>'+
     '<label class="vf">An <input class="num" data-vf="year" inputmode="numeric" value="'+(v.year||"")+'" placeholder="ex. 2019" aria-label="Anul"></label>'+
-    '<label class="vf">Tip <select class="vkind" data-vf="kind" aria-label="Tipul vehiculului">'+VKIND.map(function(k){return '<option value="'+k[0]+'"'+(v.kind===k[0]?" selected":"")+'>'+k[1]+'</option>'}).join("")+'</select></label>'+
-    (v.kind==="alt"?'<label class="vf">Ce fel <input data-vf="kname" value="'+esc(v.kname||"")+'" placeholder="ex. rulotă, scuter, barcă" aria-label="Ce fel de vehicul"></label>':'')+
+    '<label class="vf">Tip <input data-vf="kname" list="vtypes" value="'+esc(v.kname||(v.kind==="moto"||v.kind==="auto"?trData(vehTypeName(v)):""))+'" placeholder="ex. mașină, rulotă, barcă" aria-label="Tipul vehiculului" autocomplete="off"></label>'+
+    '<datalist id="vtypes" data-notr>'+VTYPES.map(function(t){return '<option value="'+esc(trData(t))+'"></option>'}).join("")+'</datalist>'+
     (mods.firma!==false?'<label class="vf">Plătit de obicei din <select class="vkind vpay" data-vf="pay" aria-label="De obicei plătit din"><option value="casa"'+(v.pay!=="firma"?" selected":"")+'>plătit din Casă</option><option value="firma"'+(v.pay==="firma"?" selected":"")+'>plătit din Firmă</option></select></label>':'')+
     '<label class="vf">Kilometraj acum (opțional) <input class="num" data-vf="km" inputmode="numeric" placeholder="ex. 128000" value="'+(v.km>0?v.km:"")+'" aria-label="Kilometraj actual: '+esc(vehName(v))+'"></label>'+
     '<p class="vhint">Kilometrajul e opțional. Dacă îl treci din când în când (sau la plin), aplicația estimează singură cât mergi și când vine revizia după km. Altfel îți amintește doar după dată.</p>'+
