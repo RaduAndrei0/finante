@@ -777,6 +777,62 @@ html[lang="en"] .gr .xc .x.arm::after{content:" Sure? Tap again"}
 html[lang="en"] .impgrp>summary::after{content:"Show ▾"!important}
 html[lang="en"] .impgrp[open]>summary::after{content:"Hide ▴"!important}
 @media (min-width:900px){html[lang="en"] .gr .xc .x::after{content:""}}
+
+/* notă + 📌 (păstrează nota în lunile următoare) */
+.notew{display:flex;gap:6px;align-items:stretch}
+.notew input{flex:1;min-width:0}
+.pinb{flex:none;width:40px;border:1px solid var(--line);border-radius:7px;background:var(--surface);color:var(--muted);display:flex;align-items:center;justify-content:center;padding:0}
+.pinb svg{width:18px;height:18px}
+.pinb[aria-pressed="true"]{color:var(--brand-fg);border-color:var(--brand-fg);background:color-mix(in srgb,var(--brand-fg) 12%,var(--surface))}
+.pinb[aria-pressed="true"] svg path:first-child{fill:currentColor}
+#tab-casa .pinb{border-radius:999px}
+#tab-firma .pinb{border-radius:4px}
+/* „Din extras” pe un rând planificat */
+.txd .txh{font-size:11px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);padding:2px 0 4px}
+
+/* vehiculul: afișat (nume, an, tip) sau în editare */
+.carh.vview{flex-direction:column;align-items:stretch;gap:6px}
+.vview .vhead{flex:1 1 auto;align-items:center;flex-wrap:nowrap}
+.vtitle{flex:1;min-width:0;display:flex;flex-direction:column;gap:1px}
+.vtitle b{font-size:20px;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.vtitle small{color:var(--muted);font-size:13px}
+.vview .carkm{padding-left:18px}
+.vedit{flex:none}
+.carh.vform{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px 12px;padding:12px;border:1px solid var(--line);border-radius:8px;background:var(--surface2);margin-bottom:12px}
+.vform .vf{display:flex;flex-direction:column;gap:4px;font-size:12px;color:var(--muted);min-width:0}
+.vform .vf.wide{grid-column:1 / -1}
+.vform input,.vform select{width:100%;min-width:0;background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:9px 10px;color:var(--fg);font-size:15px}
+.vform .vname{font-size:17px;font-weight:600}
+.vhint{grid-column:1 / -1;margin:0;color:var(--muted);font-size:12.5px;line-height:1.45}
+.vfbtn{grid-column:1 / -1;display:flex;justify-content:flex-end}
+/* „+ Scadență”: șabloane */
+.cpick{margin:10px 0 4px;padding:12px;border:1px dashed var(--line);border-radius:8px;display:flex;flex-direction:column;gap:10px}
+.cph{font-weight:600}
+.cpl{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:8px}
+.cpi{display:flex;flex-direction:column;align-items:flex-start;gap:2px;text-align:left;padding:10px 12px;border:1px solid var(--line);border-radius:6px;background:var(--surface);color:var(--fg);min-width:0}
+.cpi:hover{border-color:var(--auto)}
+.cpi b{font-weight:600}
+.cpi small{color:var(--muted);font-size:12px}
+.cpi.have{opacity:.6}
+.cpick>.btn{align-self:flex-start}
+/* „Făcută”: la câți km */
+.car-r .rask{grid-column:1 / -1;display:flex;flex-wrap:wrap;align-items:flex-end;gap:8px}
+.car-r .rask label{display:flex;flex-direction:column;gap:4px;font-size:12.5px;color:var(--muted);flex:1 1 200px}
+.car-r .rask input{border-color:var(--line)!important}
+#tab-transport .vtitle b{font-family:var(--f-car);font-size:26px;text-transform:uppercase;letter-spacing:.03em}
+#tab-transport .vtitle small{font-family:var(--f-car);font-size:14.5px;letter-spacing:.05em;text-transform:uppercase}
+#tab-transport .cpi,#tab-transport .vform input,#tab-transport .vform select{border-radius:3px}
+#tab-transport .cpi b{font-family:var(--f-car);font-size:16.5px;letter-spacing:.02em}
+#tab-transport .vform .vname{font-family:var(--f-body);font-size:17px;text-transform:none;letter-spacing:0;font-weight:600}
+
+/* Firmă: extrasul lunii */
+.stbadge{display:inline-block;margin-left:6px;padding:1px 7px;border-radius:999px;font-size:10px;letter-spacing:.05em;vertical-align:1px;font-weight:600}
+.stbadge.ok{background:var(--okbg);color:var(--ok)}
+.stbadge.est{background:var(--warnbg);color:var(--warn)}
+.stmiss{display:flex;flex-wrap:wrap;align-items:center;gap:10px 14px;padding:12px 14px;border:1px solid var(--warn);border-radius:var(--r,10px);background:var(--warnbg);color:var(--fg)}
+.stmiss .smi1{font-size:22px;line-height:1}
+.stmiss .smt1{flex:1 1 240px;min-width:0;display:flex;flex-direction:column;gap:2px}
+.stmiss .smt1 small{color:var(--muted);font-size:12.5px}
 </style>
 </head>
 <body>
@@ -884,7 +940,7 @@ html[lang="en"] .impgrp[open]>summary::after{content:"Hide ▴"!important}
 
     <!-- ============ CASĂ ============ -->
     <section class="tab" id="tab-casa" data-tab="casa" role="tabpanel" aria-labelledby="tb-casa" hidden>
-      <div class="rowhead hero hc"><span class="horn" aria-hidden="true"></span><h2><i style="background:var(--casa)"></i>Casă</h2><span class="hintline" id="casaHint">din salariu net, decontare și diurne</span></div>
+      <div class="rowhead hero hc"><span class="horn" aria-hidden="true"></span><h2><i style="background:var(--casa)"></i>Casă</h2><span class="hintline" id="casaHint">plățile lunare ale casei și ce rămâne</span></div>
       <div class="kpis" id="kpisC"></div>
       <section class="panel">
         <div class="tablehead">
@@ -900,6 +956,7 @@ html[lang="en"] .impgrp[open]>summary::after{content:"Hide ▴"!important}
     <!-- ============ FIRMĂ ============ -->
     <section class="tab" id="tab-firma" data-tab="firma" role="tabpanel" aria-labelledby="tb-firma" hidden>
       <div class="rowhead hero hf"><span class="horn" aria-hidden="true"></span><h2><i style="background:var(--firma)"></i>Firmă</h2><a class="rlink" id="bnrLink" href="https://www.bnr.ro/Cursul-de-schimb-5691.aspx" target="_blank" rel="noopener">Curs BNR ↗</a></div>
+      <div class="stmiss" id="firmStMiss" role="status" hidden></div>
       <section class="panel" id="ratePanel">
         <div class="ratebox">
           <label class="rate">Curs EUR/RON <input id="rate" class="num" inputmode="decimal" placeholder="ex. 5,05" aria-label="Curs EUR/RON"></label>
@@ -956,6 +1013,7 @@ html[lang="en"] .impgrp[open]>summary::after{content:"Hide ▴"!important}
           <label>Ce <select id="xpCat"><option value="fuel">Combustibil</option><option value="ride">Taxi / Uber / Bolt</option><option value="pub">Transport public</option><option value="park">Parcare</option><option value="toll">Taxe de drum, peaj</option><option value="wash">Spălătorie</option><option value="serv">Service și piese</option><option value="other">Altele</option></select></label>
           <label>Data <input id="xpDate" type="date"></label>
           <label id="xpVehL">Vehicul <select id="xpVeh"></select></label>
+          <label id="xpKmL">Km la bord (opțional) <input id="xpKm" class="num" inputmode="numeric" placeholder="ex. 148000" autocomplete="off"></label>
           <label id="xpFromL">Plătit din <select id="xpFrom"><option value="casa">Casă</option><option value="firma">Firmă</option></select></label>
           <label class="wide">Notă <input id="xpNote" placeholder="opțional, de ex. plin la OMV" autocomplete="off"></label>
           <div class="xpbtns"><button class="btn auto" type="submit" id="xpSave">Salvează</button><button class="btn" type="button" id="xpCancel">Renunță</button><span class="xpmsg" id="xpMsg" role="status"></span></div>
@@ -1105,7 +1163,7 @@ This typically indicates that your device does not have a healthy Internet conne
 <script>
 (function(){"use strict";
 var TARGET="web";
-var BUILD_ID="build 2026-11-03 17:51 UTC";
+var BUILD_ID="build 2026-11-04 08:32 UTC";
 var WHERE_DB="Datele tale stau în contul tău Google, într-un proiect Firebase (Google Cloud, regiunea Frankfurt). Pe telefon rămâne doar o copie temporară, ca să meargă și fără net.";
 var MONTHS=["ianuarie","februarie","martie","aprilie","mai","iunie","iulie","august","septembrie","octombrie","noiembrie","decembrie"];
 var GROUPS=["Casă","Firmă"], KINDS=["Plată","Încasare","Transfer","Memento"];
@@ -1175,7 +1233,7 @@ function tplRows(m){
 /* comisioane trase automat de bancă: pornesc bifate, sume fixe */
 var BANKFEE={comeur:{amount:6,cur:"EUR"},comron:{amount:40,cur:"RON"}}, AUTOPAID={comeur:1,comron:1,comtx:1};
 var KR={"Memento":0,"Încasare":1,"Plată":2,"Transfer":3};
-var IC={x:'<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 4l8 8M12 4l-8 8"/></svg>',
+var IC={pin:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3.5h6l-1 5 3.5 3.5h-11L10 8.5z"/><path d="M12 12v8.5"/></svg>',x:'<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 4l8 8M12 4l-8 8"/></svg>',
  clock:'<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="8" r="6"/><path d="M8 4.5V8l2.3 1.5"/></svg>',
  ok:'<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8.5l3.3 3.3L13 4.5"/></svg>',
  circle:'<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="8" cy="8" r="6.2"/></svg>',
@@ -1218,7 +1276,7 @@ function saveState(t){var el=$("#savestate");if(el)el.textContent=t;if(/^(Nu s-a
 /* plățile lunii (facturi, grădiniță, chirie…) = rândurile tale; ce vine din extrase (magazine, benzinărie…) e „alte cheltuieli” */
 function isBill(x){return !x.src}
 function canBill(x){var k=String(x.key||"");return !!x.src&&k.indexOf("cat_")!==0&&k.indexOf("own_")!==0}
-function clean(it){var o={};["ym","group","name","kind","day","amount","status","note","key","order","cur","date","src","hs","locked","tx"].forEach(function(k){o[k]=it[k]==null?null:it[k]});return o}
+function clean(it){var o={};["ym","group","name","kind","day","amount","status","note","key","order","cur","date","src","hs","locked","tx","pin"].forEach(function(k){o[k]=it[k]==null?null:it[k]});return o}
 function persistLocal(){try{localStorage.setItem("fin_items",JSON.stringify(items))}catch(e){}}
 function persistMisc(){try{localStorage.setItem("fin_settings",JSON.stringify(mods));localStorage.setItem("fin_meta",JSON.stringify(meta));localStorage.setItem("fin_start",JSON.stringify(startBal));localStorage.setItem("fin_rules",JSON.stringify(rules));localStorage.setItem("fin_imps",JSON.stringify(imports));localStorage.setItem("fin_bals",JSON.stringify(bals))}catch(e){}}
 function retry(fn,n){n=n==null?3:n;return Promise.resolve().then(fn).catch(function(e){var c=e&&e.code;if(n>0&&(c==="resource_exhausted"||c==="resource-exhausted"||c==="unavailable"))return new Promise(function(r){setTimeout(r,250+Math.random()*450)}).then(function(){return retry(fn,n-1)});throw e})}
@@ -1370,13 +1428,15 @@ function syncFee(m){
 }
 
 /* ---------- crearea unei luni ---------- */
+/* nota trece în luna nouă doar la memento-uri (sunt instrucțiuni) sau când ai fixat-o cu 📌; la plăți și încasări nota e despre luna ei */
+function keepNote(s){return s.kind==="Memento"||!!s.pin}
 function buildMonth(target){
   var prevYm=null;
   items.forEach(function(x){if(x.ym<target&&!x.src&&(!prevYm||x.ym>prevYm))prevYm=x.ym});
   var tpl=mods.tpl>=2,model=tpl?tplRows():DEFAULTS;
   /* comisioanele băncii nu se mai pun dinainte: apar doar din extras, cu suma reală */
   var src=prevYm?monthItems(prevYm).filter(function(x){return !x.src&&!AUTOPAID[x.key]}).sort(function(a,b){return (a.order||0)-(b.order||0)}):model.filter(function(d){return !AUTOPAID[d.key]}).map(function(d,i){return {key:d.key,group:d.group,name:d.name,kind:d.kind,day:d.day==null?null:d.day,note:"",order:i,cur:d.cur||null}});
-  return src.map(function(s,i){var key=s.key||("x"+rid());var fee=BANKFEE[key];return {id:target+"_"+key,key:key,ym:target,group:s.group,name:s.name,kind:s.kind,day:s.day==null?null:s.day,amount:null,status:AUTOPAID[key]?"Așteaptă":"De făcut",note:s.note||"",order:i,cur:s.cur||(fee?fee.cur:null)}});
+  return src.map(function(s,i){var key=s.key||("x"+rid());var fee=BANKFEE[key];return {id:target+"_"+key,key:key,ym:target,group:s.group,name:s.name,kind:s.kind,day:s.day==null?null:s.day,amount:null,status:AUTOPAID[key]?"Așteaptă":"De făcut",note:keepNote(s)?(s.note||""):"",pin:s.pin?true:null,order:i,cur:s.cur||(fee?fee.cur:null)}});
 }
 function createMonth(target){
   if(!canWrite){return}
@@ -1651,6 +1711,8 @@ I18N.enP=[
  [/^plătit (.+) · inclusiv salariu, decontare și diurne(?: · în plus (.+) direct din contul în EUR)?$/,function(m,a,b){return "paid "+a+" · including salary, reimbursements and allowances"+(b?" · plus "+b+" straight from the EUR account":"")}],
  [/^plătit (.+) · inclusiv salariul tău$/,"paid $1 · including your salary"],
  [/^plăți lunare (.+) · alte cheltuieli (.+)$/,"monthly payments $1 · other spending $2"],
+ [/^primit din (.+) așteptat · contează doar ce e bifat ca făcut$/,"received of $1 expected · only what's checked as done counts"],
+ [/^plătit (.+) · în plus (.+) direct din contul în EUR$/,"paid $1 · plus $2 straight from the EUR account"],
  [/^primit din (.+) așteptat \(salariu, decontare, diurne(, alte venituri)?\)$/,function(m,a,b){return "received of "+a+" expected (salary, reimbursements, allowances"+(b?", other income":"")+")"}],
  [/^primit din (.+) așteptat \(salariu, decontare, diurne(, alte venituri)?\) · contează doar ce e bifat ca făcut$/,function(m,a,b){return "received of "+a+" expected (salary, reimbursements, allowances"+(b?", other income":"")+") · only checked rows count"}],
  [/^sold la început de lună (.+) \+ venit − plăți(?: \+ (.+) aduși din alt cont al tău| − (.+) mutați în alt cont al tău)?$/,function(m,a,b,c){return "start-of-month balance "+a+" + income − payments"+(b?" + "+b+" brought from another of your accounts":c?" − "+c+" moved to another of your accounts":"")}],
@@ -1685,11 +1747,44 @@ Object.assign(I18N.en,{"Setări":"Settings","Aspect și limbă":"Appearance and 
 "După sistem":"Match system","Luminos":"Light","Întunecat":"Dark",
 "„După sistem” urmează setarea telefonului sau a calculatorului: ziua luminos, noaptea întunecat, dacă așa ai pus acolo.":"“Match system” follows your phone or computer setting: light by day, dark at night, if that's how you set it there.",
 "scadențe · revizii · drumuri":"due dates · services · trips"});
+/* v2.3: note fixe, „din extras”, transport, extrasul firmei */
+Object.assign(I18N.en,{"Păstrează nota în fiecare lună":"Keep the note every month",
+"Nota rămâne în fiecare lună. Atinge ca s-o lași doar pe luna asta.":"The note stays every month. Tap to keep it on this month only.",
+"Nota rămâne doar pe luna asta.":"The note stays on this month only.","Nota se păstrează și în lunile următoare.":"The note is kept in the coming months too.",
+"Din extras":"From the statement","din extras":"from statement","Editează":"Edit","Gata":"Done","Marcă și model":"Make and model","An":"Year","Ce fel":"What kind",
+"ex. Dacia Logan":"e.g. Dacia Logan","ex. 2019":"e.g. 2019","ex. rulotă, scuter, barcă":"e.g. caravan, scooter, boat","Plătit de obicei din":"Usually paid from",
+"Kilometraj acum (opțional)":"Mileage now (optional)",
+"Kilometrajul e opțional. Dacă îl treci din când în când (sau la plin), aplicația estimează singură cât mergi și când vine revizia după km. Altfel îți amintește doar după dată.":"Mileage is optional. If you enter it now and then (or when you fill up), the app estimates how much you drive and when a km-based service is due. Otherwise it reminds you by date only.",
+"Ce vrei să urmărești?":"What do you want to track?","CASCO":"Comprehensive insurance (CASCO)","Distribuție":"Timing belt","AdBlue":"AdBlue","Plăcuțe de frână":"Brake pads",
+"Lichid de frână":"Brake fluid","Filtru habitaclu (polen)":"Cabin (pollen) filter","Bujii":"Spark plugs","Baterie":"Battery","Altceva…":"Something else…",
+"scrii tu ce și la cât timp":"you write what and how often","după dată":"by date","vară / iarnă":"summer / winter",
+"Intervalele sunt orientative. Cele corecte sunt în cartea service a vehiculului tău: le schimbi oricând pe rând.":"Intervals are only a guide. The right ones are in your vehicle's service book: you can change them on each item any time.",
+"Următoarea dată":"Next date","La km (opțional)":"At km (optional)","La câți km ai făcut-o?":"At what mileage did you do it?","ex. 148000":"e.g. 148000","Fără km":"No mileage",
+"Km la bord (opțional)":"Odometer km (optional)","estimat":"estimated","Socotit din extrasul încărcat":"Calculated from the loaded statement",
+"Fără extras: socotit doar din ce ai bifat":"No statement: calculated only from what you checked","Încarcă extrasul":"Load the statement",
+"Până îl încarci, soldul e doar estimat din ce ai bifat. Cu extrasul, plățile și încasările se bifează singure și soldul e cel real.":"Until you load it, the balance is only estimated from what you checked. With the statement, payments and income get checked automatically and the balance is the real one.",
+"plățile lunare ale casei și ce rămâne":"the home's monthly payments and what's left"});
+I18N.enP.unshift(
+ [/^Lipsește extrasul firmei pe (.+)$/,function(m,a){return "The business statement for "+capF(a)+" is missing"}],
+ [/^Mergi la (.+)$/,function(m,a){return "Go to "+capF(a)}],
+ [/^la (.+) km$/,"at $1 km"],
+ [/^(.+) sau la (.+) km$/,function(m,a,b){var t=trText(a);return (t==null?a:t)+" or at "+b+" km"}],
+ [/^~(.+) km acum \(estimat\) · (.+) km la (.+)$/,"~$1 km now (estimated) · $2 km on $3"],
+ [/^(.+) km la (\d.+)$/,"$1 km on $2"],
+ [/^(ai deja · )?la ((?:\d+ (?:an|ani|lună|luni)|[\d.,]+ km)(?: sau (?:\d+ (?:an|ani|lună|luni)|[\d.,]+ km))?)$/,function(m,a,b){return (a?"you have it · ":"")+"every "+b.replace(/ sau /g," or ").replace(/\bani\b/g,"years").replace(/\ban\b/g,"year").replace(/\bluni\b/g,"months").replace(/\blună\b/g,"month")}]
+);
+Object.assign(I18N.en,{"Anul":"Year"});
+Object.assign(I18N.en,{"Niciun rând de plată în luna asta.":"No payment rows this month."});
+I18N.enP.push([/^plătit ([^·]+)$/,"paid $1"]);
+I18N.enP.unshift([/^ai deja · (vară \/ iarnă|după dată)$/,function(m,a){return "you have it · "+(a==="după dată"?"by date":"summer / winter")}]);
 
 /* ================= Versiuni și „Ce e nou” =================
    Versiune mare (3.0) = schimbare importantă; mică (2.1) = funcție nouă; reparație (2.1.1) = corectură.
    Cea mai nouă versiune e prima din listă. */
 var CHANGELOG=[
+ {v:"2.3",d:"2026-11-04",t:{ro:"Pentru toată lumea",en:"For everyone"},
+  ro:["Luna nouă pornește cu note goale la plăți și încasări; memento-urile își păstrează nota, iar cu 📌 fixezi orice notă","Pe rândurile potrivite din extras apare „Din extras”: cine a plătit și ce scrie la plată, separat de nota ta","Transport: vehiculul cu marcă, model, an și tip (scrii tu ce fel e), fără meniu mereu deschis","Fiecare scadență are intervalul ei în luni și/sau km, cu șabloane: revizie, distribuție, AdBlue, frâne, bujii, baterie și altele","Kilometrajul e opțional: „Făcută” te întreabă la câți km, poți trece km și la plin, iar aplicația estimează când vine revizia","Firmă: soldul apare „estimat” până încarci extrasul lunii și „din extras” după; un avertisment îți amintește dacă lipsește","Texte generale, potrivite oricui"],
+  en:["A new month starts with empty notes on payments and income; reminders keep their note, and 📌 pins any note","Rows matched with the statement show “From the statement”: who paid and the payment details, apart from your note","Transport: the vehicle with make, model, year and type (you name the kind), without an always-open menu","Each due item has its own interval in months and/or km, with templates: service, timing belt, AdBlue, brakes, spark plugs, battery and more","Mileage is optional: “Done” asks at what km, you can enter km when filling up, and the app estimates when the service is due","Business: the balance shows “estimated” until you load the month's statement and “from statement” after; a notice reminds you if it's missing","General wording that fits anyone"]},
  {v:"2.2.1",d:"2026-11-03",t:{ro:"Corecturi",en:"Fixes"},
   ro:["În engleză, butonul „Șterge rândul” și „Arată / Ascunde” apar acum în engleză"],
   en:["In English, the “Delete row” button and “Show / Hide” now appear in English"]},
@@ -2554,7 +2649,7 @@ function casaOpen(k,depth){
 }
 var FIRMA_FOOT=(document.getElementById("firmaFoot")||{}).textContent||"";
 function renderCasa(){
-  $("#casaHint").textContent=mods.tpl>=2?(mods.firma===false?"din salariu și alte venituri":"din salariul primit de la firmă și alte venituri"):"din salariu net, decontare și diurne";
+  $("#casaHint").textContent="plățile lunare ale casei și ce rămâne";
   var m=monthItems(ym),r=rateFor(ym);
   var cin=m.filter(function(x){return x.group==="Casă"&&x.kind==="Încasare"});
   /* venit = ce trimite firma în contul tău (transferurile Firmei) + încasările Casei; un transfer făcut din Casă e bani care ies */
@@ -2580,7 +2675,7 @@ function renderCasa(){
     }else $("#kpisC").className="kpis two";
   }else{
     $("#kpisC").className="kpis";
-    c+=kpi("good","Venit casă",lei(venitDone),"primit din "+lei(venit)+" așteptat (salariu, decontare, diurne"+(other>0?", alte venituri":"")+") · contează doar ce e bifat ca făcut");
+    c+=kpi("good","Venit casă",lei(venitDone),"primit din "+lei(venit)+" așteptat · contează doar ce e bifat ca făcut");
     c+=kpi("","Plătit acasă",lei(cPaid),cEx>0.005?"plăți lunare "+lei(cBill)+" · alte cheltuieli "+lei(Math.round(cEx*100)/100):"din "+lei(cTot)+" de plătit");
     c+=kpi(bLeft>0?"bad":"","Rămas de plătit",lei(bLeft),bN?plural(bN,"plată nebifată","plăți nebifate"):"totul e bifat");
     /* cu extras: pornim de la soldul de la începutul lunii; banii mutați între conturile tale intră separat */
@@ -2598,6 +2693,20 @@ function renderCasa(){
 }
 
 /* ---------- Firmă ---------- */
+/* la Firmă extrasul e baza: soldul e „confirmat” doar pentru lunile cu extras încărcat */
+function firmHasSt(k){var a=k+"-01",b=k+"-31";return (imports||[]).some(function(r){return r.group==="Firmă"&&r.from&&r.to&&r.from<=b&&r.to>=a})}
+function firmHasRows(k){return items.some(function(x){return x.ym===k&&x.group==="Firmă"&&!x.src})}
+function stBadge(k){return firmHasSt(k)?' <span class="stbadge ok" title="Socotit din extrasul încărcat">din extras</span>':' <span class="stbadge est" title="Fără extras: socotit doar din ce ai bifat">estimat</span>'}
+function renderFirmSt(){
+  var el=$("#firmStMiss");if(!el)return;
+  var now=ymNow(),k=null,h="";
+  if(ym<now&&firmHasRows(ym)&&!firmHasSt(ym))k=ym;
+  else if(ym===now){var p=shift(now,-1);if(firmHasRows(p)&&!firmHasSt(p))k=p}
+  if(!k||!canWrite){el.hidden=true;return}
+  h='<span class="smi1">📄</span><span class="smt1"><b>Lipsește extrasul firmei pe '+esc(label(k))+'</b><small>Până îl încarci, soldul e doar estimat din ce ai bifat. Cu extrasul, plățile și încasările se bifează singure și soldul e cel real.</small></span>'+
+    (k===ym?'<label class="btn auto filebtn" for="impFile">Încarcă extrasul</label>':'<button type="button" class="btn auto" data-goym="'+k+'">Mergi la '+esc(label(k))+'</button>');
+  el.innerHTML=h;el.hidden=false;
+}
 function renderFirmaRon(m,f){
   var inc=m.filter(function(x){return x.group==="Firmă"&&x.kind==="Încasare"&&curOf(x)==="RON"});
   var incDone=sum(inc.filter(function(x){return x.status==="Gata"}),function(x){return x.amount});
@@ -2605,15 +2714,15 @@ function renderFirmaRon(m,f){
   var fPaidR=sum(fOutR.filter(function(x){return x.status==="Gata"}),function(x){return x.amount});
   var res=f.ir-f.oR,run=firmRun(ym),dR=run.ron-firmRun(shift(ym,-1)).ron,k='';
   k+=kpi("good","Încasat",lei(incDone),"din "+lei(f.ir)+" așteptat");
-  k+=kpi("","Plăți firmă",lei(f.oR),"plătit "+lei(fPaidR)+" · inclusiv salariul tău");
+  k+=kpi("","Plăți firmă",lei(f.oR),"plătit "+lei(fPaidR));
   k+=kpi(res<0?"bad":"good","Rezultatul lunii",lei(res),"încasări minus plăți, cum sunt trecute");
-  k+=kpi(run.ron<-0.5?"bad":"good","Sold firmă, reportat",lei(run.ron),"luna asta "+(dR>=0?"+":"")+lei(dR)+" · se adună de la o lună la alta");
+  k+=kpi(run.ron<-0.5?"bad":"good","Sold firmă, reportat"+stBadge(ym),lei(run.ron),"luna asta "+(dR>=0?"+":"")+lei(dR)+" · se adună de la o lună la alta");
   $("#kpisF").innerHTML=k;
 }
 function renderFirma(){
   var m=monthItems(ym),r=rateFor(ym),f=firmMonth(ym),ro=fxRon();
   $("#ratePanel").hidden=ro;$("#foldX").hidden=ro;$("#bnrLink").hidden=ro;
-  $("#firmaFoot").textContent=FIRMA_FOOT;
+  $("#firmaFoot").textContent=FIRMA_FOOT;renderFirmSt();
   if(ro){renderFirmaRon(m,f);renderFilters("Firmă");renderGrid("Firmă");return}
   /* cursul și schimbul apar doar în lunile cu euro */
   var hasEur=m.some(function(x){return x.group==="Firmă"&&curOf(x)==="EUR"})||!!ownRate(ym)||!!(meta[ym]&&meta[ym].exch!=null);
@@ -2630,10 +2739,10 @@ function renderFirma(){
   var xin=$("#exch");if(document.activeElement!==xin){xin.value=exSet?decIn(exv):"";xin.placeholder=needEur!=null?("necesar: "+money(needEur)):"ex. 2100"}
   var k='';
   k+=kpi("good","Încasat de la client",eur(incEurDone),"din "+eur(incEur)+" așteptat"+(r&&incEur?" (≈ "+lei(incEur*r)+")":""));
-  k+=kpi("","Plăți firmă (lei)",lei(f.oR),"plătit "+lei(fPaidR)+" · inclusiv salariu, decontare și diurne"+(f.oE>0?" · în plus "+eur(f.oE)+" direct din contul în EUR":""));
+  k+=kpi("","Plăți firmă (lei)",lei(f.oR),"plătit "+lei(fPaidR)+(f.oE>0?" · în plus "+eur(f.oE)+" direct din contul în EUR":""));
   k+=kpi("","De schimbat în lei",needEur==null?"—":eur(needEur),exSet?("schimbat <b>"+eur(exv)+"</b>"+(restE==null?"":restE>0.005?" · mai ai de schimbat <b>"+eur(restE)+"</b>":restE<-0.005?" · cu <b>"+eur(-restE)+"</b> peste necesar":" · acoperă plățile")):(r?("la cursul "+decIn(r)+" ca să acoperi plățile firmei · treci sus cât ai schimbat efectiv"):"completează cursul de sus"));
   var run=firmRun(ym),runPrev=firmRun(shift(ym,-1)),dE=run.eur-runPrev.eur;
-  k+=kpi(run.eur<0||(!run.noRate&&run.ron<-0.5)?"bad":(run.noRate?"":"good"),"Sold firmă, reportat",eur(run.eur),(run.noRate?"lei în cont: <b>necunoscut încă</b>":(run.ron<0?"minus <b>"+lei(-run.ron)+"</b>":"plus <b>"+lei(run.ron)+"</b>")+" în cont")+" · luna asta "+(dE>=0?"+":"")+eur(dE)+" · se adună de la o lună la alta"+(run.noRate?(f.ex>0&&!f.rr?" · pune cursul lunii (sus), ca să se socotească și leii din schimb":" · lipsește cursul unei luni cu schimb, mai în urmă"):""));
+  k+=kpi(run.eur<0||(!run.noRate&&run.ron<-0.5)?"bad":(run.noRate?"":"good"),"Sold firmă, reportat"+stBadge(ym),eur(run.eur),(run.noRate?"lei în cont: <b>necunoscut încă</b>":(run.ron<0?"minus <b>"+lei(-run.ron)+"</b>":"plus <b>"+lei(run.ron)+"</b>")+" în cont")+" · luna asta "+(dE>=0?"+":"")+eur(dE)+" · se adună de la o lună la alta"+(run.noRate?(f.ex>0&&!f.rr?" · pune cursul lunii (sus), ca să se socotească și leii din schimb":" · lipsește cursul unei luni cu schimb, mai în urmă"):""));
   $("#kpisF").innerHTML=k;
   renderHist();
   renderFilters("Firmă");renderGrid("Firmă");
@@ -2713,24 +2822,26 @@ function daysTxt(ds){
 function txdHtml(x){
   if(!x.tx||!x.tx.length)return "";
   var isCat=String(x.key||"").indexOf("cat_")===0,cur=curOf(x)==="EUR"?" €":" lei",cats=SHOP_CATS.concat([CAT_GAS,CAT_OTHER]);
-  return '<div class="txd">'+txGroups(x).map(function(g){
+  return '<div class="txd">'+(x.src?'':'<div class="txh">Din extras</div>')+txGroups(x).map(function(g){
     return '<div class="txl"><span class="tm">'+esc(g.m)+'</span><span class="tn">'+(g.n>1?g.n+' plăți · ':'')+esc(daysTxt(g.days))+'</span><span class="ta">'+money(Math.round(g.a*100)/100)+cur+'</span>'+
       (isCat&&canWrite?'<select class="tmv" data-mv="'+esc(g.m)+'" aria-label="Mută „'+esc(g.m)+'” în altă categorie"><option value="">mută în…</option>'+cats.filter(function(c){return "cat_"+c.key!==x.key}).map(function(c){return '<option value="'+c.key+'">'+esc(c.name)+'</option>'}).join("")+'</select>':'')+
     '</div>';
   }).join("")+(canWrite&&canBill(x)?'<div class="mkb"><button type="button" class="btn" data-mkbill="1">Fă-l plată lunară</button><small>Trece sus, la plățile lunii, și intră în cerc. Luna viitoare îl aștept și îl bifez singur din extras.</small></div>':'')+'</div>';
 }
+/* rezumatul extrasului pe un rând planificat: cine a plătit / ce scrie la plată, plus câte au mai fost */
+function txShort(x){var g=txGroups(x);if(!g.length)return "";var t=g[0].m;if(t.length>46)t=t.slice(0,45)+"…";return g.length>1?t+" +"+(g.length-1):t}
 /* moneda contează doar la Firmă când încasezi în euro (sau pe un rând care e deja în EUR) */
 function showCur(x){return curOf(x)==="EUR"||(x.group==="Firmă"&&!fxRon())}
 function rowHtml(x){
   var si=x.status==="Gata"?2:x.status==="Așteaptă"?1:0, open=openId===x.id, memo=x.kind==="Memento";
   var amt=x.amount>0?money(x.amount)+(curOf(x)==="EUR"?" €":" lei"):"";
   var mt=[x.day!=null?"ziua "+x.day:"fără zi",x.kind.toLowerCase()];
-  var hasTx=!!(x.tx&&x.tx.length);
+  var hasTx=!!(x.tx&&x.tx.length),stTx=hasTx&&!x.src;
   if(x.hs&&x.hs.length)mt.push("din extras");
-  if(hasTx)mt.push(plural(x.tx.length,"plată","plăți"));
-  else if(x.note)mt.push(x.note);
+  if(x.src&&hasTx)mt.push(plural(x.tx.length,"plată","plăți"));
+  else{if(x.note)mt.push(x.note);if(stTx)mt.push(txShort(x))}
   var lab=si===2?(x.kind==="Încasare"?"Încasat":x.kind==="Memento"?"Făcut":"Plătit"):si===1?"În așteptare":"Nefăcut";
-  return '<div class="gr'+(si===2?' done':'')+(open?' open':'')+(hasTx?' hastx':'')+'" data-id="'+esc(x.id)+'">'+
+  return '<div class="gr'+(si===2?' done':'')+(open?' open':'')+(hasTx&&x.src?' hastx':'')+(stTx?' sttx':'')+'" data-id="'+esc(x.id)+'">'+
     '<div class="gsum">'+
       (x.src?'<span class="stb s2 fixed" title="'+lab+' (din extras)">'+IC.circleOk+'</span>':'<button type="button" class="stb s'+si+'" data-stb="1" aria-label="'+esc(x.name||"rând")+': '+lab+'. Atinge ca să schimbi." title="'+lab+'">'+(si===2?IC.circleOk:si===1?IC.circleClock:IC.circleEmpty)+'</button>')+
       '<button type="button" class="gmain" data-open="1" aria-expanded="'+open+'"><span class="gname">'+esc(x.name||"(fără nume)")+'</span><span class="gmeta">'+esc(mt.join(" · "))+'</span></button>'+
@@ -2744,8 +2855,8 @@ function rowHtml(x){
       (showCur(x)?'<div><span class="lab">Monedă</span><select data-f="cur" aria-label="Monedă">'+opts(["RON","EUR"],curOf(x))+'</select></div>':'')+
       (x.src?'<div class="stc"><span class="lab">Status</span><span class="stx">'+IC.ok+(x.kind==="Încasare"?"Încasat":"Plătit")+'</span></div>'
         :'<div class="stc"><span class="lab">Status</span><div class="sg" role="group" aria-label="Status">'+stBtns(x)+'</div></div>')+
-      (hasTx?'<div class="notec"><span class="lab">Detalii</span><button type="button" class="dbtn" data-open="1" aria-expanded="'+open+'">'+plural(x.tx.length,"plată","plăți")+' '+(open?'▴':'▾')+'</button></div>'
-        :'<div class="notec"><span class="lab">Notă</span><input data-f="note" value="'+esc(x.note||"")+'" aria-label="Notă"></div>')+
+      (hasTx&&x.src?'<div class="notec"><span class="lab">Detalii</span><button type="button" class="dbtn" data-open="1" aria-expanded="'+open+'">'+plural(x.tx.length,"plată","plăți")+' '+(open?'▴':'▾')+'</button></div>'
+        :'<div class="notec"><span class="lab">Notă</span><div class="notew"><input data-f="note" value="'+esc(x.note||"")+'" aria-label="Notă">'+(memo?'':'<button type="button" class="pinb" data-pin="1" aria-pressed="'+(x.pin?'true':'false')+'" title="'+(x.pin?'Nota rămâne în fiecare lună. Atinge ca s-o lași doar pe luna asta.':'Păstrează nota în fiecare lună')+'" aria-label="Păstrează nota în fiecare lună">'+IC.pin+'</button>')+'</div></div>')+
       '<div class="xc"><button class="x" type="button" data-del="1" aria-label="Șterge rândul" title="Șterge rândul">×</button></div>'+
     '</div>'+
     (open?txdHtml(x):'')+
@@ -2926,6 +3037,7 @@ var delArm={id:null,t:null};
     var stb=e.target.closest("[data-stb]");
     if(stb){if(canWrite)put(Object.assign({},it,{status:(it.status||"De făcut")==="Gata"?"De făcut":"Gata"}));return}
     if(e.target.closest("[data-mkbill]")){if(canWrite)makeBill(it);return}
+    if(e.target.closest("[data-pin]")){if(canWrite){put(Object.assign({},it,{pin:it.pin?null:true}));toast(it.pin?"Nota rămâne doar pe luna asta.":"Nota se păstrează și în lunile următoare.")}return}
     if(e.target.closest("[data-open]")){openId=(openId===id)?null:id;renderGrid(g);return}
     var sb=e.target.closest("[data-st]");
     if(sb){if(canWrite&&(it.status||"De făcut")!==sb.getAttribute("data-st"))put(Object.assign({},it,{status:sb.getAttribute("data-st")}));return}
@@ -2957,6 +3069,8 @@ $("#modCasaImp").addEventListener("change",function(){putSettings({casaImp:this.
 $("#modTransport").addEventListener("change",function(){putSettings({transport:this.checked})});
 $("#modFx").addEventListener("change",function(){putSettings({fx:this.value==="RON"?"RON":"EUR"})});
 $("#fuelMin").addEventListener("change",function(){var v=parseInt(this.value,10);if(v>=0&&v<100000)putSettings({fuelMin:v});else this.value=mods.fuelMin});
+/* Firmă: „Mergi la luna fără extras” */
+$("#firmStMiss").addEventListener("click",function(e){var b=e.target.closest("[data-goym]");if(b)setYm(b.getAttribute("data-goym"))});
 
 /* ================= Transport: vehicule, scadențe și revizii =================
    Totul stă în colecția „car” (regulile Firestore rămân aceleași):
@@ -2981,10 +3095,19 @@ var CARDEF=[
 /* ce scadențe primește un vehicul nou, după tip (motocicleta nu are rovinietă și anvelope de iarnă) */
 var VDEF={auto:["rca","rov","itp","anv","rev"],moto:["rca","itp","rev"],alt:[]};
 var VKIND=[["auto","Mașină"],["moto","Motocicletă"],["alt","Alt vehicul"]];
+/* șabloane pentru „+ Scadență”: valori tipice, de ajustat după cartea service a fiecărui vehicul (k = după dată / km / sezon) */
+var CTPL=[
+ {t:"RCA",kind:"data",every:12},{t:"Rovinietă",kind:"data",every:12},{t:"ITP",kind:"data",every:24},{t:"CASCO",kind:"data",every:12},
+ {t:"Revizie (ulei și filtre)",kind:"revizie",every:12,everyKm:15000},{t:"Distribuție",kind:"revizie",every:60,everyKm:120000},
+ {t:"AdBlue",kind:"revizie",everyKm:10000},{t:"Plăcuțe de frână",kind:"revizie",everyKm:40000},{t:"Lichid de frână",kind:"revizie",every:24},
+ {t:"Filtru habitaclu (polen)",kind:"revizie",every:12,everyKm:15000},{t:"Bujii",kind:"revizie",everyKm:60000},{t:"Baterie",kind:"revizie",every:60},
+ {t:"Schimb anvelope",kind:"sezon",every:6},{t:"Altceva…",kind:"revizie",every:12,blank:1}
+];
+var vEdit=null,cPick=null,renewAsk=null,carKmPrev=null;
 var carOpen=null,carChg=false,car=CARDEF.map(function(d){return Object.assign({},d)}),carKm=null,carKmAt=null,carSeeded=false,pendingCar=false,vehs=[],carLoaded=false,vdelArm=null,vdelT=null;
 try{var lc=JSON.parse(localStorage.getItem("fin_car")||"null");if(lc&&lc.items){if(lc.items.length||Array.isArray(lc.vehs)){car=lc.items;carKm=lc.km||null;carKmAt=lc.at||null;vehs=Array.isArray(lc.vehs)?lc.vehs:[]}}}catch(e){}
 function cleanCar(it){var o={};["name","kind","due","dueKm","every","everyKm","remind","season","order","veh"].forEach(function(k){o[k]=it[k]==null?null:it[k]});return o}
-function cleanVeh(v){var o={};["name","kind","km","at","order","deleted","pay"].forEach(function(k){o[k]=v[k]==null?null:v[k]});return o}
+function cleanVeh(v){var o={};["name","kind","km","at","order","deleted","pay","year","kname","km0","at0"].forEach(function(k){o[k]=v[k]==null?null:v[k]});return o}
 function persistCar(){try{localStorage.setItem("fin_car",JSON.stringify({items:car,km:carKm,at:carKmAt,vehs:vehs,xps:xps}))}catch(e){}}
 function carSaveMsg(t){var el=$("#carsave");if(el)el.textContent=t}
 function carWrite(fn){
@@ -3001,8 +3124,8 @@ function vehOf(it){return it.veh||"veh_main"}
 function vehicles(){
   var out=[],md=vehMainDoc();
   if(!(md&&md.deleted)&&(md||car.some(function(it){return !it.veh})))
-    out.push({id:"veh_main",name:(md&&md.name)||"",kind:(md&&md.kind)||"auto",order:md&&md.order!=null?md.order:0,km:carKm,at:carKmAt,pay:(md&&md.pay)||null});
-  vehs.forEach(function(v){if(v.id!=="veh_main"&&!v.deleted)out.push({id:v.id,name:v.name||"",kind:v.kind||"auto",order:v.order||0,km:v.km>0?v.km:null,at:v.at||null,pay:v.pay||null})});
+    out.push({id:"veh_main",name:(md&&md.name)||"",kind:(md&&md.kind)||"auto",order:md&&md.order!=null?md.order:0,km:carKm,at:carKmAt,pay:(md&&md.pay)||null,year:(md&&md.year)||null,kname:(md&&md.kname)||null,km0:carKmPrev?carKmPrev.km:null,at0:carKmPrev?carKmPrev.at:null});
+  vehs.forEach(function(v){if(v.id!=="veh_main"&&!v.deleted)out.push({id:v.id,name:v.name||"",kind:v.kind||"auto",order:v.order||0,km:v.km>0?v.km:null,at:v.at||null,pay:v.pay||null,year:v.year||null,kname:v.kname||null,km0:v.km0||null,at0:v.at0||null})});
   return out.sort(function(a,b){return (a.order||0)-(b.order||0)});
 }
 function vehById(id){return vehicles().find(function(v){return v.id===id})||null}
@@ -3012,14 +3135,21 @@ function putVeh(v){
   render();carWrite(function(){return ccol.doc(v.id).set(cleanVeh(v))});
 }
 function vehBase(id){return id==="veh_main"?(vehMainDoc()||{id:"veh_main",order:0}):vehs.find(function(o){return o.id===id})}
+/* kilometrajul e opțional; dacă îl treci din când în când, păstrăm și citirea de dinainte ca să estimăm cât mergi */
 function putKm(vid,v){
-  var at=iso(new Date());
-  if(vid==="veh_main"){carKm=v;carKmAt=at;render();carWrite(function(){return ccol.doc("_km").set({km:v,at:at})});return}
-  var b=vehBase(vid);if(b)putVeh(Object.assign({},b,{km:v,at:at}));
+  var at=iso(new Date()),cur=vehById(vid),prev=null;
+  if(cur&&cur.km>0&&cur.at&&cur.at<at&&v>cur.km)prev={km:cur.km,at:cur.at};
+  else if(cur&&cur.km0>0)prev={km:cur.km0,at:cur.at0};
+  if(vid==="veh_main"){carKm=v;carKmAt=at;carKmPrev=prev;render();carWrite(function(){var o={km:v,at:at};if(prev){o.km0=prev.km;o.at0=prev.at}return ccol.doc("_km").set(o)});return}
+  var b=vehBase(vid);if(b)putVeh(Object.assign({},b,{km:v,at:at,km0:prev?prev.km:null,at0:prev?prev.at:null}));
 }
+/* kilometrajul estimat azi, din ultimele două citiri (măcar două săptămâni între ele); altfel ultimul trecut */
+function kmRate(v){if(!(v&&v.km>0&&v.km0>0&&v.at&&v.at0))return 0;var d=dayN(v.at)-dayN(v.at0);return d>=14&&v.km>v.km0?(v.km-v.km0)/d:0}
+function estKm(v){if(!v||!(v.km>0))return null;var r=kmRate(v);if(!r||!v.at)return v.km;return Math.round(v.km+r*Math.max(0,-daysTo(v.at)))}
+function vehTypeName(v){return v.kind==="alt"?(v.kname||"Alt vehicul"):v.kind==="moto"?"Motocicletă":"Mașină"}
 function addVeh(kind){
   var ord=vehicles().reduce(function(a,v){return Math.max(a,v.order||0)},0)+1,id="veh_"+rid();
-  var v={id:id,name:"",kind:kind,order:ord,km:null,at:null};
+  var v={id:id,name:"",kind:kind,order:ord,km:null,at:null};vEdit=id;
   var defs=CARDEF.filter(function(d){return (VDEF[kind]||[]).indexOf(d.id)>=0}).map(function(d){return Object.assign({},d,{id:"c"+rid(),veh:id})});
   vehs.push(v);car=car.concat(defs);vdelArm=null;
   render();
@@ -3060,7 +3190,7 @@ function carState(it,km){
     else if(d<=rem){worst("warn");parts.push("în "+plural(d,"zi","zile"))}
     else{worst("ok");parts.push(d>60?"peste ~"+Math.round(d/30.4)+" luni":"în "+plural(d,"zi","zile"))}
   }
-  if(it.kind==="revizie"&&it.dueKm>0){
+  if(it.kind!=="sezon"&&it.dueKm>0){
     if(km>0){var l=it.dueKm-km;
       if(l<=0){worst("bad");parts.push("depășit cu "+money(-l)+" km")}
       else if(l<=1500){worst("warn");parts.push("încă "+money(l)+" km")}
@@ -3070,7 +3200,7 @@ function carState(it,km){
   if(!parts.length)parts.push("fără dată");
   return {cls:cls,rank:rank,text:parts[0],sub:parts.slice(1).join(" · "),d:due?daysTo(due):99999};
 }
-function carRows(v){return car.filter(function(it){return vehOf(it)===v.id}).map(function(it){return {it:it,s:carState(it,v.km)}}).sort(function(a,b){return (b.s.rank-a.s.rank)||(a.s.d-b.s.d)||((a.it.order||0)-(b.it.order||0))})}
+function carRows(v){var km=estKm(v);return car.filter(function(it){return vehOf(it)===v.id}).map(function(it){return {it:it,s:carState(it,km)}}).sort(function(a,b){return (b.s.rank-a.s.rank)||(a.s.d-b.s.d)||((a.it.order||0)-(b.it.order||0))})}
 function renderCarBanner(){
   var bar=$("#carbar"),parts=[],bad=false;
   if(mods.transport!==false)vehicles().forEach(function(v){
@@ -3082,22 +3212,52 @@ function renderCarBanner(){
   bar.hidden=false;bar.className="car-banner"+(bad?" bad":"");bar.textContent=parts.join(" · ");
 }
 function carRowHtml(r){
-  var it=r.it,s=r.s,rv=it.kind==="revizie",sz=it.kind==="sezon";
-  var sub=isoOk(it.due)?(it.kind==="data"?"scade pe ":"următoarea: ")+fmtD(it.due):"alege o dată";
+  var it=r.it,s=r.s,sz=it.kind==="sezon",kmOk=!sz;
+  var sub=isoOk(it.due)?(it.kind==="data"?"scade pe ":"următoarea: ")+fmtD(it.due):(it.dueKm>0?"la "+money(it.dueKm)+" km":"alege o dată");
   if(sz)sub="acum pe "+(it.season||"vară")+" · "+sub;
-  var op=carOpen===it.id;
+  else if(isoOk(it.due)&&it.dueKm>0)sub+=" sau la "+money(it.dueKm)+" km";
+  var op=carOpen===it.id,ask=renewAsk===it.id;
   return '<div class="car-r'+(op?' copen':'')+'" data-id="'+esc(it.id)+'">'+
     '<div class="pill '+s.cls+'" data-ctog="1"><span>'+esc(s.text)+'</span>'+(s.sub?'<small>'+esc(s.sub)+'</small>':'')+'</div>'+
     '<button type="button" class="ctitle" data-ctog="1" aria-expanded="'+op+'"><b>'+esc(it.name||"(fără nume)")+'</b><small>'+esc(sub)+'</small><i aria-hidden="true">▾</i></button>'+
     '<div class="nmc"><span class="lab">Ce</span><input data-f="name" value="'+esc(it.name)+'" aria-label="Ce"><div class="sub">'+esc(sub)+'</div></div>'+
-    '<div><span class="lab">Scadent la</span><input type="date" data-f="due" value="'+(isoOk(it.due)?it.due:"")+'" aria-label="Scadent la"></div>'+
-    (rv?'<div><span class="lab">La km</span><input class="num" data-f="dueKm" inputmode="numeric" value="'+(it.dueKm>0?it.dueKm:"")+'" placeholder="–" aria-label="La km"></div>'
-       :sz?'<div><span class="lab">Acum pe</span><select data-f="season" aria-label="Anvelope montate acum"><option'+(it.season!=="iarnă"?" selected":"")+'>vară</option><option'+(it.season==="iarnă"?" selected":"")+'>iarnă</option></select></div>'
-       :'<div class="empty0"></div>')+
+    '<div><span class="lab">Următoarea dată</span><input type="date" data-f="due" value="'+(isoOk(it.due)?it.due:"")+'" aria-label="Scadent la"></div>'+
+    (kmOk?'<div><span class="lab">La km (opțional)</span><input class="num" data-f="dueKm" inputmode="numeric" value="'+(it.dueKm>0?it.dueKm:"")+'" placeholder="–" aria-label="La km"></div>'
+       :'<div><span class="lab">Acum pe</span><select data-f="season" aria-label="Anvelope montate acum"><option'+(it.season!=="iarnă"?" selected":"")+'>vară</option><option'+(it.season==="iarnă"?" selected":"")+'>iarnă</option></select></div>')+
     '<div><span class="lab">La câte luni</span><input class="num" data-f="every" inputmode="numeric" value="'+(it.every>0?it.every:"")+'" placeholder="–" aria-label="Interval în luni"></div>'+
-    (rv?'<div><span class="lab">La câți km</span><input class="num" data-f="everyKm" inputmode="numeric" value="'+(it.everyKm>0?it.everyKm:"")+'" placeholder="–" aria-label="Interval în km"></div>':'<div class="empty0"></div>')+
-    '<div class="ract"><button type="button" class="btn" data-act="renew">'+(sz?"Schimbate":rv?"Făcută":"Reînnoit")+'</button><button type="button" class="btn cclose" data-ctog="1">Închide ▴</button><button class="x" type="button" data-cdel="1" aria-label="Șterge" title="Șterge">×</button></div>'+
+    (kmOk?'<div><span class="lab">La câți km</span><input class="num" data-f="everyKm" inputmode="numeric" value="'+(it.everyKm>0?it.everyKm:"")+'" placeholder="–" aria-label="Interval în km"></div>':'<div class="empty0"></div>')+
+    (ask?'<div class="rask"><label>La câți km ai făcut-o? <input class="num" data-ask="km" inputmode="numeric" placeholder="ex. 148000" value="'+(estKm(vehById(vehOf(it)))||"")+'"></label><button type="button" class="btn auto" data-act="renewkm">Gata</button><button type="button" class="btn" data-act="renewnokm">Fără km</button></div>'
+       :'<div class="ract"><button type="button" class="btn" data-act="renew">'+(sz?"Schimbate":it.kind==="data"?"Reînnoit":"Făcută")+'</button><button type="button" class="btn cclose" data-ctog="1">Închide ▴</button><button class="x" type="button" data-cdel="1" aria-label="Șterge" title="Șterge">×</button></div>')+
   '</div>';
+}
+function vehHeadHtml(v){
+  var ed=vEdit===v.id,ek=estKm(v),meta=[];
+  if(v.year)meta.push(String(v.year));
+  meta.push(vehTypeName(v));
+  if(mods.firma!==false)meta.push(v.pay==="firma"?"plătit din Firmă":"plătit din Casă");
+  if(!ed)return '<div class="carh vview">'+
+    '<div class="vhead"><i aria-hidden="true"></i><div class="vtitle"><b>'+esc(v.name||vehName(v))+'</b><small data-notr>'+esc(meta.map(trData).join(" · "))+'</small></div>'+
+    '<button type="button" class="btn vedit" data-vedit="1">Editează</button></div>'+
+    (v.km>0?'<div class="carkm"><span>'+(ek&&ek>v.km?'~'+money(ek)+' km acum (estimat) · ':'')+money(v.km)+' km la '+fmtD(v.at||iso(new Date()))+'</span></div>':'')+
+  '</div>';
+  return '<div class="carh vform">'+
+    '<label class="vf wide">Marcă și model <input class="vname" data-vf="name" value="'+esc(v.name)+'" placeholder="ex. Dacia Logan" aria-label="Numele vehiculului"></label>'+
+    '<label class="vf">An <input class="num" data-vf="year" inputmode="numeric" value="'+(v.year||"")+'" placeholder="ex. 2019" aria-label="Anul"></label>'+
+    '<label class="vf">Tip <select class="vkind" data-vf="kind" aria-label="Tipul vehiculului">'+VKIND.map(function(k){return '<option value="'+k[0]+'"'+(v.kind===k[0]?" selected":"")+'>'+k[1]+'</option>'}).join("")+'</select></label>'+
+    (v.kind==="alt"?'<label class="vf">Ce fel <input data-vf="kname" value="'+esc(v.kname||"")+'" placeholder="ex. rulotă, scuter, barcă" aria-label="Ce fel de vehicul"></label>':'')+
+    (mods.firma!==false?'<label class="vf">Plătit de obicei din <select class="vkind vpay" data-vf="pay" aria-label="De obicei plătit din"><option value="casa"'+(v.pay!=="firma"?" selected":"")+'>plătit din Casă</option><option value="firma"'+(v.pay==="firma"?" selected":"")+'>plătit din Firmă</option></select></label>':'')+
+    '<label class="vf">Kilometraj acum (opțional) <input class="num" data-vf="km" inputmode="numeric" placeholder="ex. 128000" value="'+(v.km>0?v.km:"")+'" aria-label="Kilometraj actual: '+esc(vehName(v))+'"></label>'+
+    '<p class="vhint">Kilometrajul e opțional. Dacă îl treci din când în când (sau la plin), aplicația estimează singură cât mergi și când vine revizia după km. Altfel îți amintește doar după dată.</p>'+
+    '<div class="vfbtn"><button type="button" class="btn auto" data-vdone="1">Gata</button></div>'+
+  '</div>';
+}
+function pickHtml(v){
+  var have=car.filter(function(it){return vehOf(it)===v.id}).map(function(it){return (it.name||"").toLowerCase()});
+  return '<div class="cpick"><div class="cph">Ce vrei să urmărești?</div><div class="cpl">'+CTPL.map(function(t,i){
+    var on=!t.blank&&have.indexOf(trData(t.t).toLowerCase())>=0||!t.blank&&have.indexOf(t.t.toLowerCase())>=0;
+    var iv=[];if(t.every)iv.push(t.every%12===0&&t.every>=12?plural(t.every/12,"an","ani"):plural(t.every,"lună","luni"));if(t.everyKm)iv.push(money(t.everyKm)+" km");
+    return '<button type="button" class="cpi'+(on?' have':'')+'" data-tpl="'+i+'"><b>'+esc(t.t)+'</b><small>'+esc(t.blank?"scrii tu ce și la cât timp":(on?"ai deja · ":"")+(t.kind==="sezon"?"vară / iarnă":iv.length?"la "+iv.join(" sau "):"după dată"))+'</small></button>';
+  }).join("")+'</div><p class="vhint">Intervalele sunt orientative. Cele corecte sunt în cartea service a vehiculului tău: le schimbi oricând pe rând.</p><button type="button" class="btn" data-pickx="1">Renunță</button></div>';
 }
 function renderCarList(){
   if(pressing){pressFlush=true;return}
@@ -3106,16 +3266,10 @@ function renderCarList(){
   var vs=vehicles(),h="";
   vs.forEach(function(v){
     var rows=carRows(v);
-    h+='<section class="panel veh" data-v="'+esc(v.id)+'">'+
-      '<div class="carh">'+
-        '<div class="vhead"><i aria-hidden="true"></i><input class="vname" data-vf="name" value="'+esc(v.name)+'" placeholder="Nume, de ex. Audi Q5" aria-label="Numele vehiculului">'+
-        '<select class="vkind" data-vf="kind" aria-label="Tipul vehiculului">'+VKIND.map(function(k){return '<option value="'+k[0]+'"'+(v.kind===k[0]?" selected":"")+'>'+k[1]+'</option>'}).join("")+'</select>'+
-        (mods.firma!==false?'<select class="vkind vpay" data-vf="pay" aria-label="De obicei plătit din"><option value="casa"'+(v.pay!=="firma"?" selected":"")+'>plătit din Casă</option><option value="firma"'+(v.pay==="firma"?" selected":"")+'>plătit din Firmă</option></select>':'')+'</div>'+
-        '<div class="carkm"><label>Kilometraj acum <input class="num" data-vf="km" inputmode="numeric" placeholder="ex. 128000" value="'+(v.km>0?v.km:"")+'" aria-label="Kilometraj actual: '+esc(vehName(v))+'"></label><span>'+(v.at?"actualizat "+fmtD(v.at):"")+'</span></div>'+
-      '</div>'+
-
+    h+='<section class="panel veh" data-v="'+esc(v.id)+'">'+vehHeadHtml(v)+
       (rows.length?rows.map(carRowHtml).join(""):'<div class="empty">Nicio scadență încă. Apasă „+ Scadență” ca să adaugi prima.</div>')+
-      '<div class="carbtns vbtns"><button class="btn auto" type="button" data-vadd="data">+ Scadență</button><button class="btn" type="button" data-vadd="revizie">+ Revizie</button>'+
+      (cPick===v.id?pickHtml(v):'')+
+      '<div class="carbtns vbtns"><button class="btn auto" type="button" data-vpick="1">+ Scadență</button>'+
       '<button class="btn vdel'+(vdelArm===v.id?" armed":"")+'" type="button" data-vdel="1">'+(vdelArm===v.id?"Sigur? Se șterg și scadențele lui":"Șterge vehiculul")+'</button></div>'+
     '</section>';
   });
@@ -3124,25 +3278,31 @@ function renderCarList(){
   $("#vehs").innerHTML=h;
   pendingCar=false;
 }
-function renewCar(it){
-  var n=Object.assign({},it),t=iso(new Date()),ev=it.every>0?it.every:12,v=vehById(vehOf(it)),km=v?v.km:null;
+function renewCar(it,kmDone){
+  var n=Object.assign({},it),t=iso(new Date()),ev=it.every>0?it.every:null,vid=vehOf(it),v=vehById(vid);
   if(it.kind==="sezon"){
     var to=it.season==="iarnă"?"vară":"iarnă";n.season=to;
     n.due=to==="iarnă"?nextDate(4,1):nextDate(11,1);
-  }else if(it.kind==="revizie"){
-    n.due=addM(t,ev);
-    if(km>0&&it.everyKm>0)n.dueKm=km+it.everyKm;
+  }else if(it.kind==="data"){
+    var base=(isoOk(it.due)&&daysTo(it.due)>=0)?it.due:t;n.due=addM(base,ev||12);
   }else{
-    var base=(isoOk(it.due)&&daysTo(it.due)>=0)?it.due:t;n.due=addM(base,ev);
+    n.due=ev?addM(t,ev):"";
+    var km=kmDone>0?kmDone:(v?estKm(v):null);
+    if(it.everyKm>0)n.dueKm=km>0?km+it.everyKm:null;
+    if(kmDone>0&&v&&!(v.km>=kmDone))putKm(vid,kmDone);
   }
-  putCar(n);
+  renewAsk=null;putCar(n);
 }
-function addCar(vid,kind){
+function addCar(vid,t){
   var ord=car.reduce(function(a,x){return Math.max(a,x.order||0)},0)+1,id="c"+rid();
-  var it={id:id,name:"",kind:kind,due:"",every:12,remind:30,order:ord,veh:vid==="veh_main"?null:vid};
-  if(kind==="revizie"){it.dueKm=null;it.everyKm=15000}
-  car.push(it);carOpen=id;render();
-  var inp=document.querySelector('.car-r[data-id="'+id+'"] input[data-f="name"]');if(inp)inp.focus();
+  t=t||{t:"",kind:"revizie",every:12,blank:1};
+  var it={id:id,name:t.blank?"":trData(t.t),kind:t.kind,due:t.kind==="sezon"?nextDate(11,1):"",every:t.every||null,remind:30,order:ord,veh:vid==="veh_main"?null:vid};
+  if(t.kind==="sezon")it.season="vară";
+  if(t.kind==="revizie"){it.dueKm=null;it.everyKm=t.everyKm||null}
+  cPick=null;car.push(it);carOpen=id;
+  if(!t.blank&&mode==="db"&&ccol)carWrite(function(){return ccol.doc(id).set(cleanCar(it))});else if(!t.blank)persistCar();
+  render();
+  var inp=document.querySelector('.car-r[data-id="'+id+'"] input[data-f="'+(t.blank?"name":"due")+'"]');if(inp)inp.focus();
 }
 $("#vehadd").addEventListener("click",function(e){var b=e.target.closest("[data-vnew]");if(b&&canWrite)addVeh(b.getAttribute("data-vnew"))});
 $("#vehs").addEventListener("change",function(e){
@@ -3156,12 +3316,15 @@ function onVehChange(e){
     pendingCar=false;
     if(vf==="km"){var a=parseAmt(t.value);if(a>0)putKm(vid,Math.round(a));return}
     var b=vehBase(vid);if(!b)return;
-    var nv=Object.assign({},b);if(vf==="name")nv.name=t.value.trim();else if(vf==="pay")nv.pay=t.value==="firma"?"firma":"casa";else nv.kind=t.value;
+    var nv=Object.assign({},b);if(vf==="name")nv.name=t.value.trim();else if(vf==="pay")nv.pay=t.value==="firma"?"firma":"casa";
+    else if(vf==="year"){var y=parseInt(t.value,10);nv.year=y>1900&&y<2100?y:null}
+    else if(vf==="kname")nv.kname=t.value.trim()||null;
+    else nv.kind=t.value;
     putVeh(nv);return;
   }
-  var row=t.closest(".car-r");if(!row)return;
+  var row=t.closest(".car-r");if(!row||t.hasAttribute("data-ask"))return;
   var it=car.find(function(x){return x.id===row.getAttribute("data-id")});if(!it)return;
-  var f=t.getAttribute("data-f"),n=Object.assign({},it),v=t.value;
+  var f=t.getAttribute("data-f"),n=Object.assign({},it),v=t.value;if(!f)return;
   if(f==="name")n.name=v.trim();
   else if(f==="due")n.due=isoOk(v)?v:"";
   else if(f==="dueKm"||f==="everyKm"){var a2=parseAmt(v);n[f]=a2>0?Math.round(a2):null}
@@ -3173,7 +3336,11 @@ $("#vehs").addEventListener("click",function(e){
   commitFocus($("#vehs"),e);
   var sec=e.target.closest(".veh");if(!sec)return;
   var vid=sec.getAttribute("data-v");
-  if(e.target.closest("[data-vadd]")){if(canWrite)addCar(vid,e.target.closest("[data-vadd]").getAttribute("data-vadd"));return}
+  if(e.target.closest("[data-vedit]")){vEdit=vid;renderCarList();var f=document.querySelector('.veh[data-v="'+vid+'"] .vname');if(f)f.focus();return}
+  if(e.target.closest("[data-vdone]")){vEdit=null;renderCarList();return}
+  if(e.target.closest("[data-vpick]")){cPick=cPick===vid?null:vid;renderCarList();var pk=document.querySelector('.veh[data-v="'+vid+'"] .cpick');if(pk)try{pk.scrollIntoView({block:"nearest"})}catch(er){}return}
+  if(e.target.closest("[data-pickx]")){cPick=null;renderCarList();return}
+  var tp=e.target.closest("[data-tpl]");if(tp){if(canWrite)addCar(vid,CTPL[+tp.getAttribute("data-tpl")]);return}
   if(e.target.closest("[data-vdel]")){
     if(!canWrite)return;
     if(vdelArm===vid){clearTimeout(vdelT);delVeh(vid);return}
@@ -3183,7 +3350,9 @@ $("#vehs").addEventListener("click",function(e){
   var it=car.find(function(x){return x.id===row.getAttribute("data-id")});if(!it)return;
   if(e.target.closest("[data-ctog]")){carOpen=carOpen===it.id?null:it.id;renderCarList();return}
   if(e.target.closest("[data-cdel]")){delCar(it.id);toastUndo("„"+(it.name||"Scadența")+"” a fost ștearsă.",function(){putCar(it)});return}
-  if(e.target.closest("[data-act=renew]")&&canWrite)renewCar(it);
+  if(e.target.closest("[data-act=renew]")&&canWrite){if(it.kind!=="sezon"&&it.kind!=="data"&&it.everyKm>0){renewAsk=it.id;renderCarList();var ai=document.querySelector('.car-r[data-id="'+it.id+'"] [data-ask=km]');if(ai){ai.focus();try{ai.select()}catch(er){}}}else renewCar(it);return}
+  if(e.target.closest("[data-act=renewkm]")&&canWrite){var ki=row.querySelector("[data-ask=km]"),kv=ki?Math.round(parseAmt(ki.value)||0):0;renewCar(it,kv>0?kv:null);return}
+  if(e.target.closest("[data-act=renewnokm]")&&canWrite){renewCar(it,null);return}
 });
 $("#vehs").addEventListener("focusout",function(){setTimeout(function(){if(pendingCar&&!inTyping("#vehs"))renderCarList()},0)});
 
@@ -3252,6 +3421,7 @@ function openXp(x){
   $("#xpDate").value=x?x.date:(ym===ymNow()?iso(new Date()):ym+"-01");
   $("#xpVeh").value=x?(x.veh||""):(vs.length===1&&$("#xpCat").value!=="ride"&&$("#xpCat").value!=="pub"?vs[0].id:"");
   $("#xpNote").value=x?(x.note||""):"";
+  $("#xpKm").value="";xpKmVis();
   $("#xpFromL").hidden=mods.firma===false;
   $("#xpFrom").value=x?xFrom(x):(vehPay($("#xpVeh").value)||xpLastFrom);
   $("#xpSave").textContent=x?"Salvează modificarea":"Salvează";
@@ -3267,8 +3437,11 @@ $("#xpCat").addEventListener("change",function(){
   var c=this.value,vs=vehicles();
   if(c==="ride"||c==="pub"){$("#xpVeh").value="";$("#xpFrom").value=xpLastFrom}
   else if(!$("#xpVeh").value&&vs.length===1){$("#xpVeh").value=vs[0].id;$("#xpFrom").value=vehPay(vs[0].id)||xpLastFrom}
+  xpKmVis();
 });
-$("#xpVeh").addEventListener("change",function(){var p=vehPay(this.value);if(p)$("#xpFrom").value=p});
+$("#xpVeh").addEventListener("change",function(){var p=vehPay(this.value);if(p)$("#xpFrom").value=p;xpKmVis()});
+/* km la bord: doar dacă e legată de un vehicul; actualizează kilometrajul (opțional) */
+function xpKmVis(){var l=$("#xpKmL");if(l)l.hidden=!$("#xpVeh").value}
 $("#xpForm").addEventListener("submit",function(e){
   e.preventDefault();
   if(!canWrite)return;
@@ -3277,7 +3450,9 @@ $("#xpForm").addEventListener("submit",function(e){
   if(!isoOk(d)){xpMsg("Alege data.");$("#xpDate").focus();return}
   var x={id:xpEdit?xpEdit.id:"x_"+rid()+rid(),date:d,amount:Math.round(a*100)/100,cur:$("#xpCur").value==="EUR"?"EUR":"RON",cat:$("#xpCat").value,note:$("#xpNote").value.trim(),veh:$("#xpVeh").value||null,from:mods.firma===false?"casa":($("#xpFrom").value==="firma"?"firma":"casa")};
   xpLastCat=x.cat;if(!vehPay(x.veh))xpLastFrom=x.from;
+  var km=Math.round(parseAmt($("#xpKm").value)||0),kv=x.veh?vehById(x.veh):null;
   closeXp();putX(x);
+  if(kv&&km>0&&!(kv.km>=km))putKm(x.veh,km);
   if(x.date.slice(0,7)!==ym)toast("Am pus cheltuiala în "+label(x.date.slice(0,7))+".");
 });
 $("#xpList").addEventListener("click",function(e){
@@ -3784,7 +3959,7 @@ async function connectDb(db,user){
   ccol=db.collection("car");
   unsubs.push(ccol.onSnapshot(function(snap){
     var arr=[],vv=[],xx=[],k0=null,at0=null;
-    snap.docs.forEach(function(d){var o=Object.assign({},d.data());o.id=d.id;if(d.id==="_km"){k0=o.km>0?o.km:null;at0=o.at||null}else if(d.id.indexOf("veh_")===0)vv.push(o);else if(d.id.indexOf("x_")===0)xx.push(o);else arr.push(o)});
+    snap.docs.forEach(function(d){var o=Object.assign({},d.data());o.id=d.id;if(d.id==="_km"){k0=o.km>0?o.km:null;at0=o.at||null;carKmPrev=o.km0>0?{km:o.km0,at:o.at0||null}:null}else if(d.id.indexOf("veh_")===0)vv.push(o);else if(d.id.indexOf("x_")===0)xx.push(o);else arr.push(o)});
     carKm=k0;carKmAt=at0;vehs=vv;xps=xx;
     if(snap.docs.length){car=arr;carEmpty=false;carLoaded=true}
     else if(!snap.metadata.fromCache){car=[];carEmpty=true;carLoaded=true;seedCar()}
