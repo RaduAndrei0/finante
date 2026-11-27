@@ -1199,7 +1199,7 @@ This typically indicates that your device does not have a healthy Internet conne
 <script>
 (function(){"use strict";
 var TARGET="web";
-var BUILD_ID="build 2026-11-27 08:45 UTC";
+var BUILD_ID="build 2026-11-27 09:00 UTC";
 var WHERE_DB="Datele tale stau în contul tău Google, într-un proiect Firebase (Google Cloud, regiunea Frankfurt). Pe telefon rămâne doar o copie temporară, ca să meargă și fără net.";
 var MONTHS=["ianuarie","februarie","martie","aprilie","mai","iunie","iulie","august","septembrie","octombrie","noiembrie","decembrie"];
 var GROUPS=["Casă","Firmă"], KINDS=["Plată","Încasare","Transfer","Memento"];
@@ -1838,6 +1838,9 @@ I18N.enP.unshift(
 );
 
 var CHANGELOG=[
+ {v:"2.6",d:"2026-11-27",t:{ro:"Decontul din extras",en:"Reimbursement from the statement"},
+  ro:["Când încarci extrasul firmei, transferul de decont se bifează singur pe rândul „Decont…”, chiar dacă firma plătește luna următoare","Rândul de decont se mută în luna în care s-a plătit, cu suma din extras, ca soldul firmei să se potrivească","Merge și din extrasul contului personal (Casă), la banii primiți de la firmă","Dacă anulezi importul, rândul revine în luna lui, nebifat"],
+  en:["When you load the business statement, the reimbursement transfer checks the “Reimbursement…” row by itself, even if the business pays the next month","The reimbursement row moves to the month it was paid in, with the amount from the statement, so the business balance matches","It also works from your personal account statement (Home), for money received from the business","If you undo the import, the row goes back to its month, unchecked"]},
  {v:"2.5",d:"2026-11-27",t:{ro:"Cheltuieli pe firmă",en:"Business expenses"},
   ro:["„+ Cheltuială pe firmă” în panoul „Firma îți datorează”: birotică, echipamente, telefon, masă, cazare și altele plătite din banii tăi","Atingi un rând din panou ca să-l modifici sau să-l ștergi; cele de transport te duc în Transport","Panoul arată și ce a fost deja decontat"],
   en:["“+ Business expense” in the “The business owes you” panel: office supplies, equipment, phone, meals, accommodation and more paid from your own money","Tap a row in the panel to edit or delete it; transport ones take you to Transport","The panel also shows what has already been reimbursed"]},
@@ -2499,8 +2502,10 @@ function buildProposals(st,group,ctx){
   var rules=ctx.rules||[],used={};
   function compat(p,r){
     var ok=p.dir<0?(r.group===group&&(r.kind==="Plată"||r.kind==="Transfer")):(r.group===group?r.kind==="Încasare":(home&&r.kind==="Transfer"));
-    return ok&&rowCur(r)===p.cur&&r.ym===p.ym;
+    /* un decont cerut într-o lună se poate plăti în lunile de după: rândul nebifat rămâne candidat */
+    return ok&&rowCur(r)===p.cur&&(r.ym===p.ym||(decRow(r)&&r.status!=="Gata"&&r.ym<p.ym));
   }
+  function decRow(r){return String(r.key||"").indexOf("dec_")===0}
   var pairs=[];
   props.forEach(function(p){
     /* rând cu aceeași cheie (comisioane) */
@@ -2522,6 +2527,8 @@ function buildProposals(st,group,ctx){
       if(p.cat==="tax"&&/tax|stat|fisc|impoz/.test(rn))hint=true;
       if(/salar/.test(pn)&&/salar/.test(rn))hint=true;
       if(/diurn/.test(pn)&&/diurn/.test(rn))hint=true;
+      /* rândul de decont („Cere decontul”): după cuvânt sau după sumă exactă la un transfer */
+      if(decRow(r)&&!/salar|diurn|gradinit/.test(pn)&&(/decont|ramburs|cheltuiel|cheltuel/.test(pn)||(amt==="exact"&&(p.cat==="tr"||p.cat==="in"))))hint=true;
       if(p.cat==="fuel"&&/carburant|benzin|combustib/.test(rn))hint=true;
       if(p.cat==="cash"&&/numerar|cash/.test(rn))hint=true;
       s+=Math.min(tok,2)*4+(hint?8:0);
@@ -2549,7 +2556,7 @@ function buildProposals(st,group,ctx){
     var cs=pairs.filter(function(x){return x.p.id===p.id}).map(function(x){return x.r});
     rows.forEach(function(r){if(compat(p,r)&&r.status!=="Gata"&&cs.indexOf(r)<0)cs.push(r)});
     var seenIds={};p.cands=[];
-    cs.forEach(function(r){if(seenIds[r.id])return;seenIds[r.id]=1;p.cands.push({id:r.id,name:r.name,amount:r.amount,status:r.status,taken:!!used[r.id]&&(!a||a.r.id!==r.id)})});
+    cs.forEach(function(r){if(seenIds[r.id])return;seenIds[r.id]=1;p.cands.push({id:r.id,name:r.name+(r.ym!==p.ym?" ("+label(r.ym)+")":""),amount:r.amount,status:r.status,taken:!!used[r.id]&&(!a||a.r.id!==r.id)})});
   });
   return {props:props,fx:fxs,dupes:dupes,infos:infos,gas:gas};
 }
@@ -3952,6 +3959,8 @@ async function applyImport(){
         if(addUp&&p.note)n.note=p.note;
         n.tx=(addUp?(row.tx||[]):[]).concat(p.tx||[]);
         if(row.key==="comtx")n.locked=true;
+        /* decontul plătit în altă lună decât a fost cerut se mută în luna plății (soldul firmei se potrivește cu extrasul) */
+        if(String(row.key||"").indexOf("dec_")===0){n.day=p.day;if(row.ym!==p.ym){prev.ym=row.ym;prev.order=row.order==null?null:row.order;n.ym=p.ym;n.order=nextOrd(p.ym)}}
         updated.push({id:row.id,prev:prev});upRows.push(n);
         if(p.cat!=="fee"&&row.key&&!row.src&&(p.manual||p.why!=="regulă"))newRules.push({p:rulePattern(p),k:row.key});
       }else{

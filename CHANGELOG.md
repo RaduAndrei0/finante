@@ -2,6 +2,20 @@
 
 Versiune mare (3.0) = schimbare importantă · mică (2.1) = funcție nouă · reparație (2.1.1) = corectură.
 
+## v2.6 · 27 noiembrie 2026 — Decontul din extras
+
+- Când încarci extrasul firmei, transferul de decont se bifează singur pe rândul „Decont…”, chiar dacă firma plătește luna următoare
+- Rândul de decont se mută în luna în care s-a plătit, cu suma din extras, ca soldul firmei să se potrivească
+- Merge și din extrasul contului personal (Casă), la banii primiți de la firmă
+- Dacă anulezi importul, rândul revine în luna lui, nebifat
+
+*Reimbursement from the statement · 27 November 2026*
+
+- When you load the business statement, the reimbursement transfer checks the “Reimbursement…” row by itself, even if the business pays the next month
+- The reimbursement row moves to the month it was paid in, with the amount from the statement, so the business balance matches
+- It also works from your personal account statement (Home), for money received from the business
+- If you undo the import, the row goes back to its month, unchecked
+
 ## v2.5 · 27 noiembrie 2026 — Cheltuieli pe firmă
 
 - „+ Cheltuială pe firmă” în panoul „Firma îți datorează”: birotică, echipamente, telefon, masă, cazare și altele plătite din banii tăi
