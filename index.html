@@ -467,6 +467,12 @@ details.fold[open]>summary{margin-bottom:10px}
 #owePanel .owetot b{font-size:18px}
 #owePanel .owesub{font-size:11.5px;color:var(--muted);text-transform:uppercase;letter-spacing:.07em;font-weight:600;margin:14px 0 2px}
 #owePanel .xd{color:var(--muted);font-size:12px;margin-right:8px}
+#owePanel .hrow[data-ow]{cursor:pointer;border-radius:8px}
+#owePanel .hrow[data-ow]:hover{background:var(--surface2)}
+#owePanel .owekind{font-size:11px;color:var(--muted);margin-left:6px}
+#owePanel .owefold{margin-top:12px;font-size:13px}
+#owePanel .owefold summary{cursor:pointer;color:var(--muted)}
+#owDel.arm{color:var(--bad);border-color:var(--bad)}
 @media (max-width:899px){
   .car-h{display:none}
   .car-r{grid-template-columns:minmax(0,1fr) minmax(0,1fr);row-gap:6px;padding:12px 0}
@@ -979,7 +985,22 @@ html[lang="en"] .impgrp[open]>summary::after{content:"Hide ▴"!important}
         <div class="hintline" id="autonote" style="margin-top:8px"></div>
       </section>
       <div class="kpis" id="kpisF"></div>
-      <section class="panel" id="owePanel" aria-labelledby="howe" hidden></section>
+      <section class="panel" id="owePanel" aria-labelledby="howe" hidden>
+        <div class="tablehead">
+          <h2 id="howe">Firma îți datorează</h2>
+          <div class="tools"><button class="btn" type="button" id="oweAdd">+ Cheltuială pe firmă</button></div>
+        </div>
+        <div class="hint" id="oweHint"></div>
+        <form class="xpform" id="oweForm" hidden novalidate>
+          <label>Sumă <input id="owAmt" class="num" inputmode="decimal" placeholder="ex. 120" autocomplete="off"></label>
+          <label>Monedă <select id="owCur"><option value="RON">lei</option><option value="EUR">€</option></select></label>
+          <label>Ce <select id="owCat"><option value="f_office">Birotică și papetărie</option><option value="f_tech">Echipamente, IT</option><option value="f_tel">Telefon, abonamente</option><option value="f_meal">Masă, protocol</option><option value="f_trip">Cazare, deplasări</option><option value="f_other">Altele pentru firmă</option></select></label>
+          <label>Data <input id="owDate" type="date"></label>
+          <label class="wide">Notă <input id="owNote" placeholder="opțional, de ex. toner, factură pe firmă" autocomplete="off"></label>
+          <div class="xpbtns"><button class="btn pri" type="submit" id="owSave">Salvează</button><button class="btn" type="button" id="owCancel">Renunță</button><button class="btn" type="button" id="owDel" hidden>Șterge</button><span class="xpmsg" id="owMsg" role="status"></span></div>
+        </form>
+        <div id="oweList"></div>
+      </section>
       <details class="panel fold" id="foldX">
         <summary><h2>Curs și EUR schimbați</h2></summary>
         <div class="hint">Pe luni: cât ai încasat în EUR, cât era necesar de schimbat, cât ai schimbat efectiv (îl treci sus, la „EUR schimbați luna asta”) și diferența lunii. Un minus la diferență înseamnă că ai schimbat mai mult decât a intrat luna asta, iar restul s-a luat din soldul reportat, deci nu e greșeală. Se face roșu doar dacă soldul total în EUR ajunge sub zero. Dacă nu treci nimic, se socotește cât era necesar.</div>
@@ -1178,7 +1199,7 @@ This typically indicates that your device does not have a healthy Internet conne
 <script>
 (function(){"use strict";
 var TARGET="web";
-var BUILD_ID="build 2026-11-27 08:30 UTC";
+var BUILD_ID="build 2026-11-27 08:45 UTC";
 var WHERE_DB="Datele tale stau în contul tău Google, într-un proiect Firebase (Google Cloud, regiunea Frankfurt). Pe telefon rămâne doar o copie temporară, ca să meargă și fără net.";
 var MONTHS=["ianuarie","februarie","martie","aprilie","mai","iunie","iulie","august","septembrie","octombrie","noiembrie","decembrie"];
 var GROUPS=["Casă","Firmă"], KINDS=["Plată","Încasare","Transfer","Memento"];
@@ -1804,14 +1825,22 @@ Object.assign(I18N.en,{"Scuter":"Scooter","Rulotă":"Caravan","Remorcă":"Traile
 Object.assign(I18N.en,{"Banii mei, pe firmă":"My money, for the business","De recuperat":"To get back","Decont cerut":"Requested","Decontat":"Reimbursed",
 "Firma îți datorează":"The business owes you","Cere decontul":"Request reimbursement","Decont cerut, nebifat încă":"Reimbursement requested, not checked yet","Mergi la rând":"Go to row",
 "Ce ai plătit din banii tăi pentru firmă (la Transport, „Plătit din: Banii mei, pe firmă”). Stă aici până îți dă firma banii înapoi.":"What you paid from your own money for the business (in Transport, “Paid from: My money, for the business”). It stays here until the business pays you back.",
-"Aștept răspunsul bazei de date. Încearcă din nou peste câteva secunde.":"Waiting for the database. Try again in a few seconds."});
+"Aștept răspunsul bazei de date. Încearcă din nou peste câteva secunde.":"Waiting for the database. Try again in a few seconds.",
+"+ Cheltuială pe firmă":"+ Business expense","Birotică și papetărie":"Office supplies","Echipamente, IT":"Equipment, IT","Telefon, abonamente":"Phone, subscriptions","Masă, protocol":"Meals, hospitality","Cazare, deplasări":"Accommodation, travel","Altele pentru firmă":"Other business costs","transport":"transport",
+"ex. 120":"e.g. 120","opțional, de ex. toner, factură pe firmă":"optional, e.g. toner, invoiced to the business","Scrie suma (de ex. 120).":"Enter the amount (e.g. 120).",
+"Ce ai plătit din banii tăi pentru firmă. Stă aici până îți dă firma banii înapoi. Atinge un rând ca să-l modifici.":"What you paid from your own money for the business. It stays here until the business pays you back. Tap a row to edit it.",
+"Nimic de recuperat. Când plătești ceva pentru firmă din banii tăi, adaugă-l aici (la transport: „Plătit din: Banii mei, pe firmă”).":"Nothing to get back. When you pay for something for the business from your own money, add it here (for transport: “Paid from: My money, for the business”)."});
 I18N.enP.unshift(
  [/^(\d+) (cheltuială|cheltuieli) · bifează rândul „(.+)” când primești banii$/,function(m,a,b,c){return a+" expense"+(b==="cheltuială"?"":"s")+" · check the “"+c+"” row when you get the money"}],
+ [/^Decontate \((\d+)\)$/,"Reimbursed ($1)"],
  [/^Creează întâi luna (.+), apoi cere decontul\.$/,"Create $1 first, then request the reimbursement."],
  [/^Decont de (.+) pus la Firmă, în (.+)\. Bifează-l când primești banii\.$/,function(m,a,b){return "Reimbursement of "+a.replace(/\blei\b/g,"RON")+" added on Business, in "+b+". Check it when you get the money."}]
 );
 
 var CHANGELOG=[
+ {v:"2.5",d:"2026-11-27",t:{ro:"Cheltuieli pe firmă",en:"Business expenses"},
+  ro:["„+ Cheltuială pe firmă” în panoul „Firma îți datorează”: birotică, echipamente, telefon, masă, cazare și altele plătite din banii tăi","Atingi un rând din panou ca să-l modifici sau să-l ștergi; cele de transport te duc în Transport","Panoul arată și ce a fost deja decontat"],
+  en:["“+ Business expense” in the “The business owes you” panel: office supplies, equipment, phone, meals, accommodation and more paid from your own money","Tap a row in the panel to edit or delete it; transport ones take you to Transport","The panel also shows what has already been reimbursed"]},
  {v:"2.4",d:"2026-11-27",t:{ro:"Firma îți datorează",en:"The business owes you"},
   ro:["Transport: la „Plătit din” poți alege „Banii mei, pe firmă”, când plătești tu ceva pentru firmă (de ex. un plin cash, cu factura pe firmă)","Firmă: panoul „Firma îți datorează” arată ce ai de recuperat și totalul","„Cere decontul” pune la Firmă un rând de Transfer cu suma; când îl bifezi, cheltuielile apar „Decontat”, banii intră la venitul Casei și ies din soldul firmei","O cheltuială importată din extras își păstrează legătura cu extrasul și după ce o modifici"],
   en:["Transport: under “Paid from” you can pick “My money, for the business”, when you pay for something the business owes you for (e.g. a cash fill-up invoiced to the business)","Business: the “The business owes you” panel shows what you have to get back and the total","“Request reimbursement” adds a Transfer row on Business with the amount; when you check it, the expenses show “Reimbursed”, the money counts as Home income and leaves the business balance","An expense imported from a statement keeps its link to the statement after you edit it"]},
@@ -3449,8 +3478,11 @@ function oweState(x){if(!x.owe)return null;var r=oweRow(x);return !r?"open":r.st
 function oweTag(x){var s=oweState(x);return s==="open"?'<i class="xtag o">De recuperat</i>':s==="asked"?'<i class="xtag oa">Decont cerut</i>':'<i class="xtag od">Decontat</i>'}
 function isDecKey(k){return String(k||"").indexOf("dec_")===0}
 function vehPay(id){var v=id?vehById(id):null;return v&&v.pay==="firma"?"firma":v&&v.pay==="casa"?"casa":null}
-function catName(c){var f=XCAT.find(function(k){return k[0]===c});return f?f[1]:"Altele"}
-function xpOfMonth(m){return xps.filter(function(x){return isoOk(x.date)&&x.date.slice(0,7)===m}).sort(function(a,b){return b.date.localeCompare(a.date)||String(b.id).localeCompare(String(a.id))})}
+var FCAT=[["f_office","Birotică și papetărie"],["f_tech","Echipamente, IT"],["f_tel","Telefon, abonamente"],["f_meal","Masă, protocol"],["f_trip","Cazare, deplasări"],["f_other","Altele pentru firmă"]];
+function catName(c){var f=XCAT.concat(FCAT).find(function(k){return k[0]===c});return f?f[1]:"Altele"}
+/* cheltuială pe firmă care nu ține de transport (stă tot în „car”, ca x_…, dar nu apare în Transport) */
+function isBizX(x){return String(x.cat||"").indexOf("f_")===0}
+function xpOfMonth(m){return xps.filter(function(x){return isoOk(x.date)&&x.date.slice(0,7)===m&&!isBizX(x)}).sort(function(a,b){return b.date.localeCompare(a.date)||String(b.id).localeCompare(String(a.id))})}
 function putX(x){
   var i=xps.findIndex(function(o){return o.id===x.id});if(i>=0)xps[i]=x;else xps.push(x);
   render();carWrite(function(){return ccol.doc(x.id).set(cleanX(x))});
@@ -3545,20 +3577,25 @@ $("#xpList").addEventListener("keydown",function(e){if((e.key==="Enter"||e.key==
 function renderOwe(){
   var el=$("#owePanel");if(!el)return;
   if(!oweOn()||(mode==="db"&&(!firstDefinitive||!carLoaded))){el.hidden=true;return}
+  el.hidden=false;
+  $("#oweAdd").disabled=!canWrite;
   var all=xps.filter(function(x){return x.owe&&isoOk(x.date)});
   var open=all.filter(function(x){return oweState(x)==="open"}).sort(function(a,b){return a.date.localeCompare(b.date)});
   var asked={};all.forEach(function(x){if(oweState(x)==="asked")asked[x.dec]=(asked[x.dec]||0)+1});
   var rows=Object.keys(asked).map(function(id){return items.find(function(i){return i.id===id})}).filter(Boolean).sort(function(a,b){return a.ym.localeCompare(b.ym)});
-  if(!open.length&&!rows.length){el.hidden=true;return}
+  var done=all.filter(function(x){return oweState(x)==="done"}).sort(function(a,b){return b.date.localeCompare(a.date)});
+  $("#oweHint").textContent=open.length||rows.length
+    ?"Ce ai plătit din banii tăi pentru firmă. Stă aici până îți dă firma banii înapoi. Atinge un rând ca să-l modifici."
+    :"Nimic de recuperat. Când plătești ceva pentru firmă din banii tăi, adaugă-l aici (la transport: „Plătit din: Banii mei, pe firmă”).";
   var vn={};vehicles().forEach(function(v){vn[v.id]=vehName(v)});
-  var tr=0,te=0;open.forEach(function(x){if(x.cur==="EUR")te+=+x.amount||0;else tr+=+x.amount||0});
-  var h='<h2 id="howe">Firma îți datorează</h2><div class="hint">Ce ai plătit din banii tăi pentru firmă (la Transport, „Plătit din: Banii mei, pe firmă”). Stă aici până îți dă firma banii înapoi.</div>';
+  function line(x){
+    var sub=[x.veh&&vn[x.veh]?vn[x.veh]:"",x.note||""].filter(Boolean).join(" · ");
+    return '<div class="hrow" data-ow="'+esc(x.id)+'" tabindex="0" role="button"><div class="t"><span class="xd">'+esc(shortD(x.date))+'</span><b>'+esc(catName(x.cat))+'</b>'+(isBizX(x)?'':'<span class="owekind">transport</span>')+(sub?'<small>'+esc(sub)+'</small>':'')+'</div><span class="a">'+money(x.amount)+(x.cur==="EUR"?" €":" lei")+'</span></div>';
+  }
+  var h='';
   if(open.length){
-    h+='<div class="owesub">De recuperat</div>';
-    h+=open.map(function(x){
-      var sub=[x.veh&&vn[x.veh]?vn[x.veh]:"",x.note||""].filter(Boolean).join(" · ");
-      return '<div class="hrow"><div class="t"><span class="xd">'+esc(shortD(x.date))+'</span><b>'+esc(catName(x.cat))+'</b>'+(sub?'<small>'+esc(sub)+'</small>':'')+'</div><span class="a">'+money(x.amount)+(x.cur==="EUR"?" €":" lei")+'</span></div>';
-    }).join("");
+    var tr=0,te=0;open.forEach(function(x){if(x.cur==="EUR")te+=+x.amount||0;else tr+=+x.amount||0});
+    h+='<div class="owesub">De recuperat</div>'+open.map(line).join("");
     h+='<div class="owetot"><span>Total <b class="num">'+(tr>0||!te?lei(r2(tr)):'')+(tr>0&&te>0?' + ':'')+(te>0?eur(r2(te)):'')+'</b></span>'+(canWrite?'<button type="button" class="btn pri" data-owereq="1">Cere decontul</button>':'')+'</div>';
   }
   if(rows.length){
@@ -3567,8 +3604,47 @@ function renderOwe(){
       return '<div class="hrow"><div class="t"><b>'+esc(label(r.ym))+'</b><small>'+plural(asked[r.id],"cheltuială","cheltuieli")+' · bifează rândul „'+esc(r.name)+'” când primești banii</small></div><span class="a">'+money(r.amount)+(curOf(r)==="EUR"?" €":" lei")+'</span>'+(r.ym!==ym?'<button type="button" class="btn" data-owego="'+esc(r.id)+'">Mergi la rând</button>':'')+'</div>';
     }).join("");
   }
-  el.innerHTML=h;el.hidden=false;
+  if(done.length){
+    var wasOpen=!!document.querySelector("#oweList .owefold[open]");
+    h+='<details class="owefold"'+(wasOpen?' open':'')+'><summary>Decontate ('+done.length+')</summary>'+done.slice(0,30).map(line).join("")+'</details>';
+  }
+  $("#oweList").innerHTML=h;
 }
+/* formularul din panou: cheltuieli pe firmă care nu țin de transport */
+var owEdit=null,owDelT=null;
+function owMsg(t){$("#owMsg").textContent=t||""}
+function openOw(x){
+  owEdit=x||null;
+  $("#owAmt").value=x?decIn(x.amount):"";
+  $("#owCur").value=x&&x.cur==="EUR"?"EUR":"RON";
+  $("#owCat").value=x?x.cat:"f_office";
+  $("#owDate").value=x?x.date:(ym===ymNow()?iso(new Date()):ym+"-01");
+  $("#owNote").value=x?(x.note||""):"";
+  $("#owSave").textContent=x?"Salvează modificarea":"Salvează";
+  var d=$("#owDel");d.hidden=!x;d.classList.remove("arm");d.textContent="Șterge";
+  owMsg("");$("#oweForm").hidden=false;
+  try{$("#oweForm").scrollIntoView({block:"nearest"})}catch(e){}
+  $("#owAmt").focus();
+}
+function closeOw(){owEdit=null;$("#oweForm").hidden=true;owMsg("")}
+$("#oweAdd").addEventListener("click",function(){if(canWrite)openOw(null)});
+$("#owCancel").addEventListener("click",closeOw);
+$("#oweForm").addEventListener("submit",function(e){
+  e.preventDefault();if(!canWrite)return;
+  var a=parseAmt($("#owAmt").value),d=$("#owDate").value;
+  if(!(a>0)){owMsg("Scrie suma (de ex. 120).");$("#owAmt").focus();return}
+  if(!isoOk(d)){owMsg("Alege data.");$("#owDate").focus();return}
+  var x={id:owEdit?owEdit.id:"x_"+rid()+rid(),date:d,amount:Math.round(a*100)/100,cur:$("#owCur").value==="EUR"?"EUR":"RON",cat:$("#owCat").value,note:$("#owNote").value.trim(),veh:null,from:"casa",owe:true};
+  if(owEdit&&owEdit.dec)x.dec=owEdit.dec;
+  if(owEdit&&owEdit.hs)x.hs=owEdit.hs;
+  closeOw();putX(x);
+});
+$("#owDel").addEventListener("click",function(){
+  if(!canWrite||!owEdit)return;
+  var b=this;
+  if(!b.classList.contains("arm")){b.classList.add("arm");b.textContent="Sigur?";clearTimeout(owDelT);owDelT=setTimeout(function(){b.classList.remove("arm");b.textContent="Șterge"},4000);return}
+  var x=owEdit;closeOw();delX(x.id);toastUndo("Cheltuiala a fost ștearsă.",function(){putX(x)});
+});
 function requestDecont(){
   if(!canWrite)return;
   if(mode==="db"&&(!firstDefinitive||!carLoaded)){toast("Aștept răspunsul bazei de date. Încearcă din nou peste câteva secunde.");return}
@@ -3591,9 +3667,17 @@ function requestDecont(){
 }
 $("#owePanel").addEventListener("click",function(e){
   if(e.target.closest("[data-owereq]")){requestDecont();return}
+  var rw=e.target.closest("[data-ow]");
+  if(rw&&canWrite){
+    var x=xps.find(function(o){return o.id===rw.getAttribute("data-ow")});if(!x)return;
+    if(isBizX(x))openOw(x);else{setTab("transport");openXp(x)}
+    return;
+  }
   var g=e.target.closest("[data-owego]");
   if(g){var r=items.find(function(i){return i.id===g.getAttribute("data-owego")});if(r){setYm(r.ym);var el=document.querySelector('#gridF .gr[data-id="'+r.id+'"]');if(el)try{el.scrollIntoView({block:"center"})}catch(er){}}}
 });
+
+$("#oweList").addEventListener("keydown",function(e){if((e.key==="Enter"||e.key===" ")&&e.target.hasAttribute&&e.target.hasAttribute("data-ow")){e.preventDefault();e.target.click()}});
 
 /* ================= Extrase: ecranul de import ================= */
 var PDF_URL="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js", PDF_WORKER="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";

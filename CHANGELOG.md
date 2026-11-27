@@ -2,6 +2,18 @@
 
 Versiune mare (3.0) = schimbare importantă · mică (2.1) = funcție nouă · reparație (2.1.1) = corectură.
 
+## v2.5 · 27 noiembrie 2026 — Cheltuieli pe firmă
+
+- „+ Cheltuială pe firmă” în panoul „Firma îți datorează”: birotică, echipamente, telefon, masă, cazare și altele plătite din banii tăi
+- Atingi un rând din panou ca să-l modifici sau să-l ștergi; cele de transport te duc în Transport
+- Panoul arată și ce a fost deja decontat
+
+*Business expenses · 27 November 2026*
+
+- “+ Business expense” in the “The business owes you” panel: office supplies, equipment, phone, meals, accommodation and more paid from your own money
+- Tap a row in the panel to edit or delete it; transport ones take you to Transport
+- The panel also shows what has already been reimbursed
+
 ## v2.4 · 27 noiembrie 2026 — Firma îți datorează
 
 - Transport: la „Plătit din” poți alege „Banii mei, pe firmă”, când plătești tu ceva pentru firmă (de ex. un plin cash, cu factura pe firmă)
