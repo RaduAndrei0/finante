@@ -2,6 +2,22 @@
 
 Versiune mare (3.0) = schimbare importantă · mică (2.1) = funcție nouă · reparație (2.1.1) = corectură.
 
+## v3.0 · 27 noiembrie 2026 — Funcții, după cum îți trebuie
+
+- Setări → Funcții: toate funcțiile aplicației pe categorii (Casă, Firmă, Transport, General), fiecare cu comutatorul ei
+- Ții evidența doar pentru Casă, doar pentru Firmă sau pentru amândouă; ce nu folosești dispare din meniu
+- Comutatoare noi: extrasele firmei, „Firma îți datorează”, vehiculele și scadențele, calendarul lunii
+- Sume în euro și la Casă: salariu, chirie sau rate în EUR, socotite în lei la cursul lunii (același curs ca la Firmă)
+- La prima intrare alegi Casă, Firmă sau amândouă; ce oprești doar se ascunde, datele rămân
+
+*Features, the way you need them · 27 November 2026*
+
+- Settings → Features: all the app's features by category (Home, Business, Transport, Overview), each with its own switch
+- Track just Home, just Business or both; what you don't use disappears from the menu
+- New switches: business statements, “The business owes you”, vehicles and due dates, the month calendar
+- Euro amounts for Home too: salary, rent or loan payments in EUR, converted to RON at the month's rate (the same rate as Business)
+- On first sign-in you pick Home, Business or both; anything you turn off is only hidden, the data stays
+
 ## v2.6 · 27 noiembrie 2026 — Decontul din extras
 
 - Când încarci extrasul firmei, transferul de decont se bifează singur pe rândul „Decont…”, chiar dacă firma plătește luna următoare
