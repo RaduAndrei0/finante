@@ -1323,7 +1323,7 @@ This typically indicates that your device does not have a healthy Internet conne
 <script>
 (function(){"use strict";
 var TARGET="web";
-var BUILD_ID="build 2026-11-27 10:45 UTC";
+var BUILD_ID="build 2026-11-27 11:00 UTC";
 var WHERE_DB="Datele tale stau în contul tău, într-un proiect Firebase (Google Cloud, regiunea Frankfurt). Pe telefon rămâne doar o copie temporară, ca să meargă și fără net.";
 var MONTHS=["ianuarie","februarie","martie","aprilie","mai","iunie","iulie","august","septembrie","octombrie","noiembrie","decembrie"];
 var GROUPS=["Casă","Firmă"], KINDS=["Plată","Încasare","Transfer","Memento"];
@@ -1974,7 +1974,7 @@ Object.assign(I18N.en,{"sau":"or","Intră cu email":"Sign in with email","Am con
 "Dacă există un cont cu adresa asta, ți-am trimis un email cu linkul de resetare. Uită-te și în Spam.":"If there's an account with this address, we've sent an email with the reset link. Check Spam too.",
 "Scrie întâi adresa de email de mai sus, apoi apasă din nou.":"First enter your email address above, then tap again.","Încă nu văd confirmarea. Apasă linkul din email, apoi încearcă din nou.":"I can't see the confirmation yet. Tap the link in the email, then try again.",
 "Am retrimis emailul de confirmare.":"The confirmation email was sent again.","Scrie adresa de email la care ai primit linkul, apoi apasă „Intră”.":"Enter the email address the link was sent to, then tap “Sign in”.",
-"Aplicația e privată deocamdată: contul ăsta nu are acces. Ieși și intră cu un cont invitat.":"The app is private for now: this account has no access. Sign out and sign in with an invited account.",
+"Contul ăsta nu are acces la date. Ieși și intră din nou; dacă tot nu merge, scrie-ne.":"This account can't reach its data. Sign out and sign in again; if it still doesn't work, let us know.",
 "Funcții":"Features","Ții evidența pentru":"You keep track of","Casă și firmă":"Home and business","Mereu":"Always","Pornit":"On","Oprit":"Off",
 "Pornește doar ce folosești. Ce oprești se ascunde, dar datele rămân și revin când îl pornești din nou.":"Turn on only what you use. Anything you turn off is hidden, but its data stays and comes back when you turn it on again.",
 "Plățile lunare ale casei, venitul și ce rămâne.":"Monthly home payments, income and what's left.",
@@ -4470,7 +4470,7 @@ function webListenErr(err){
   if(err&&err.code==="permission-denied"){
     fbBanner("Firestore nu te lasă să citești datele. În Firebase, la Firestore → Rules, verifică să fie publicate regulile primite de la mine.");
     /* aplicația e privată: un cont fără acces vede un mesaj clar și poate ieși */
-    if(!FB.signingOut){gateShow("Aplicația e privată deocamdată: contul ăsta nu are acces. Ieși și intră cu un cont invitat.",false,true);$("#gout").hidden=false}
+    if(!FB.signingOut){gateShow("Contul ăsta nu are acces la date. Ieși și intră din nou; dacă tot nu merge, scrie-ne.",false,true);$("#gout").hidden=false}
   }
 }
 
