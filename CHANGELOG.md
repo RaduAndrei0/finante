@@ -2,6 +2,18 @@
 
 Versiune mare (2.0) = schimbare importantă · mică (1.3) = funcții noi · reparație (1.3.1) = corectură.
 
+## v2.2 · 27 noiembrie 2026 — Ștergerea contului
+
+- Mai mult → Contul și datele → „Șterge contul”: șterge definitiv toate datele și contul
+- Ca să nu se întâmple din greșeală: scrii ȘTERGE și confirmi că ești tu (cu Google sau cu parola)
+- Rândurile din tabel nu mai stau toate deschise (reparat)
+
+*Deleting your account · 27 November 2026*
+
+- More → Account and data → “Delete account”: deletes all your data and the account for good
+- So it can't happen by mistake: you type DELETE and confirm it's you (with Google or your password)
+- Table rows no longer all stay open (fixed)
+
 ## v2.1 · 27 noiembrie 2026 — Intrare cu email
 
 - Pe lângă Google, intri și cu email și parolă: „Am cont” sau „Cont nou”

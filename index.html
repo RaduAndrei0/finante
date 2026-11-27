@@ -663,6 +663,20 @@ details.fold[open]>summary{margin-bottom:10px}
 .gverify p{margin:0;font-size:14px;line-height:1.45}
 .gvic{width:52px;height:52px;border-radius:16px;display:flex;align-items:center;justify-content:center;color:var(--brand-fg);background:color-mix(in srgb,var(--brand-fg) 14%,transparent)}
 .gvic svg{width:26px;height:26px}
+.delzone{margin-top:18px;border:1px solid color-mix(in srgb,var(--bad) 35%,var(--line));border-radius:12px;padding:14px;display:flex;flex-direction:column;gap:12px}
+.delhead{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.delhead>div{display:flex;flex-direction:column;gap:3px;flex:1;min-width:200px}
+.delhead small{color:var(--muted);font-size:12.5px;line-height:1.4}
+.btn.danger{color:var(--bad);border-color:color-mix(in srgb,var(--bad) 45%,var(--line))}
+.btn.danger.pri{background:var(--bad);color:#fff;border-color:var(--bad)}
+.btn.danger.pri:disabled{opacity:.4;cursor:not-allowed}
+.delbox{display:flex;flex-direction:column;gap:10px;border-top:1px solid var(--line);padding-top:12px}
+.delwarn,.delnote{margin:0;font-size:13px;color:var(--muted)}
+.delnote:empty{display:none}
+.delf{display:flex;flex-direction:column;gap:6px;font-size:13px}
+.delf input{min-height:44px;background:var(--surface);border:1.5px solid var(--line);border-radius:10px;padding:8px 12px;color:var(--fg);font:inherit;font-size:16px;max-width:320px}
+.delword{color:var(--bad);letter-spacing:.06em}
+.delbtns{display:flex;gap:8px;flex-wrap:wrap}
 .prules{list-style:none;margin:-2px 0 2px;padding:10px 12px;border-radius:12px;background:var(--surface2);display:grid;gap:5px;font-size:12.5px;color:var(--muted)}
 .prules li{display:flex;align-items:center;gap:8px;transition:color .15s}
 .prules li::before{content:"";flex:none;width:16px;height:16px;border-radius:50%;border:1.5px solid var(--line);box-sizing:border-box;transition:all .15s}
@@ -1285,6 +1299,18 @@ html[lang="en"] .impgrp[open]>summary::after{content:"Hide ▴"!important}
         </div>
         <div class="impmsg" id="dataMsg" role="status"></div>
         <p class="note">Copia are toate rândurile, cursurile și scadențele mașinii. Păstrează-o într-un loc sigur: e doar a ta și nu o pune pe GitHub.</p>
+        <div class="delzone" id="delZone">
+          <div class="delhead"><div><b>Șterge contul</b><small>Se șterg definitiv toate datele tale din aplicație (luni, setări, vehicule, cheltuieli) și contul. Nu se mai pot recupera.</small></div>
+            <button class="btn danger" id="delStart" type="button">Șterge contul…</button></div>
+          <div class="delbox" id="delBox" hidden>
+            <p class="delwarn">Dacă vrei să le păstrezi, apasă întâi <b>Descarcă o copie (JSON)</b> de mai sus.</p>
+            <label class="delf"><span>Scrie <b class="delword" id="delWordShow" data-notr>ȘTERGE</b> ca să confirmi</span><input id="delWord" autocomplete="off" autocapitalize="characters" spellcheck="false"></label>
+            <label class="delf" id="delPwL" hidden><span>Parola contului</span><input id="delPw" type="password" autocomplete="current-password"></label>
+            <p class="delnote" id="delNote"></p>
+            <div class="delbtns"><button class="btn danger pri" id="delGo" type="button" disabled>Șterge definitiv</button><button class="btn" id="delCancel" type="button">Renunță</button></div>
+            <div class="impmsg" id="delMsg" role="status"></div>
+          </div>
+        </div>
         <div class="inst" id="instBox" hidden>
           <div><b>Pune aplicația pe ecranul telefonului</b><small id="instNote">Se deschide ca o aplicație, fără bara browserului.</small></div>
           <button class="btn pri" id="instBtn" type="button" hidden>Instalează</button>
@@ -1324,7 +1350,7 @@ This typically indicates that your device does not have a healthy Internet conne
 <script>
 (function(){"use strict";
 var TARGET="web";
-var BUILD_ID="build 2026-11-27 13:15 UTC";
+var BUILD_ID="build 2026-11-27 13:35 UTC";
 var WHERE_DB="Datele tale stau în contul tău, într-un proiect Firebase (Google Cloud, regiunea Frankfurt). Pe telefon rămâne doar o copie temporară, ca să meargă și fără net.";
 var MONTHS=["ianuarie","februarie","martie","aprilie","mai","iunie","iulie","august","septembrie","octombrie","noiembrie","decembrie"];
 var GROUPS=["Casă","Firmă"], KINDS=["Plată","Încasare","Transfer","Memento"];
@@ -1955,7 +1981,18 @@ Object.assign(I18N.en,{"Scuter":"Scooter","Rulotă":"Caravan","Remorcă":"Traile
 /* ================= Versiuni și „Ce e nou” =================
    Versiune mare (2.0) = schimbare importantă; mică (1.3) = funcții noi; reparație (1.3.1) = corectură.
    Cea mai nouă versiune e prima din listă. */
-Object.assign(I18N.en,{"sau":"or","Intră cu email":"Sign in with email","Am cont":"I have an account","Cont nou":"New account","Parolă":"Password","nume@exemplu.ro":"name@example.com",
+Object.assign(I18N.en,{"Șterge contul":"Delete account","Șterge contul…":"Delete account…","Șterge definitiv":"Delete permanently","Parola contului":"Account password","ca să confirmi":"to confirm","Scrie":"Type",
+"Se șterg definitiv toate datele tale din aplicație (luni, setări, vehicule, cheltuieli) și contul. Nu se mai pot recupera.":"All your data in the app (months, settings, vehicles, expenses) and your account are deleted for good. They can't be recovered.",
+"Dacă vrei să le păstrezi, apasă întâi":"If you want to keep them, first tap","de mai sus.":"above.",
+"La final îți cer să confirmi contul Google într-o fereastră, ca să știm sigur că ești tu.":"At the end you'll confirm your Google account in a window, so we know it's really you.",
+"Pune parola contului, ca să știm sigur că ești tu.":"Enter your account password, so we know it's really you.",
+"Dacă nu te-ai logat în ultimele minute, îți cer să ieși și să intri din nou, ca să știm sigur că ești tu.":"If you haven't signed in during the last few minutes, you'll be asked to sign out and in again, so we know it's really you.",
+"Se confirmă că ești tu…":"Confirming it's you…","Se șterg datele…":"Deleting the data…","Se șterge contul…":"Deleting the account…",
+"Ca să ștergi contul, ieși și intră din nou, apoi revino aici în câteva minute.":"To delete the account, sign out and in again, then come back here within a few minutes.","Parola nu e corectă.":"The password isn't right.",
+"Ai închis fereastra de confirmare. Nimic nu s-a șters.":"You closed the confirmation window. Nothing was deleted.","Ai ales alt cont Google decât cel cu care ești intrat. Nimic nu s-a șters.":"You picked a different Google account from the one you're signed in with. Nothing was deleted.",
+"Nu s-a putut termina ștergerea. Încearcă din nou; dacă datele au fost deja șterse, apasă din nou ca să se șteargă și contul.":"The deletion couldn't finish. Try again; if the data was already deleted, tap again to delete the account too.",
+"Contul și toate datele tale au fost șterse.":"Your account and all your data have been deleted.",
+"sau":"or","Intră cu email":"Sign in with email","Am cont":"I have an account","Cont nou":"New account","Parolă":"Password","nume@exemplu.ro":"name@example.com",
 "După ce îți faci contul, îți trimit un email ca să confirmi adresa.":"Once your account is made, we'll email you to confirm the address.",
 "Scrie parola încă o dată":"Type the password again","Cel puțin 10 caractere":"At least 10 characters","O literă mică":"A lowercase letter","O literă mare":"An uppercase letter","O cifră":"A number","Un caracter special (! @ # ? - _ …)":"A special character (! @ # ? - _ …)","Parolele se potrivesc":"The passwords match",
 "Parolă nouă pentru":"New password for","Parolă nouă":"New password","Salvează parola":"Save password","Renunță":"Cancel",
@@ -2013,6 +2050,9 @@ I18N.enP.unshift(
 );
 
 var CHANGELOG=[
+ {v:"2.2",d:"2026-11-27",t:{ro:"Ștergerea contului",en:"Deleting your account"},
+  ro:["Mai mult → Contul și datele → „Șterge contul”: șterge definitiv toate datele și contul", "Ca să nu se întâmple din greșeală: scrii ȘTERGE și confirmi că ești tu (cu Google sau cu parola)", "Rândurile din tabel nu mai stau toate deschise (reparat)"],
+  en:["More → Account and data → “Delete account”: deletes all your data and the account for good", "So it can't happen by mistake: you type DELETE and confirm it's you (with Google or your password)", "Table rows no longer all stay open (fixed)"]},
  {v:"2.1",d:"2026-11-27",t:{ro:"Intrare cu email",en:"Email sign-in"},
   ro:["Pe lângă Google, intri și cu email și parolă: „Am cont” sau „Cont nou”", "Cont nou: parola se scrie de două ori, iar regulile se bifează pe loc (litere mici și mari, o cifră, un caracter special, minim 10)", "Adresa se confirmă printr-un email, înainte de prima intrare", "„Am uitat parola”: linkul din email deschide o pagină a aplicației, unde pui parola nouă de două ori", "Sau intri fără parolă, cu un link trimis pe email"],
   en:["Besides Google, you can sign in with email and password: “I have an account” or “New account”", "New account: you type the password twice, and the rules tick off as you go (lowercase and uppercase letters, a number, a special character, at least 10)", "The address is confirmed by email before the first sign-in", "“Forgot password”: the email link opens a page in the app where you type the new password twice", "Or sign in without a password, with a link sent by email"]},
@@ -4565,6 +4605,7 @@ function signInErr(e){
   try{pp=FB.fs.enablePersistence({synchronizeTabs:true}).catch(function(){})}catch(e){pp=Promise.resolve()}
   var persist=Promise.race([pp,new Promise(function(r){setTimeout(r,4000)})]);
   try{FB.auth.languageCode=LANG}catch(e){}
+  try{if(sessionStorage.getItem("fin_deleted")){sessionStorage.removeItem("fin_deleted");setTimeout(function(){gMsg("Contul și toate datele tale au fost șterse.")},300)}}catch(e){}
   FB.auth.onAuthStateChanged(function(u){
     if(GM.reset)return;
     if(u&&needsVerify(u)){showVerify(u);return}
@@ -4717,6 +4758,67 @@ $("#signOut").addEventListener("click",function(){
     .catch(function(){})
     .then(function(){location.reload()});
 });
+
+
+/* ---------- Șterge contul: datele (items, meta, car), apoi contul ---------- */
+(function(){
+  if(TARGET!=="web")return;
+  var WORD=function(){return L("ȘTERGE","DELETE")};
+  function provs(){var u=FB.auth&&FB.auth.currentUser;return u?(u.providerData||[]).map(function(p){return p&&p.providerId}):[]}
+  function delMsg(t,err){var m=$("#delMsg");m.textContent=t||"";m.className="impmsg"+(err?" err":"")}
+  function refresh(){
+    var ok=$("#delWord").value.trim().toUpperCase()===WORD().toUpperCase();
+    var pw=!$("#delPwL").hidden;
+    $("#delGo").disabled=!ok||(pw&&!$("#delPw").value)||!canWrite;
+  }
+  $("#delStart").addEventListener("click",function(){
+    if(!FB.auth||!FB.auth.currentUser)return;
+    var pr=provs();
+    $("#delWordShow").textContent=WORD();
+    $("#delPwL").hidden=!(pr.indexOf("password")>=0&&pr.indexOf("google.com")<0);
+    $("#delNote").textContent=pr.indexOf("google.com")>=0?"La final îți cer să confirmi contul Google într-o fereastră, ca să știm sigur că ești tu.":pr.indexOf("password")>=0?"Pune parola contului, ca să știm sigur că ești tu.":"Dacă nu te-ai logat în ultimele minute, îți cer să ieși și să intri din nou, ca să știm sigur că ești tu.";
+    $("#delBox").hidden=false;$("#delStart").hidden=true;$("#delWord").value="";$("#delPw").value="";delMsg("");refresh();
+    try{$("#delWord").focus()}catch(e){}
+  });
+  $("#delCancel").addEventListener("click",function(){$("#delBox").hidden=true;$("#delStart").hidden=false;delMsg("")});
+  $("#delWord").addEventListener("input",refresh);$("#delPw").addEventListener("input",refresh);
+  function reauth(u){
+    var pr=provs();
+    if(pr.indexOf("google.com")>=0){var gp=new firebase.auth.GoogleAuthProvider();gp.setCustomParameters({prompt:"select_account",login_hint:u.email||""});return u.reauthenticateWithPopup(gp)}
+    if(pr.indexOf("password")>=0)return u.reauthenticateWithCredential(firebase.auth.EmailAuthProvider.credential(u.email,$("#delPw").value));
+    var t=Date.parse(u.metadata&&u.metadata.lastSignInTime||"")||0;
+    if(Date.now()-t<4*60*1000)return Promise.resolve();
+    return Promise.reject({code:"auth/requires-recent-login"});
+  }
+  function wipe(){
+    var base=FB.fs.collection("users").doc(FB.uid);
+    return Promise.all(["items","meta","car"].map(function(c){return base.collection(c).get()})).then(function(snaps){
+      var refs=[];snaps.forEach(function(sn){sn.forEach(function(d){refs.push(d.ref)})});
+      var chain=Promise.resolve();
+      for(var i=0;i<refs.length;i+=400)(function(part){chain=chain.then(function(){var b=FB.fs.batch();part.forEach(function(r){b.delete(r)});return b.commit()})})(refs.slice(i,i+400));
+      return chain.then(function(){return refs.length});
+    });
+  }
+  $("#delGo").addEventListener("click",function(){
+    var u=FB.auth&&FB.auth.currentUser;if(!u||this.disabled)return;
+    var go=this;go.disabled=true;$("#delCancel").disabled=true;delMsg("Se confirmă că ești tu…");
+    reauth(u).then(function(){
+      delMsg("Se șterg datele…");FB.signingOut=true;stopListening();
+      return wipe();
+    }).then(function(){
+      delMsg("Se șterge contul…");
+      return FB.auth.currentUser.delete();
+    }).then(function(){
+      try{sessionStorage.setItem("fin_deleted","1")}catch(e){}
+      try{["fin_linkEmail"].forEach(function(k){localStorage.removeItem(k)})}catch(e){}
+      return Promise.resolve().then(function(){return FB.fs.terminate()}).then(function(){return FB.fs.clearPersistence()}).catch(function(){});
+    }).then(function(){location.replace(location.origin+location.pathname)},function(e){
+      FB.signingOut=false;go.disabled=false;$("#delCancel").disabled=false;
+      var c=(e&&e.code)||"";
+      delMsg(c==="auth/requires-recent-login"?"Ca să ștergi contul, ieși și intră din nou, apoi revino aici în câteva minute.":(c==="auth/wrong-password"||c==="auth/invalid-credential"||c==="auth/invalid-login-credentials")?"Parola nu e corectă.":(c==="auth/popup-closed-by-user"||c==="auth/cancelled-popup-request")?"Ai închis fereastra de confirmare. Nimic nu s-a șters.":c==="auth/user-mismatch"?"Ai ales alt cont Google decât cel cu care ești intrat. Nimic nu s-a șters.":"Nu s-a putut termina ștergerea. Încearcă din nou; dacă datele au fost deja șterse, apasă din nou ca să se șteargă și contul.",true);
+    });
+  });
+})();
 
 /* ---------- cont nou și gol: întâi alegi, abia apoi se creează ceva ---------- */
 function renderWelcome(){
