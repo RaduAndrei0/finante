@@ -2,6 +2,18 @@
 
 Versiune mare (2.0) = schimbare importantă · mică (1.3) = funcții noi · reparație (1.3.1) = corectură.
 
+## v2.3 · 27 noiembrie 2026 — Memento pe telefon
+
+- Setări → Funcții → General → „Memento zilnic pe telefon”: o notificare dimineața cu ce ai de plătit azi și mâine și ce a rămas în urmă
+- Merge pentru orice cont, fără aplicații în plus; se pornește pe fiecare telefon sau calculator (pe iPhone, cu aplicația pusă pe ecranul principal)
+- Vine doar când ai ceva de făcut și ține cont de funcțiile pornite și de limbă
+
+*Reminder on your phone · 27 November 2026*
+
+- Settings → Features → Overview → “Daily reminder on your phone”: a morning notification with what you have to pay today and tomorrow and what's overdue
+- Works for any account, with no extra apps; turn it on for each phone or computer (on iPhone, with the app added to the Home Screen)
+- It only comes when you have something to do and follows your features and language
+
 ## v2.2 · 27 noiembrie 2026 — Contul și datele tale
 
 - Mai mult → Contul și datele → „Șterge contul”: șterge definitiv toate datele și contul

@@ -665,6 +665,10 @@ details.fold[open]>summary{margin-bottom:10px}
 .gvic svg{width:26px;height:26px}
 .glegal{font-size:12.5px;color:var(--muted);text-decoration:underline;text-underline-offset:2px;margin-top:-2px}
 .ghint a{color:var(--brand-fg)}
+.pushst{margin:0;font-size:12.5px;color:var(--muted);line-height:1.4}
+.pushst:empty{display:none}
+.pushst.err{color:var(--bad)}
+.pushst.ok{color:var(--ok)}
 .delzone{margin-top:18px;border:1px solid color-mix(in srgb,var(--bad) 35%,var(--line));border-radius:12px;padding:14px;display:flex;flex-direction:column;gap:12px}
 .delhead{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
 .delhead>div{display:flex;flex-direction:column;gap:3px;flex:1;min-width:200px}
@@ -1355,7 +1359,7 @@ This typically indicates that your device does not have a healthy Internet conne
 <script>
 (function(){"use strict";
 var TARGET="web";
-var BUILD_ID="build 2026-11-27 13:55 UTC";
+var BUILD_ID="build 2026-11-27 14:30 UTC";
 var WHERE_DB="Datele tale stau în contul tău, într-un proiect Firebase (Google Cloud, regiunea Frankfurt). Pe telefon rămâne doar o copie temporară, ca să meargă și fără net.";
 var MONTHS=["ianuarie","februarie","martie","aprilie","mai","iunie","iulie","august","septembrie","octombrie","noiembrie","decembrie"];
 var GROUPS=["Casă","Firmă"], KINDS=["Plată","Încasare","Transfer","Memento"];
@@ -1986,7 +1990,9 @@ Object.assign(I18N.en,{"Scuter":"Scooter","Rulotă":"Caravan","Remorcă":"Traile
 /* ================= Versiuni și „Ce e nou” =================
    Versiune mare (2.0) = schimbare importantă; mică (1.3) = funcții noi; reparație (1.3.1) = corectură.
    Cea mai nouă versiune e prima din listă. */
-Object.assign(I18N.en,{"Termeni și confidențialitate":"Terms and privacy","Creându-ți contul, ești de acord cu":"By creating your account, you agree to the","termenii și confidențialitatea":"terms and privacy",
+Object.assign(I18N.en,{"Memento zilnic pe telefon":"Daily reminder on your phone",
+"O notificare dimineața: ce ai de plătit azi și mâine și ce a rămas în urmă. Se pornește pe fiecare telefon sau calculator.":"A morning notification: what you have to pay today and tomorrow and what's overdue. Turn it on for each phone or computer.",
+"Termeni și confidențialitate":"Terms and privacy","Creându-ți contul, ești de acord cu":"By creating your account, you agree to the","termenii și confidențialitatea":"terms and privacy",
 " · ce date păstrăm, unde stau și cum le ștergi.":" · what data we keep, where it's stored and how to delete it.","· ce date păstrăm, unde stau și cum le ștergi.":"· what data we keep, where it's stored and how to delete it.",
 "Șterge contul":"Delete account","Șterge contul…":"Delete account…","Șterge definitiv":"Delete permanently","Parola contului":"Account password","ca să confirmi":"to confirm","Scrie":"Type",
 "Se șterg definitiv toate datele tale din aplicație (luni, setări, vehicule, cheltuieli) și contul. Nu se mai pot recupera.":"All your data in the app (months, settings, vehicles, expenses) and your account are deleted for good. They can't be recovered.",
@@ -2057,6 +2063,9 @@ I18N.enP.unshift(
 );
 
 var CHANGELOG=[
+ {v:"2.3",d:"2026-11-27",t:{ro:"Memento pe telefon",en:"Reminder on your phone"},
+  ro:["Setări → Funcții → General → „Memento zilnic pe telefon”: o notificare dimineața cu ce ai de plătit azi și mâine și ce a rămas în urmă", "Merge pentru orice cont, fără aplicații în plus; se pornește pe fiecare telefon sau calculator (pe iPhone, cu aplicația pusă pe ecranul principal)", "Vine doar când ai ceva de făcut și ține cont de funcțiile pornite și de limbă"],
+  en:["Settings → Features → Overview → “Daily reminder on your phone”: a morning notification with what you have to pay today and tomorrow and what's overdue", "Works for any account, with no extra apps; turn it on for each phone or computer (on iPhone, with the app added to the Home Screen)", "It only comes when you have something to do and follows your features and language"]},
  {v:"2.2",d:"2026-11-27",t:{ro:"Contul și datele tale",en:"Your account and data"},
   ro:["Mai mult → Contul și datele → „Șterge contul”: șterge definitiv toate datele și contul", "Ca să nu se întâmple din greșeală: scrii ȘTERGE și confirmi că ești tu (cu Google sau cu parola)", "Pagina „Termeni și confidențialitate”: ce date păstrăm, unde stau, cine le vede și cum le ștergi; link pe ecranul de intrare și în Contul și datele", "Rândurile din tabel nu mai stau toate deschise (reparat)"],
   en:["More → Account and data → “Delete account”: deletes all your data and the account for good", "So it can't happen by mistake: you type DELETE and confirm it's you (with Google or your password)", "The “Terms and privacy” page: what data we keep, where it's stored, who sees it and how to delete it; linked from the sign-in screen and Account and data", "Table rows no longer all stay open (fixed)"]},
@@ -3216,12 +3225,14 @@ function renderSettings(){
     });
     var nt=card.querySelector(".fnote");if(nt){nt.hidden=live;nt.textContent=c.offNote||""}
   });
+  pushStatus();
   var fm=$("#fuelMin");if(fm){if(document.activeElement!==fm)fm.value=mods.fuelMin;fm.disabled=!canWrite}
   var fl=$("#fuelMinL");if(fl)fl.hidden=!(impOn("Casă")||impOn("Firmă"));
   var fc=$("#featCount");fc.setAttribute("data-notr","");fc.innerHTML=L("Ai pornite ","You have ")+"<b>"+on+L(" din "," of ")+all+"</b>"+L(" funcții."," features on.");
   $("#seurL").hidden=fxRon();
   $("#startPanel").hidden=!firmaOn();
 }
+var PUSH={sub:null,ready:false,msg:"",err:false};   /* memento pe telefon: abonamentul acestui dispozitiv */
 /* lista de funcții: o categorie = un card; fiecare funcție are comutatorul ei */
 var FI={
  casa:'<svg viewBox="0 0 24 24"><path d="M4 11.5L12 5l8 6.5V19.5H4z"/><path d="M10 19.5v-5h4v5"/></svg>',
@@ -3232,6 +3243,7 @@ var FI={
  eur:'<svg viewBox="0 0 24 24"><path d="M17.5 6.5a6.5 6.5 0 1 0 0 11"/><path d="M4.5 10.5h9M4.5 13.5h9"/></svg>',
  owe:'<svg viewBox="0 0 24 24"><path d="M4 14.5h3.5l3.5 2h4.5a1.5 1.5 0 0 0 0-3H12"/><path d="M7.5 14.5V20H4M11.5 13.5h6l2.5-2"/><circle cx="15" cy="6.5" r="2.8"/></svg>',
  wrench:'<svg viewBox="0 0 24 24"><path d="M14.5 4.5a4.5 4.5 0 0 0-4.2 6.1L4.5 16.4 7.6 19.5l5.8-5.8a4.5 4.5 0 0 0 6.1-4.2l-2.7 2.7-2.9-.6-.6-2.9z"/></svg>',
+ bell:'<svg viewBox="0 0 24 24"><path d="M6 16.5V11a6 6 0 0 1 12 0v5.5l1.5 2h-15z"/><path d="M10 20.5a2 2 0 0 0 4 0"/></svg>',
  cal:'<svg viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="15" rx="2"/><path d="M4 9.5h16M8.5 3v4M15.5 3v4"/><circle class="f" cx="9" cy="14" r="1.2"/><circle class="f" cx="15" cy="14" r="1.2"/></svg>'
 };
 var FEATS=[
@@ -3246,7 +3258,9 @@ var FEATS=[
   subs:[{k:"veh",t:"Vehicule și scadențe",d:"RCA, ITP, rovinietă și revizii după dată sau km, cu avertizare din timp.",ic:"wrench",get:function(){return mods.veh!==false},set:function(v){return {veh:v}}}],
   extra:'<label class="setsel" id="fuelMinL">La benzinărie, plinul pornește de la <input id="fuelMin" class="num" inputmode="numeric" style="width:84px;text-align:right"> lei <small style="flex-basis:100%">Din extras nu se vede ce ai luat: sub suma asta, plata e trecută la mărunțișuri (țigări, cafea).</small></label>'},
  {g:"general",t:"General",d:"Prima pagină: ce urmează, ce e întârziat și cât ai plătit.",ic:"gen",c:"var(--brand-fg)",always:true,on:function(){return true},
-  subs:[{k:"cal",t:"Calendarul lunii",d:"Zilele cu plăți și încasări, dintr-o privire.",ic:"cal",get:function(){return mods.cal!==false},set:function(v){return {cal:v}}}]}
+  subs:[{k:"cal",t:"Calendarul lunii",d:"Zilele cu plăți și încasări, dintr-o privire.",ic:"cal",get:function(){return mods.cal!==false},set:function(v){return {cal:v}}},
+        {k:"push",t:"Memento zilnic pe telefon",d:"O notificare dimineața: ce ai de plătit azi și mâine și ce a rămas în urmă. Se pornește pe fiecare telefon sau calculator.",ic:"bell",get:function(){return !!PUSH.sub},set:null}],
+  extra:'<p class="pushst" id="pushSt" role="status"></p>'}
 ];
 function buildFeats(){
   $("#featList").innerHTML=FEATS.map(function(c){
@@ -3261,6 +3275,7 @@ function buildFeats(){
 $("#featList").addEventListener("change",function(e){
   var k=e.target.getAttribute&&e.target.getAttribute("data-feat");if(!k||!canWrite)return;
   if(k==="transport"){putSettings({transport:e.target.checked});return}
+  if(k==="push"){pushToggle(e.target.checked);return}
   var f=null;FEATS.forEach(function(c){c.subs.forEach(function(x){if(x.k===k)f=x})});
   if(f)putSettings(f.set(e.target.checked));
 });
@@ -4580,6 +4595,7 @@ function gateHide(){$("#gate").hidden=true}
 function startSession(u){
   if(FB.uid===u.uid)return;
   FB.uid=u.uid;FB.email=u.email||"";
+  setTimeout(pushInit,1500);
   gateHide();renderAcct();
   welcomed=false;
   connectDb(fbDb(u.uid),null).catch(function(e){saveState("Conexiune întreruptă ("+((e&&e.code)||"eroare")+")")});
@@ -4758,14 +4774,77 @@ $("#signOut").addEventListener("click",function(){
     return;
   }
   b.disabled=true;b.textContent="Se iese…";FB.signingOut=true;
+  var ps=PUSH.sub;
   stopListening();
-  Promise.resolve().then(function(){return FB.auth.signOut()})
+  Promise.race([pushForget(ps).then(function(){return ps&&ps.unsubscribe()}),new Promise(function(r){setTimeout(r,2500)})]).catch(function(){}).then(function(){PUSH.sub=null;return FB.auth.signOut()})
     .then(function(){return FB.fs.terminate()})
     .then(function(){return FB.fs.clearPersistence()})
     .catch(function(){})
     .then(function(){location.reload()});
 });
 
+
+
+/* ---------- Memento zilnic pe telefon (Web Push) ----------
+   Fiecare telefon/calculator se abonează separat; abonamentul stă în users/{uid}/meta/push.
+   Jobul zilnic (repo finante-memento) citește abonamentele și trimite notificarea. */
+var VAPID_PUB="BLt0CG5K9x1sUQQ-DwETgOmc5wAUZUr__4CjJ1OViBHC6EO4g6K9mXzePYntj6s3XX0V9NBMZDmPP-tndmzhrqc";
+function pushSupported(){return "serviceWorker" in navigator&&"PushManager" in window&&"Notification" in window}
+function isIOS(){return /iP(hone|ad|od)/.test(navigator.userAgent)||(navigator.platform==="MacIntel"&&navigator.maxTouchPoints>1)}
+function isStandalone(){try{return window.matchMedia("(display-mode: standalone)").matches||navigator.standalone===true}catch(e){return false}}
+function b64u(s){var p="=".repeat((4-s.length%4)%4),b=atob((s+p).replace(/-/g,"+").replace(/_/g,"/")),a=new Uint8Array(b.length);for(var i=0;i<b.length;i++)a[i]=b.charCodeAt(i);return a}
+function pushKey(ep){var h=0;for(var i=0;i<ep.length;i++){h=(h*31+ep.charCodeAt(i))|0}return "d"+(h>>>0).toString(36)}
+function pushDoc(){return FB.fs.collection("users").doc(FB.uid).collection("meta").doc("push")}
+function pushSave(sub){
+  var j=sub.toJSON(),o={};o[pushKey(j.endpoint)]={endpoint:j.endpoint,keys:j.keys,ua:String(navigator.userAgent||"").slice(0,140),at:new Date().toISOString(),lang:LANG};
+  return pushDoc().set({devs:o},{merge:true});
+}
+function pushForget(sub){
+  if(!sub||mode!=="db"||!FB.uid)return Promise.resolve();
+  var o={};o[pushKey(sub.endpoint)]=firebase.firestore.FieldValue.delete();
+  return pushDoc().set({devs:o},{merge:true}).catch(function(){});
+}
+function pushStatus(){
+  var el=$("#pushSt");if(!el)return;
+  var t="",c="";
+  if(PUSH.msg){t=PUSH.msg;c=PUSH.err?"err":"ok"}
+  else if(!pushSupported())t=isIOS()&&!isStandalone()?L("Pe iPhone merge după ce pui aplicația pe ecranul principal (Partajează → Adaugă pe ecranul principal) și o deschizi de acolo.","On iPhone it works once you add the app to the Home Screen (Share → Add to Home Screen) and open it from there."):L("Browserul ăsta nu poate primi notificări.","This browser can't receive notifications.");
+  else if(window.Notification&&Notification.permission==="denied"){t=L("Notificările sunt blocate pentru site în browser. Le deblochezi din setările site-ului (lacătul de lângă adresă).","Notifications are blocked for this site in the browser. Unblock them in the site settings (the padlock next to the address).");c="err"}
+  else if(PUSH.sub){t=L("Pornit pe acest dispozitiv. Vine în fiecare dimineață, doar când ai ceva de făcut.","On for this device. It comes every morning, only when you have something to do.");c="ok"}
+  el.textContent=t;el.className="pushst"+(c?" "+c:"");
+  var i=document.querySelector('[data-feat="push"]');if(i){i.checked=!!PUSH.sub;if(!pushSupported())i.disabled=true}
+}
+function pushInit(){
+  if(!pushSupported()||!navigator.serviceWorker){PUSH.ready=true;return}
+  navigator.serviceWorker.ready.then(function(r){return r.pushManager.getSubscription()}).then(function(s){
+    PUSH.sub=s;PUSH.ready=true;
+    if(s&&mode==="db"&&FB.uid&&canWrite)pushSave(s).catch(function(){});   /* ține abonamentul la zi pentru contul cu care ești intrat */
+    pushStatus();
+  }).catch(function(){PUSH.ready=true});
+}
+function pushToggle(on){
+  PUSH.msg="";PUSH.err=false;
+  if(mode!=="db"||!canWrite){pushStatus();return}
+  if(!pushSupported()){pushStatus();return}
+  var fail=function(t){PUSH.msg=t;PUSH.err=true;pushStatus()};
+  if(!on){
+    var s=PUSH.sub;PUSH.sub=null;pushStatus();
+    pushForget(s).then(function(){return s&&s.unsubscribe()}).catch(function(){});
+    return;
+  }
+  Notification.requestPermission().then(function(p){
+    if(p!=="granted"){fail(L("Fără permisiunea de notificări nu pot trimite memento-ul. Apasă din nou și alege „Permite”.","Without notification permission I can't send the reminder. Tap again and choose “Allow”."));return}
+    return navigator.serviceWorker.ready.then(function(r){
+      return r.pushManager.subscribe({userVisibleOnly:true,applicationServerKey:b64u(VAPID_PUB)}).then(function(sub){
+        PUSH.sub=sub;
+        return pushSave(sub).then(function(){
+          pushStatus();
+          return r.showNotification(L("Memento pornit","Reminder on"),{body:L("De mâine dimineață îți scriu aici ce ai de plătit.","From tomorrow morning I'll tell you here what you have to pay."),icon:"icon-192.png",badge:"icon-192.png",tag:"memento-on"});
+        });
+      });
+    });
+  }).catch(function(e){fail(L("Nu am putut porni memento-ul pe acest dispozitiv. Încearcă din nou.","Couldn't turn the reminder on for this device. Try again."))});
+}
 
 /* ---------- Șterge contul: datele (items, meta, car), apoi contul ---------- */
 (function(){
