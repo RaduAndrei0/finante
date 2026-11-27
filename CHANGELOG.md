@@ -5,7 +5,7 @@ Versiune mare (2.0) = schimbare importantă · mică (1.3) = funcții noi · rep
 ## v2.1 · 27 noiembrie 2026 — Intrare cu email
 
 - Pe lângă Google, intri și cu email și parolă: „Am cont” sau „Cont nou”
-- Cont nou: parola se scrie de două ori, iar regulile se bifează pe loc (litere mici și mari, o cifră, un caracter special, minim 8)
+- Cont nou: parola se scrie de două ori, iar regulile se bifează pe loc (litere mici și mari, o cifră, un caracter special, minim 10)
 - Adresa se confirmă printr-un email, înainte de prima intrare
 - „Am uitat parola”: linkul din email deschide o pagină a aplicației, unde pui parola nouă de două ori
 - Sau intri fără parolă, cu un link trimis pe email
@@ -13,7 +13,7 @@ Versiune mare (2.0) = schimbare importantă · mică (1.3) = funcții noi · rep
 *Email sign-in · 27 November 2026*
 
 - Besides Google, you can sign in with email and password: “I have an account” or “New account”
-- New account: you type the password twice, and the rules tick off as you go (lowercase and uppercase letters, a number, a special character, at least 8)
+- New account: you type the password twice, and the rules tick off as you go (lowercase and uppercase letters, a number, a special character, at least 10)
 - The address is confirmed by email before the first sign-in
 - “Forgot password”: the email link opens a page in the app where you type the new password twice
 - Or sign in without a password, with a link sent by email

@@ -952,7 +952,7 @@ html[lang="en"] .impgrp[open]>summary::after{content:"Hide ▴"!important}
       <label class="gfield"><span>Email</span><input id="gEmail" type="email" inputmode="email" autocomplete="email" autocapitalize="off" spellcheck="false" placeholder="nume@exemplu.ro"></label>
 <label class="gfield" id="gPassL"><span>Parolă</span><span class="gpw"><input id="gPass" type="password" autocomplete="current-password"><button type="button" class="gshow" data-eye="gPass" aria-label="Arată parola" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 12s3.5-6.5 9.5-6.5 9.5 6.5 9.5 6.5-3.5 6.5-9.5 6.5S2.5 12 2.5 12z"/><circle cx="12" cy="12" r="2.8"/></svg></button></span></label>
       <label class="gfield" id="gPass2L" hidden><span>Scrie parola încă o dată</span><span class="gpw"><input id="gPass2" type="password" autocomplete="new-password"><button type="button" class="gshow" data-eye="gPass2" aria-label="Arată parola" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 12s3.5-6.5 9.5-6.5 9.5 6.5 9.5 6.5-3.5 6.5-9.5 6.5S2.5 12 2.5 12z"/><circle cx="12" cy="12" r="2.8"/></svg></button></span></label>
-      <ul class="prules" hidden id="gRules" aria-live="polite"><li data-r="len">Cel puțin 8 caractere</li><li data-r="low">O literă mică</li><li data-r="up">O literă mare</li><li data-r="num">O cifră</li><li data-r="sp">Un caracter special (! @ # ? - _ …)</li><li data-r="eq">Parolele se potrivesc</li></ul>
+      <ul class="prules" hidden id="gRules" aria-live="polite"><li data-r="len">Cel puțin 10 caractere</li><li data-r="low">O literă mică</li><li data-r="up">O literă mare</li><li data-r="num">O cifră</li><li data-r="sp">Un caracter special (! @ # ? - _ …)</li><li data-r="eq">Parolele se potrivesc</li></ul>
       <small class="ghint" id="gPassHint" hidden>După ce îți faci contul, îți trimit un email ca să confirmi adresa.</small>
       <button class="btn pri gsubmit" id="gSubmit" type="submit">Intră</button>
       <div class="glinks">
@@ -966,7 +966,7 @@ html[lang="en"] .impgrp[open]>summary::after{content:"Hide ▴"!important}
       <p class="grfor">Parolă nouă pentru <b id="grFor"></b></p>
       <label class="gfield"><span>Parolă nouă</span><span class="gpw"><input id="grPass" type="password" autocomplete="new-password"><button type="button" class="gshow" data-eye="grPass" aria-label="Arată parola" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 12s3.5-6.5 9.5-6.5 9.5 6.5 9.5 6.5-3.5 6.5-9.5 6.5S2.5 12 2.5 12z"/><circle cx="12" cy="12" r="2.8"/></svg></button></span></label>
       <label class="gfield"><span>Scrie parola încă o dată</span><span class="gpw"><input id="grPass2" type="password" autocomplete="new-password"><button type="button" class="gshow" data-eye="grPass2" aria-label="Arată parola" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 12s3.5-6.5 9.5-6.5 9.5 6.5 9.5 6.5-3.5 6.5-9.5 6.5S2.5 12 2.5 12z"/><circle cx="12" cy="12" r="2.8"/></svg></button></span></label>
-      <ul class="prules" id="grRules" aria-live="polite"><li data-r="len">Cel puțin 8 caractere</li><li data-r="low">O literă mică</li><li data-r="up">O literă mare</li><li data-r="num">O cifră</li><li data-r="sp">Un caracter special (! @ # ? - _ …)</li><li data-r="eq">Parolele se potrivesc</li></ul>
+      <ul class="prules" id="grRules" aria-live="polite"><li data-r="len">Cel puțin 10 caractere</li><li data-r="low">O literă mică</li><li data-r="up">O literă mare</li><li data-r="num">O cifră</li><li data-r="sp">Un caracter special (! @ # ? - _ …)</li><li data-r="eq">Parolele se potrivesc</li></ul>
       <button class="btn pri gsubmit" id="grSave" type="submit">Salvează parola</button>
       <button type="button" class="glink gback" id="grCancel">Renunță</button>
     </form>
@@ -1324,7 +1324,7 @@ This typically indicates that your device does not have a healthy Internet conne
 <script>
 (function(){"use strict";
 var TARGET="web";
-var BUILD_ID="build 2026-11-27 11:00 UTC · fix 13:00";
+var BUILD_ID="build 2026-11-27 13:15 UTC";
 var WHERE_DB="Datele tale stau în contul tău, într-un proiect Firebase (Google Cloud, regiunea Frankfurt). Pe telefon rămâne doar o copie temporară, ca să meargă și fără net.";
 var MONTHS=["ianuarie","februarie","martie","aprilie","mai","iunie","iulie","august","septembrie","octombrie","noiembrie","decembrie"];
 var GROUPS=["Casă","Firmă"], KINDS=["Plată","Încasare","Transfer","Memento"];
@@ -1957,17 +1957,17 @@ Object.assign(I18N.en,{"Scuter":"Scooter","Rulotă":"Caravan","Remorcă":"Traile
    Cea mai nouă versiune e prima din listă. */
 Object.assign(I18N.en,{"sau":"or","Intră cu email":"Sign in with email","Am cont":"I have an account","Cont nou":"New account","Parolă":"Password","nume@exemplu.ro":"name@example.com",
 "După ce îți faci contul, îți trimit un email ca să confirmi adresa.":"Once your account is made, we'll email you to confirm the address.",
-"Scrie parola încă o dată":"Type the password again","Cel puțin 8 caractere":"At least 8 characters","O literă mică":"A lowercase letter","O literă mare":"An uppercase letter","O cifră":"A number","Un caracter special (! @ # ? - _ …)":"A special character (! @ # ? - _ …)","Parolele se potrivesc":"The passwords match",
+"Scrie parola încă o dată":"Type the password again","Cel puțin 10 caractere":"At least 10 characters","O literă mică":"A lowercase letter","O literă mare":"An uppercase letter","O cifră":"A number","Un caracter special (! @ # ? - _ …)":"A special character (! @ # ? - _ …)","Parolele se potrivesc":"The passwords match",
 "Parolă nouă pentru":"New password for","Parolă nouă":"New password","Salvează parola":"Save password","Renunță":"Cancel",
 "Parola nu respectă încă toate regulile de mai jos.":"The password doesn't meet all the rules below yet.","Parolele nu se potrivesc sau nu respectă încă regulile de mai jos.":"The passwords don't match or don't meet the rules below yet.",
-"Parola nu respectă regulile: litere mici și mari, o cifră, un caracter special și cel puțin 8 caractere.":"The password doesn't meet the rules: lowercase and uppercase letters, a number, a special character and at least 8 characters.",
+"Parola nu respectă regulile: litere mici și mari, o cifră, un caracter special și cel puțin 10 caractere.":"The password doesn't meet the rules: lowercase and uppercase letters, a number, a special character and at least 10 characters.",
 "Se confirmă adresa…":"Confirming the address…","Adresa e confirmată. Acum intră cu parola.":"The address is confirmed. Now sign in with your password.","Adresa de email a fost refăcută.":"The email address has been restored.","Se salvează…":"Saving…",
 "Gata, parola e schimbată. Intră cu parola nouă.":"Done, the password is changed. Sign in with the new password.","Intră":"Sign in","Creează contul":"Create account","Am uitat parola":"Forgot password",
 "Intră fără parolă, cu un link pe email":"Sign in without a password, with an email link","← Alte variante":"← Other options","Am confirmat":"I've confirmed","Retrimite emailul":"Resend the email","Arată parola":"Show password","Ascunde parola":"Hide password",
 "Datele tale stau în contul tău (Firebase, Frankfurt). Doar tu ai acces la ele.":"Your data lives in your account (Firebase, Frankfurt). Only you can access it.",
 "Adresa de email nu pare corectă.":"That email address doesn't look right.","Email sau parolă greșită. Dacă ți-ai făcut contul cu Google, intră cu Google.":"Wrong email or password. If you made your account with Google, sign in with Google.",
 "Există deja un cont cu adresa asta. Intră cu parola, cu Google sau cu un link pe email.":"There's already an account with this address. Sign in with the password, with Google or with an email link.",
-"Parola e prea slabă: pune cel puțin 8 caractere.":"The password is too weak: use at least 8 characters.","Prea multe încercări. Așteaptă câteva minute și încearcă din nou.":"Too many attempts. Wait a few minutes and try again.",
+"Parola e prea slabă: pune cel puțin 10 caractere.":"The password is too weak: use at least 10 characters.","Prea multe încercări. Așteaptă câteva minute și încearcă din nou.":"Too many attempts. Wait a few minutes and try again.",
 "Intrarea cu email nu e pornită încă (Firebase → Authentication → Sign-in method).":"Email sign-in isn't turned on yet (Firebase → Authentication → Sign-in method).","Contul ăsta e oprit.":"This account is disabled.",
 "Linkul a expirat sau a fost deja folosit. Cere unul nou.":"The link has expired or was already used. Ask for a new one.","Scrie parola.":"Enter the password.","Se verifică linkul…":"Checking the link…",
 "Scrie o adresă de email corectă.":"Enter a valid email address.","Parola trebuie să aibă cel puțin 8 caractere.":"The password needs at least 8 characters.","Se creează contul…":"Creating the account…","Se verifică…":"Checking…","Se trimite…":"Sending…",
@@ -2014,8 +2014,8 @@ I18N.enP.unshift(
 
 var CHANGELOG=[
  {v:"2.1",d:"2026-11-27",t:{ro:"Intrare cu email",en:"Email sign-in"},
-  ro:["Pe lângă Google, intri și cu email și parolă: „Am cont” sau „Cont nou”", "Cont nou: parola se scrie de două ori, iar regulile se bifează pe loc (litere mici și mari, o cifră, un caracter special, minim 8)", "Adresa se confirmă printr-un email, înainte de prima intrare", "„Am uitat parola”: linkul din email deschide o pagină a aplicației, unde pui parola nouă de două ori", "Sau intri fără parolă, cu un link trimis pe email"],
-  en:["Besides Google, you can sign in with email and password: “I have an account” or “New account”", "New account: you type the password twice, and the rules tick off as you go (lowercase and uppercase letters, a number, a special character, at least 8)", "The address is confirmed by email before the first sign-in", "“Forgot password”: the email link opens a page in the app where you type the new password twice", "Or sign in without a password, with a link sent by email"]},
+  ro:["Pe lângă Google, intri și cu email și parolă: „Am cont” sau „Cont nou”", "Cont nou: parola se scrie de două ori, iar regulile se bifează pe loc (litere mici și mari, o cifră, un caracter special, minim 10)", "Adresa se confirmă printr-un email, înainte de prima intrare", "„Am uitat parola”: linkul din email deschide o pagină a aplicației, unde pui parola nouă de două ori", "Sau intri fără parolă, cu un link trimis pe email"],
+  en:["Besides Google, you can sign in with email and password: “I have an account” or “New account”", "New account: you type the password twice, and the rules tick off as you go (lowercase and uppercase letters, a number, a special character, at least 10)", "The address is confirmed by email before the first sign-in", "“Forgot password”: the email link opens a page in the app where you type the new password twice", "Or sign in without a password, with a link sent by email"]},
  {v:"2.0",d:"2026-11-27",t:{ro:"Funcții și deconturi",en:"Features and reimbursements"},
   ro:["Setări → Funcții: alegi ce folosești, pe categorii (Casă, Firmă, Transport, General), fiecare funcție cu comutatorul ei", "Doar Casă, doar Firmă sau amândouă: ce nu folosești dispare din meniu, iar datele rămân", "Sume în euro și la Casă (salariu, chirie, rate), socotite în lei la cursul lunii", "„Firma îți datorează”: ce plătești din banii tăi pentru firmă, apoi „Cere decontul” pune totul într-un singur rând la Firmă", "Decontul se bifează singur când încarci extrasul, chiar dacă firma plătește luna următoare"],
   en:["Settings → Features: pick what you use, by category (Home, Business, Transport, Overview), each feature with its own switch", "Just Home, just Business or both: what you don't use disappears from the menu, and the data stays", "Euro amounts for Home too (salary, rent, loan payments), converted to RON at the month's rate", "“The business owes you”: what you pay from your own money for the business, then “Request reimbursement” puts it all in one Business row", "The reimbursement checks itself when you load the statement, even if the business pays the next month"]},
@@ -4501,7 +4501,8 @@ function gMode(m){
 function gBusy(b){["#gSubmit","#gForgot","#gLinkB","#gvDone","#gvResend","#grSave"].forEach(function(q){var e=$(q);if(e)e.disabled=b})}
 /* parola: aceleași reguli ca în Firebase (Authentication → Settings → Password policy) */
 var PW_SP=/[\^$*.\[\]{}()?"!@#%&\/\\,><':;|_~`=+\-]/;
-function pwChecks(p,q){return {len:p.length>=8,low:/[a-z]/.test(p),up:/[A-Z]/.test(p),num:/[0-9]/.test(p),sp:PW_SP.test(p),eq:!!p&&p===q}}
+var PW_MIN=10;
+function pwChecks(p,q){return {len:p.length>=PW_MIN,low:/[a-z]/.test(p),up:/[A-Z]/.test(p),num:/[0-9]/.test(p),sp:PW_SP.test(p),eq:!!p&&p===q}}
 function pwGood(p,q){var c=pwChecks(p,q);return c.len&&c.low&&c.up&&c.num&&c.sp&&c.eq}
 function pwPaint(ul,p,q,strict){
   var c=pwChecks(p,q);
@@ -4513,13 +4514,13 @@ function authErr(e){
   return c==="auth/invalid-email"?"Adresa de email nu pare corectă."
     :(c==="auth/invalid-credential"||c==="auth/wrong-password"||c==="auth/user-not-found"||c==="auth/invalid-login-credentials")?"Email sau parolă greșită. Dacă ți-ai făcut contul cu Google, intră cu Google."
     :c==="auth/email-already-in-use"?"Există deja un cont cu adresa asta. Intră cu parola, cu Google sau cu un link pe email."
-    :c==="auth/weak-password"?"Parola e prea slabă: pune cel puțin 8 caractere."
+    :c==="auth/weak-password"?"Parola e prea slabă: pune cel puțin 10 caractere."
     :c==="auth/too-many-requests"?"Prea multe încercări. Așteaptă câteva minute și încearcă din nou."
     :c==="auth/operation-not-allowed"?"Intrarea cu email nu e pornită încă (Firebase → Authentication → Sign-in method)."
     :c==="auth/user-disabled"?"Contul ăsta e oprit."
     :(c==="auth/invalid-action-code"||c==="auth/expired-action-code")?"Linkul a expirat sau a fost deja folosit. Cere unul nou."
     :c==="auth/missing-password"?"Scrie parola."
-    :c==="auth/password-does-not-meet-requirements"?"Parola nu respectă regulile: litere mici și mari, o cifră, un caracter special și cel puțin 8 caractere."
+    :c==="auth/password-does-not-meet-requirements"?"Parola nu respectă regulile: litere mici și mari, o cifră, un caracter special și cel puțin 10 caractere."
     :signInErr(e);
 }
 /* cont cu parolă, adresă neconfirmată: întâi confirmarea (regulile cer email confirmat) */
