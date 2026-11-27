@@ -94,6 +94,7 @@ footer{margin-top:28px;color:var(--muted);font-size:13.5px}
         <tr><td>Cursul EUR/RON, soldurile, setările (limbă, funcții pornite)</td><td>Le scrii sau le alegi tu</td></tr>
         <tr><td>Vehicule, scadențe, kilometraj, cheltuieli de transport și cele pe care ți le datorează firma</td><td>Le scrii tu</td></tr>
         <tr><td>Tranzacțiile din extrasele de cont pe care le încarci: data, suma, cui ai plătit sau de la cine ai primit, detaliile plății</td><td>Din extrasul încărcat de tine</td></tr>
+        <tr><td>Dacă pornești memento-ul pe telefon: adresa tehnică de notificări a fiecărui dispozitiv și tipul browserului</td><td>De la browserul tău, când apeși „Permite”</td></tr>
       </table>
       <p><b>Nu păstrăm</b>: parola ta (o gestionează Firebase/Google, nu o vedem), numere de card, coduri de acces la bancă. Fișierul extrasului (PDF sau CSV) <b>se citește în browserul tău</b> și nu se trimite nicăieri; în cont rămân doar tranzacțiile importate.</p>
       <p>Aplicația <b>nu folosește</b> cookie-uri de reclamă, analiză de trafic sau instrumente de urmărire.</p>
@@ -108,6 +109,7 @@ footer{margin-top:28px;color:var(--muted);font-size:13.5px}
     <section>
       <h2><span class="n">4.</span>Unde stau și cine ne ajută</h2>
       <div class="card"><b>Google Firebase (Google Cloud)</b><span class="muted">Contul (autentificarea) și baza de date, în regiunea Frankfurt. Datele sunt criptate la transfer și pe serverele Google.</span></div>
+      <div class="card"><b>Memento-ul zilnic</b><span class="muted">Dacă îl pornești, un program care rulează o dată pe zi pe GitHub Actions citește scadențele tale și trimite notificarea prin serviciul de notificări al browserului tău (Google, Apple sau Mozilla). Textul notificării e criptat până pe telefonul tău.</span></div>
       <div class="card"><b>GitHub Pages</b><span class="muted">Găzduiește paginile aplicației. Ca orice site, vede adresa IP a celui care o deschide, pentru securitate.</span></div>
       <div class="card"><b>Google Fonts și cdnjs (Cloudflare)</b><span class="muted">De aici se încarcă fonturile și, când imporți un extras PDF, cititorul de PDF. Văd doar adresa IP, nu datele tale.</span></div>
       <p class="muted">Pe telefonul sau calculatorul tău rămâne o copie temporară, ca aplicația să meargă și fără internet. Se șterge când ieși din cont.</p>
@@ -184,6 +186,7 @@ footer{margin-top:28px;color:var(--muted);font-size:13.5px}
         <tr><td>EUR/RON rate, balances, settings (language, features turned on)</td><td>You enter or pick them</td></tr>
         <tr><td>Vehicles, due dates, mileage, travel costs and what the business owes you</td><td>You enter them</td></tr>
         <tr><td>Transactions from the bank statements you load: date, amount, who you paid or received from, payment details</td><td>From the statement you load</td></tr>
+        <tr><td>If you turn on the phone reminder: the technical notification address of each device and the browser type</td><td>From your browser, when you tap “Allow”</td></tr>
       </table>
       <p><b>We don't keep</b>: your password (Firebase/Google handles it, we never see it), card numbers or bank access codes. The statement file (PDF or CSV) <b>is read in your browser</b> and isn't sent anywhere; only the imported transactions stay in your account.</p>
       <p>The app <b>doesn't use</b> advertising cookies, traffic analytics or tracking tools.</p>
@@ -198,6 +201,7 @@ footer{margin-top:28px;color:var(--muted);font-size:13.5px}
     <section>
       <h2><span class="n">4.</span>Where it's stored and who helps us</h2>
       <div class="card"><b>Google Firebase (Google Cloud)</b><span class="muted">The account (sign-in) and the database, in the Frankfurt region. Data is encrypted in transit and on Google's servers.</span></div>
+      <div class="card"><b>The daily reminder</b><span class="muted">If you turn it on, a program that runs once a day on GitHub Actions reads your due items and sends the notification through your browser's push service (Google, Apple or Mozilla). The notification text is encrypted all the way to your phone.</span></div>
       <div class="card"><b>GitHub Pages</b><span class="muted">Hosts the app's pages. Like any website, it sees the IP address of whoever opens it, for security.</span></div>
       <div class="card"><b>Google Fonts and cdnjs (Cloudflare)</b><span class="muted">Fonts load from here and, when you import a PDF statement, the PDF reader. They only see the IP address, not your data.</span></div>
       <p class="muted">A temporary copy stays on your phone or computer so the app works offline. It's removed when you sign out.</p>
