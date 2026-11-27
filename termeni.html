@@ -1,0 +1,261 @@
+<!doctype html>
+<html lang="ro" translate="no">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#F5F3ED" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#131311" media="(prefers-color-scheme: dark)">
+<meta name="robots" content="noindex">
+<title>Termeni și confidențialitate · Finanțe Lunare</title>
+<link rel="icon" href="icon-192.png">
+<script>try{var t=localStorage.getItem("fin_theme");if(t==="light"||t==="dark")document.documentElement.setAttribute("data-theme",t)}catch(e){}</script>
+<style>
+:root{
+  --bg:#F5F3ED;--surface:#FFFFFF;--surface2:#EEEBE3;--line:#E0DBCF;--fg:#1C1A15;--muted:#6B6559;
+  --brand:#2F6F5E;--casa:#C2542C;--firma:#2D52C9;
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#131311;--surface:#1C1B18;--surface2:#262520;--line:#34322C;--fg:#F1EEE6;--muted:#A39D8F;
+  --brand:#7CC9B3;--casa:#F2875C;--firma:#88A3FF;color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#131311;--surface:#1C1B18;--surface2:#262520;--line:#34322C;--fg:#F1EEE6;--muted:#A39D8F;
+  --brand:#7CC9B3;--casa:#F2875C;--firma:#88A3FF;color-scheme:dark}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--fg)}
+body{font:16px/1.6 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;padding:env(safe-area-inset-top,0) 0 env(safe-area-inset-bottom,0)}
+.wrap{max-width:720px;margin:0 auto;padding:20px 18px 64px}
+.top{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:22px}
+.back{display:inline-flex;align-items:center;gap:6px;color:var(--brand);text-decoration:none;font-weight:600;font-size:15px;padding:8px 2px}
+.lang{display:flex;gap:4px;padding:4px;border-radius:10px;background:var(--surface2);border:1px solid var(--line)}
+.lang button{border:0;background:transparent;color:var(--muted);font:inherit;font-size:13px;font-weight:600;padding:6px 10px;border-radius:7px;cursor:pointer}
+.lang button[aria-pressed="true"]{background:var(--surface);color:var(--fg);box-shadow:0 0 0 1px var(--line)}
+.hero{display:flex;align-items:center;gap:14px;margin-bottom:8px}
+.mark{width:44px;height:44px;flex:none}
+h1{font-size:28px;line-height:1.15;margin:0;letter-spacing:-.02em}
+.upd{color:var(--muted);font-size:13.5px;margin:6px 0 22px}
+.tldr{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:16px 18px;margin:0 0 26px}
+.tldr h2{margin:0 0 8px;font-size:16px}
+.tldr ul{margin:0;padding-left:20px}
+.tldr li{margin:4px 0}
+section{border-top:1px solid var(--line);padding:18px 0 6px}
+h2{font-size:18px;margin:0 0 8px;letter-spacing:-.01em}
+h2 .n{color:var(--muted);font-weight:500;margin-right:6px}
+p,li{color:var(--fg)}
+.muted{color:var(--muted);font-size:14px}
+a{color:var(--brand)}
+ul{padding-left:20px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin:10px 0}
+.card b{display:block}
+table{width:100%;border-collapse:collapse;font-size:14.5px;margin:8px 0}
+th,td{text-align:left;vertical-align:top;padding:8px 8px 8px 0;border-bottom:1px solid var(--line)}
+th{color:var(--muted);font-weight:600;font-size:12.5px;text-transform:uppercase;letter-spacing:.05em}
+[hidden]{display:none!important}
+footer{margin-top:28px;color:var(--muted);font-size:13.5px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top">
+    <a class="back" href="./" id="back">← <span data-ro="Înapoi la aplicație" data-en="Back to the app">Înapoi la aplicație</span></a>
+    <div class="lang" role="group" aria-label="Limba / Language"><button type="button" data-l="ro" aria-pressed="true">RO</button><button type="button" data-l="en" aria-pressed="false">EN</button></div>
+  </div>
+
+  <!-- ===================== ROMÂNĂ ===================== -->
+  <article lang="ro" id="ro">
+    <div class="hero">
+      <svg class="mark" viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="17" fill="none" stroke="var(--line)" stroke-width="6"/><path d="M24 7a17 17 0 0 1 14.7 25.5" fill="none" stroke="var(--casa)" stroke-width="6" stroke-linecap="round"/><path d="M33.5 38.1A17 17 0 0 1 9.3 15.5" fill="none" stroke="var(--firma)" stroke-width="6" stroke-linecap="round"/></svg>
+      <h1>Termeni și confidențialitate</h1>
+    </div>
+    <p class="upd">Finanțe Lunare · ultima actualizare: 27 noiembrie 2026</p>
+
+    <div class="tldr">
+      <h2>Pe scurt</h2>
+      <ul>
+        <li>Datele tale sunt <b>ale tale</b>: doar contul tău le poate vedea și modifica din aplicație.</li>
+        <li>Le folosim <b>doar ca aplicația să meargă</b> pentru tine. Nu le vindem, nu facem reclame, nu urmărim ce faci.</li>
+        <li>Stau în Firebase (Google Cloud), în <b>regiunea Frankfurt</b>, Germania.</li>
+        <li>Le poți descărca oricând (copie JSON) și le poți <b>șterge cu tot cu contul</b>, din aplicație.</li>
+      </ul>
+    </div>
+
+    <section>
+      <h2><span class="n">1.</span>Cine răspunde de date</h2>
+      <p>Operatorul datelor este <b>Prime Focus Quality SRL</b>, cu sediul în Dumbrăvița, județul Timiș, România.</p>
+      <p>Pentru orice întrebare sau cerere legată de datele tale ne scrii la <a href="mailto:office@prime-fq.com">office@prime-fq.com</a>.</p>
+    </section>
+
+    <section>
+      <h2><span class="n">2.</span>Ce date păstrăm</h2>
+      <table>
+        <tr><th>Ce</th><th>De unde</th></tr>
+        <tr><td>Adresa de email și numele afișat</td><td>Din contul cu care intri (Google sau email și parolă)</td></tr>
+        <tr><td>Plățile, încasările, memento-urile și notele tale, pe luni</td><td>Le scrii tu</td></tr>
+        <tr><td>Cursul EUR/RON, soldurile, setările (limbă, funcții pornite)</td><td>Le scrii sau le alegi tu</td></tr>
+        <tr><td>Vehicule, scadențe, kilometraj, cheltuieli de transport și cele pe care ți le datorează firma</td><td>Le scrii tu</td></tr>
+        <tr><td>Tranzacțiile din extrasele de cont pe care le încarci: data, suma, cui ai plătit sau de la cine ai primit, detaliile plății</td><td>Din extrasul încărcat de tine</td></tr>
+      </table>
+      <p><b>Nu păstrăm</b>: parola ta (o gestionează Firebase/Google, nu o vedem), numere de card, coduri de acces la bancă. Fișierul extrasului (PDF sau CSV) <b>se citește în browserul tău</b> și nu se trimite nicăieri; în cont rămân doar tranzacțiile importate.</p>
+      <p>Aplicația <b>nu folosește</b> cookie-uri de reclamă, analiză de trafic sau instrumente de urmărire.</p>
+    </section>
+
+    <section>
+      <h2><span class="n">3.</span>De ce și pe ce bază</h2>
+      <p>Folosim datele doar ca să-ți oferim aplicația: să le salvăm, să le afișăm pe orice dispozitiv pe care intri și să-ți facem calculele. Temeiul legal este <b>executarea serviciului pe care l-ai cerut</b> când ți-ai făcut cont (art. 6 alin. 1 lit. b din Regulamentul (UE) 2016/679, GDPR).</p>
+      <p>Nu le vindem, nu le împrumutăm și nu le folosim pentru reclame sau pentru profilul tău.</p>
+    </section>
+
+    <section>
+      <h2><span class="n">4.</span>Unde stau și cine ne ajută</h2>
+      <div class="card"><b>Google Firebase (Google Cloud)</b><span class="muted">Contul (autentificarea) și baza de date, în regiunea Frankfurt. Datele sunt criptate la transfer și pe serverele Google.</span></div>
+      <div class="card"><b>GitHub Pages</b><span class="muted">Găzduiește paginile aplicației. Ca orice site, vede adresa IP a celui care o deschide, pentru securitate.</span></div>
+      <div class="card"><b>Google Fonts și cdnjs (Cloudflare)</b><span class="muted">De aici se încarcă fonturile și, când imporți un extras PDF, cititorul de PDF. Văd doar adresa IP, nu datele tale.</span></div>
+      <p class="muted">Pe telefonul sau calculatorul tău rămâne o copie temporară, ca aplicația să meargă și fără internet. Se șterge când ieși din cont.</p>
+    </section>
+
+    <section>
+      <h2><span class="n">5.</span>Cine are acces</h2>
+      <p>Din aplicație, <b>doar contul tău</b> îți poate citi și modifica datele: regulile bazei de date refuză orice alt cont.</p>
+      <p>Tehnic, administratorul proiectului Firebase ar putea vedea baza de date din consola Google. Nu ne uităm în datele tale, cu excepția cazului în care ne ceri tu (de exemplu, ca să rezolvăm o problemă) sau ne obligă legea.</p>
+    </section>
+
+    <section>
+      <h2><span class="n">6.</span>Cât timp le păstrăm</h2>
+      <p>Cât timp ai cont. Când apeși <b>Mai mult → Setări → Contul și datele → Șterge contul</b>, se șterg imediat toate datele tale din baza de date și apoi contul. Nu păstrăm copii.</p>
+    </section>
+
+    <section>
+      <h2><span class="n">7.</span>Drepturile tale</h2>
+      <ul>
+        <li><b>Să-ți vezi datele</b> și să le iei cu tine: <i>Descarcă o copie (JSON)</i>, din Contul și datele.</li>
+        <li><b>Să le corectezi</b>: direct în aplicație.</li>
+        <li><b>Să le ștergi</b>: <i>Șterge contul</i>, din aplicație, sau ne scrii.</li>
+        <li><b>Să te opui</b> sau să ceri restricționarea prelucrării: ne scrii la <a href="mailto:office@prime-fq.com">office@prime-fq.com</a>.</li>
+        <li><b>Să faci plângere</b> la Autoritatea Națională de Supraveghere a Prelucrării Datelor cu Caracter Personal (ANSPDCP), <a href="https://www.dataprotection.ro" target="_blank" rel="noopener">dataprotection.ro</a>.</li>
+      </ul>
+      <p class="muted">Răspundem la cereri în cel mult o lună.</p>
+    </section>
+
+    <section>
+      <h2><span class="n">8.</span>Termeni de folosire</h2>
+      <ul>
+        <li>Aplicația este oferită <b>gratuit</b>, așa cum este. Facem tot ce putem să meargă corect, dar nu garantăm că va fi mereu fără erori sau disponibilă.</li>
+        <li>Este un instrument de evidență personală. <b>Nu este consultanță financiară, fiscală sau contabilă</b>; sumele, taxele și termenele le verifici tu sau contabilul tău.</li>
+        <li>Ești responsabil de ce scrii în aplicație și de siguranța contului tău (parolă, telefon). Îți recomandăm să descarci din când în când o copie a datelor.</li>
+        <li>Putem suspenda conturile folosite abuziv (de exemplu, conturi false sau încercări de a accesa datele altora).</li>
+        <li>Putem schimba aplicația și acești termeni. La schimbări importante te anunțăm în aplicație, la „Ce e nou”.</li>
+        <li>Se aplică legea română.</li>
+      </ul>
+    </section>
+
+    <footer>Prime Focus Quality SRL · <a href="mailto:office@prime-fq.com">office@prime-fq.com</a></footer>
+  </article>
+
+  <!-- ===================== ENGLISH ===================== -->
+  <article lang="en" id="en" hidden>
+    <div class="hero">
+      <svg class="mark" viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="17" fill="none" stroke="var(--line)" stroke-width="6"/><path d="M24 7a17 17 0 0 1 14.7 25.5" fill="none" stroke="var(--casa)" stroke-width="6" stroke-linecap="round"/><path d="M33.5 38.1A17 17 0 0 1 9.3 15.5" fill="none" stroke="var(--firma)" stroke-width="6" stroke-linecap="round"/></svg>
+      <h1>Terms and privacy</h1>
+    </div>
+    <p class="upd">Monthly Finances · last updated: 27 November 2026</p>
+
+    <div class="tldr">
+      <h2>In short</h2>
+      <ul>
+        <li>Your data is <b>yours</b>: only your account can see and change it in the app.</li>
+        <li>We use it <b>only to make the app work</b> for you. We don't sell it, show ads or track what you do.</li>
+        <li>It's stored in Firebase (Google Cloud), in the <b>Frankfurt region</b>, Germany.</li>
+        <li>You can download it any time (JSON copy) and <b>delete it together with your account</b>, in the app.</li>
+      </ul>
+    </div>
+
+    <section>
+      <h2><span class="n">1.</span>Who is responsible for the data</h2>
+      <p>The data controller is <b>Prime Focus Quality SRL</b>, based in Dumbrăvița, Timiș county, Romania.</p>
+      <p>For any question or request about your data, write to <a href="mailto:office@prime-fq.com">office@prime-fq.com</a>.</p>
+    </section>
+
+    <section>
+      <h2><span class="n">2.</span>What data we keep</h2>
+      <table>
+        <tr><th>What</th><th>Where from</th></tr>
+        <tr><td>Your email address and display name</td><td>From the account you sign in with (Google or email and password)</td></tr>
+        <tr><td>Your payments, income, reminders and notes, by month</td><td>You enter them</td></tr>
+        <tr><td>EUR/RON rate, balances, settings (language, features turned on)</td><td>You enter or pick them</td></tr>
+        <tr><td>Vehicles, due dates, mileage, travel costs and what the business owes you</td><td>You enter them</td></tr>
+        <tr><td>Transactions from the bank statements you load: date, amount, who you paid or received from, payment details</td><td>From the statement you load</td></tr>
+      </table>
+      <p><b>We don't keep</b>: your password (Firebase/Google handles it, we never see it), card numbers or bank access codes. The statement file (PDF or CSV) <b>is read in your browser</b> and isn't sent anywhere; only the imported transactions stay in your account.</p>
+      <p>The app <b>doesn't use</b> advertising cookies, traffic analytics or tracking tools.</p>
+    </section>
+
+    <section>
+      <h2><span class="n">3.</span>Why, and on what basis</h2>
+      <p>We use the data only to provide the app to you: to save it, show it on any device you sign in on and do your calculations. The legal basis is <b>providing the service you asked for</b> when you created your account (Art. 6(1)(b) of Regulation (EU) 2016/679, GDPR).</p>
+      <p>We don't sell it, lend it or use it for ads or profiling.</p>
+    </section>
+
+    <section>
+      <h2><span class="n">4.</span>Where it's stored and who helps us</h2>
+      <div class="card"><b>Google Firebase (Google Cloud)</b><span class="muted">The account (sign-in) and the database, in the Frankfurt region. Data is encrypted in transit and on Google's servers.</span></div>
+      <div class="card"><b>GitHub Pages</b><span class="muted">Hosts the app's pages. Like any website, it sees the IP address of whoever opens it, for security.</span></div>
+      <div class="card"><b>Google Fonts and cdnjs (Cloudflare)</b><span class="muted">Fonts load from here and, when you import a PDF statement, the PDF reader. They only see the IP address, not your data.</span></div>
+      <p class="muted">A temporary copy stays on your phone or computer so the app works offline. It's removed when you sign out.</p>
+    </section>
+
+    <section>
+      <h2><span class="n">5.</span>Who has access</h2>
+      <p>In the app, <b>only your account</b> can read and change your data: the database rules refuse any other account.</p>
+      <p>Technically, the administrator of the Firebase project could see the database from the Google console. We don't look at your data, except when you ask us to (for example, to fix a problem) or the law requires it.</p>
+    </section>
+
+    <section>
+      <h2><span class="n">6.</span>How long we keep it</h2>
+      <p>For as long as you have an account. When you tap <b>More → Settings → Account and data → Delete account</b>, all your data is deleted from the database right away, then the account. We keep no copies.</p>
+    </section>
+
+    <section>
+      <h2><span class="n">7.</span>Your rights</h2>
+      <ul>
+        <li><b>To see your data</b> and take it with you: <i>Download a copy (JSON)</i>, in Account and data.</li>
+        <li><b>To correct it</b>: right in the app.</li>
+        <li><b>To delete it</b>: <i>Delete account</i>, in the app, or write to us.</li>
+        <li><b>To object</b> or ask us to restrict processing: write to <a href="mailto:office@prime-fq.com">office@prime-fq.com</a>.</li>
+        <li><b>To complain</b> to the Romanian data protection authority (ANSPDCP), <a href="https://www.dataprotection.ro" target="_blank" rel="noopener">dataprotection.ro</a>, or the authority in your country.</li>
+      </ul>
+      <p class="muted">We answer requests within one month at most.</p>
+    </section>
+
+    <section>
+      <h2><span class="n">8.</span>Terms of use</h2>
+      <ul>
+        <li>The app is provided <b>free of charge</b>, as it is. We do our best to make it work correctly, but we can't guarantee it will always be error-free or available.</li>
+        <li>It's a personal record-keeping tool. <b>It isn't financial, tax or accounting advice</b>; check amounts, taxes and deadlines yourself or with your accountant.</li>
+        <li>You're responsible for what you enter in the app and for keeping your account safe (password, phone). We recommend downloading a copy of your data now and then.</li>
+        <li>We may suspend accounts used abusively (for example, fake accounts or attempts to reach other people's data).</li>
+        <li>We may change the app and these terms. For important changes we'll tell you in the app, under “What's new”.</li>
+        <li>Romanian law applies.</li>
+      </ul>
+    </section>
+
+    <footer>Prime Focus Quality SRL · <a href="mailto:office@prime-fq.com">office@prime-fq.com</a></footer>
+  </article>
+</div>
+<script>
+(function(){
+  var q=null;try{q=new URLSearchParams(location.search).get("lang")}catch(e){}
+  var l=q||(function(){try{return localStorage.getItem("fin_lang")}catch(e){return null}})()||((navigator.language||"").slice(0,2)==="ro"?"ro":"en");
+  function set(x){
+    x=x==="en"?"en":"ro";
+    document.documentElement.lang=x;
+    document.getElementById("ro").hidden=x!=="ro";document.getElementById("en").hidden=x!=="en";
+    document.querySelectorAll(".lang button").forEach(function(b){b.setAttribute("aria-pressed",b.getAttribute("data-l")===x?"true":"false")});
+    document.querySelectorAll("[data-ro]").forEach(function(e){e.textContent=e.getAttribute("data-"+x)});
+    document.title=x==="en"?"Terms and privacy · Monthly Finances":"Termeni și confidențialitate · Finanțe Lunare";
+  }
+  document.querySelectorAll(".lang button").forEach(function(b){b.addEventListener("click",function(){set(b.getAttribute("data-l"))})});
+  set(l);
+})();
+</script>
+</body>
+</html>

@@ -16,13 +16,16 @@ self.addEventListener("fetch", function (e) {
   if (r.method !== "GET") return;
   var u = new URL(r.url);
   if (u.origin !== self.location.origin) return;
+  /* doar pagina aplicației se ține ca „index.html”; alte pagini (de ex. termeni.html) se țin sub numele lor */
+  var app = r.mode === "navigate" && /\/(index\.html)?$/.test(u.pathname);
+  var key = app ? "index.html" : (r.mode === "navigate" ? u.origin + u.pathname : r);
   e.respondWith(fetch(r).then(function (res) {
     if (res && res.ok && res.type === "basic") {
       var copy = res.clone();
-      caches.open(CACHE).then(function (c) { c.put(r.mode === "navigate" ? "index.html" : r, copy); });
+      caches.open(CACHE).then(function (c) { c.put(key, copy); });
     }
     return res;
   }).catch(function () {
-    return caches.match(r.mode === "navigate" ? "index.html" : r).then(function (m) { return m || caches.match("./"); });
+    return caches.match(key).then(function (m) { return m || caches.match("index.html") || caches.match("./"); });
   }));
 });

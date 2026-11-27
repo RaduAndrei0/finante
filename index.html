@@ -663,6 +663,8 @@ details.fold[open]>summary{margin-bottom:10px}
 .gverify p{margin:0;font-size:14px;line-height:1.45}
 .gvic{width:52px;height:52px;border-radius:16px;display:flex;align-items:center;justify-content:center;color:var(--brand-fg);background:color-mix(in srgb,var(--brand-fg) 14%,transparent)}
 .gvic svg{width:26px;height:26px}
+.glegal{font-size:12.5px;color:var(--muted);text-decoration:underline;text-underline-offset:2px;margin-top:-2px}
+.ghint a{color:var(--brand-fg)}
 .delzone{margin-top:18px;border:1px solid color-mix(in srgb,var(--bad) 35%,var(--line));border-radius:12px;padding:14px;display:flex;flex-direction:column;gap:12px}
 .delhead{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
 .delhead>div{display:flex;flex-direction:column;gap:3px;flex:1;min-width:200px}
@@ -968,6 +970,7 @@ html[lang="en"] .impgrp[open]>summary::after{content:"Hide ▴"!important}
       <label class="gfield" id="gPass2L" hidden><span>Scrie parola încă o dată</span><span class="gpw"><input id="gPass2" type="password" autocomplete="new-password"><button type="button" class="gshow" data-eye="gPass2" aria-label="Arată parola" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 12s3.5-6.5 9.5-6.5 9.5 6.5 9.5 6.5-3.5 6.5-9.5 6.5S2.5 12 2.5 12z"/><circle cx="12" cy="12" r="2.8"/></svg></button></span></label>
       <ul class="prules" hidden id="gRules" aria-live="polite"><li data-r="len">Cel puțin 10 caractere</li><li data-r="low">O literă mică</li><li data-r="up">O literă mare</li><li data-r="num">O cifră</li><li data-r="sp">Un caracter special (! @ # ? - _ …)</li><li data-r="eq">Parolele se potrivesc</li></ul>
       <small class="ghint" id="gPassHint" hidden>După ce îți faci contul, îți trimit un email ca să confirmi adresa.</small>
+      <small class="ghint" id="gTerms" hidden>Creându-ți contul, ești de acord cu <a href="termeni.html">termenii și confidențialitatea</a>.</small>
       <button class="btn pri gsubmit" id="gSubmit" type="submit">Intră</button>
       <div class="glinks">
         <button type="button" class="glink" id="gForgot">Am uitat parola</button>
@@ -993,6 +996,7 @@ html[lang="en"] .impgrp[open]>summary::after{content:"Hide ▴"!important}
     <button class="btn" id="gout" type="button" hidden>Ieși din cont</button>
     <label class="glang" data-notr>🌐 <select data-lang="1" aria-label="Limba / Language" data-notr><option value="ro">Română</option><option value="en">English</option></select></label>
     <p class="gnote2">Datele tale stau în contul tău (Firebase, Frankfurt). Doar tu ai acces la ele.</p>
+    <a class="glegal" href="termeni.html">Termeni și confidențialitate</a>
   </div>
 </div>
 
@@ -1315,6 +1319,7 @@ html[lang="en"] .impgrp[open]>summary::after{content:"Hide ▴"!important}
           <div><b>Pune aplicația pe ecranul telefonului</b><small id="instNote">Se deschide ca o aplicație, fără bara browserului.</small></div>
           <button class="btn pri" id="instBtn" type="button" hidden>Instalează</button>
         </div>
+        <p class="note"><a href="termeni.html" class="legal">Termeni și confidențialitate</a> · ce date păstrăm, unde stau și cum le ștergi.</p>
         <p class="note verline">Versiunea aplicației: <button type="button" class="linkbtn" id="buildId" data-notr></button></p>
       </section>
 
@@ -1350,7 +1355,7 @@ This typically indicates that your device does not have a healthy Internet conne
 <script>
 (function(){"use strict";
 var TARGET="web";
-var BUILD_ID="build 2026-11-27 13:35 UTC";
+var BUILD_ID="build 2026-11-27 13:55 UTC";
 var WHERE_DB="Datele tale stau în contul tău, într-un proiect Firebase (Google Cloud, regiunea Frankfurt). Pe telefon rămâne doar o copie temporară, ca să meargă și fără net.";
 var MONTHS=["ianuarie","februarie","martie","aprilie","mai","iunie","iulie","august","septembrie","octombrie","noiembrie","decembrie"];
 var GROUPS=["Casă","Firmă"], KINDS=["Plată","Încasare","Transfer","Memento"];
@@ -1803,7 +1808,7 @@ I18N.en={
 "Copia are toate rândurile, cursurile și scadențele mașinii. Păstrează-o într-un loc sigur: e doar a ta și nu o pune pe GitHub.":"The copy has all rows, rates and car due dates. Keep it somewhere safe: it's yours alone, don't put it on GitHub.",
 "Fișierul nu e o copie făcută de aplicația asta.":"This file isn't a copy made by this app.","Nu pare o copie făcută de aplicație (nu e JSON valid).":"This doesn't look like a copy made by the app (not valid JSON).","Copia are":"The copy has",
 "Versiunea aplicației:":"App version:","Pune aplicația pe ecranul telefonului":"Put the app on your phone's home screen","Se deschide ca o aplicație, fără bara browserului.":"It opens like an app, without the browser bar.","Instalează":"Install",
-"Datele tale stau în contul tău Google, într-un proiect Firebase (Google Cloud, regiunea Frankfurt). Pe telefon rămâne doar o copie temporară, ca să meargă și fără net.":"Your data lives in your Google account, in a Firebase project (Google Cloud, Frankfurt region). Your phone keeps only a temporary copy so it works offline.",
+"Datele tale stau în contul tău, într-un proiect Firebase (Google Cloud, regiunea Frankfurt). Pe telefon rămâne doar o copie temporară, ca să meargă și fără net.":"Your data lives in your Google account, in a Firebase project (Google Cloud, Frankfurt region). Your phone keeps only a temporary copy so it works offline.",
 "Fără bază de date: rândurile rămân doar în acest browser. Nu se văd pe alt telefon.":"No database: rows stay only in this browser. They don't show on another phone.",
 "Acum datele stau în baza de date a acestei pagini, în contul tău Claude. Ține pagina privată (fără link partajat). Pasul următor e mutarea lor în proiectul tău Google Cloud, cu cont de acces și reguli de securitate.":"Your data is stored in this page's database, in your Claude account. Keep the page private (no shared link).",
 "Gata, aplicația e pe ecranul telefonului.":"Done, the app is on your home screen.",
@@ -1981,7 +1986,9 @@ Object.assign(I18N.en,{"Scuter":"Scooter","Rulotă":"Caravan","Remorcă":"Traile
 /* ================= Versiuni și „Ce e nou” =================
    Versiune mare (2.0) = schimbare importantă; mică (1.3) = funcții noi; reparație (1.3.1) = corectură.
    Cea mai nouă versiune e prima din listă. */
-Object.assign(I18N.en,{"Șterge contul":"Delete account","Șterge contul…":"Delete account…","Șterge definitiv":"Delete permanently","Parola contului":"Account password","ca să confirmi":"to confirm","Scrie":"Type",
+Object.assign(I18N.en,{"Termeni și confidențialitate":"Terms and privacy","Creându-ți contul, ești de acord cu":"By creating your account, you agree to the","termenii și confidențialitatea":"terms and privacy",
+" · ce date păstrăm, unde stau și cum le ștergi.":" · what data we keep, where it's stored and how to delete it.","· ce date păstrăm, unde stau și cum le ștergi.":"· what data we keep, where it's stored and how to delete it.",
+"Șterge contul":"Delete account","Șterge contul…":"Delete account…","Șterge definitiv":"Delete permanently","Parola contului":"Account password","ca să confirmi":"to confirm","Scrie":"Type",
 "Se șterg definitiv toate datele tale din aplicație (luni, setări, vehicule, cheltuieli) și contul. Nu se mai pot recupera.":"All your data in the app (months, settings, vehicles, expenses) and your account are deleted for good. They can't be recovered.",
 "Dacă vrei să le păstrezi, apasă întâi":"If you want to keep them, first tap","de mai sus.":"above.",
 "La final îți cer să confirmi contul Google într-o fereastră, ca să știm sigur că ești tu.":"At the end you'll confirm your Google account in a window, so we know it's really you.",
@@ -2050,9 +2057,9 @@ I18N.enP.unshift(
 );
 
 var CHANGELOG=[
- {v:"2.2",d:"2026-11-27",t:{ro:"Ștergerea contului",en:"Deleting your account"},
-  ro:["Mai mult → Contul și datele → „Șterge contul”: șterge definitiv toate datele și contul", "Ca să nu se întâmple din greșeală: scrii ȘTERGE și confirmi că ești tu (cu Google sau cu parola)", "Rândurile din tabel nu mai stau toate deschise (reparat)"],
-  en:["More → Account and data → “Delete account”: deletes all your data and the account for good", "So it can't happen by mistake: you type DELETE and confirm it's you (with Google or your password)", "Table rows no longer all stay open (fixed)"]},
+ {v:"2.2",d:"2026-11-27",t:{ro:"Contul și datele tale",en:"Your account and data"},
+  ro:["Mai mult → Contul și datele → „Șterge contul”: șterge definitiv toate datele și contul", "Ca să nu se întâmple din greșeală: scrii ȘTERGE și confirmi că ești tu (cu Google sau cu parola)", "Pagina „Termeni și confidențialitate”: ce date păstrăm, unde stau, cine le vede și cum le ștergi; link pe ecranul de intrare și în Contul și datele", "Rândurile din tabel nu mai stau toate deschise (reparat)"],
+  en:["More → Account and data → “Delete account”: deletes all your data and the account for good", "So it can't happen by mistake: you type DELETE and confirm it's you (with Google or your password)", "The “Terms and privacy” page: what data we keep, where it's stored, who sees it and how to delete it; linked from the sign-in screen and Account and data", "Table rows no longer all stay open (fixed)"]},
  {v:"2.1",d:"2026-11-27",t:{ro:"Intrare cu email",en:"Email sign-in"},
   ro:["Pe lângă Google, intri și cu email și parolă: „Am cont” sau „Cont nou”", "Cont nou: parola se scrie de două ori, iar regulile se bifează pe loc (litere mici și mari, o cifră, un caracter special, minim 10)", "Adresa se confirmă printr-un email, înainte de prima intrare", "„Am uitat parola”: linkul din email deschide o pagină a aplicației, unde pui parola nouă de două ori", "Sau intri fără parolă, cu un link trimis pe email"],
   en:["Besides Google, you can sign in with email and password: “I have an account” or “New account”", "New account: you type the password twice, and the rules tick off as you go (lowercase and uppercase letters, a number, a special character, at least 10)", "The address is confirmed by email before the first sign-in", "“Forgot password”: the email link opens a page in the app where you type the new password twice", "Or sign in without a password, with a link sent by email"]},
@@ -4534,7 +4541,7 @@ function gMode(m){
   document.querySelectorAll("#gform [data-gm]").forEach(function(b){b.setAttribute("aria-selected",b.getAttribute("data-gm")===GM.mode?"true":"false")});
   $("#gSubmit").textContent=GM.link?"Intră":up?"Creează contul":"Intră";
   $("#gPass").setAttribute("autocomplete",up?"new-password":"current-password");
-  $("#gPassHint").hidden=!up||GM.link;$("#gPass2L").hidden=!up||GM.link;$("#gRules").hidden=!up||GM.link;
+  $("#gPassHint").hidden=!up||GM.link;$("#gTerms").hidden=!up||GM.link;$("#gPass2L").hidden=!up||GM.link;$("#gRules").hidden=!up||GM.link;
   if(up)pwPaint($("#gRules"),$("#gPass").value,$("#gPass2").value,false);$("#gForgot").hidden=up||GM.link;$("#gLinkB").hidden=GM.link;
   $("#gPassL").hidden=GM.link;document.querySelector("#gform .gtabs").hidden=GM.link;
 }
