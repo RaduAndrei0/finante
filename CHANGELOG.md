@@ -2,6 +2,20 @@
 
 Versiune mare (2.0) = schimbare importantă · mică (1.3) = funcții noi · reparație (1.3.1) = corectură.
 
+## v2.1 · 27 noiembrie 2026 — Intrare cu email
+
+- Pe lângă Google, intri și cu email și parolă: „Am cont” sau „Cont nou”
+- La un cont nou, adresa se confirmă printr-un email, înainte de prima intrare
+- „Am uitat parola”: primești pe email un link ca s-o schimbi
+- Sau intri fără parolă, cu un link trimis pe email
+
+*Email sign-in · 27 November 2026*
+
+- Besides Google, you can sign in with email and password: “I have an account” or “New account”
+- For a new account, the address is confirmed by email before the first sign-in
+- “Forgot password”: you get an email link to change it
+- Or sign in without a password, with a link sent by email
+
 ## v2.0 · 27 noiembrie 2026 — Funcții și deconturi
 
 - Setări → Funcții: alegi ce folosești, pe categorii (Casă, Firmă, Transport, General), fiecare funcție cu comutatorul ei

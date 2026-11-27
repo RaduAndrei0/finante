@@ -636,6 +636,32 @@ details.fold[open]>summary{margin-bottom:10px}
 .gbtn{display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:48px;padding:0 20px;font-size:15px;font-weight:600;background:var(--surface);border:1.5px solid var(--line);border-radius:12px;color:var(--fg);width:100%;margin-top:4px}
 .gbtn:hover{border-color:var(--muted)}
 .gbtn svg{width:20px;height:20px;flex:none}
+.gor{display:flex;align-items:center;gap:10px;width:100%;color:var(--muted);font-size:12px;text-transform:uppercase;letter-spacing:.08em;margin:2px 0}
+.gor::before,.gor::after{content:"";flex:1;height:1px;background:var(--line)}
+.gbtn svg[fill="none"]{color:var(--fg)}
+.gform,.gverify{width:100%;display:flex;flex-direction:column;gap:10px;text-align:left}
+.gatecard .gform{border:0;padding:0;margin:4px 0 0;background:none}
+.gtabs{display:grid;grid-template-columns:1fr 1fr;gap:4px;padding:4px;border-radius:12px;background:var(--surface2);border:1px solid var(--line)}
+.gtabs button{border:0;background:transparent;border-radius:9px;padding:9px 6px;font:inherit;font-size:14px;font-weight:500;color:var(--muted);cursor:pointer}
+.gtabs button[aria-selected="true"]{background:var(--surface);color:var(--fg);box-shadow:0 1px 3px rgba(0,0,0,.12),0 0 0 1px var(--line)}
+.gfield{display:flex;flex-direction:column;gap:5px;font-size:12.5px;color:var(--muted)}
+.gfield input{width:100%;min-height:46px;background:var(--surface);border:1.5px solid var(--line);border-radius:12px;padding:10px 12px;color:var(--fg);font:inherit;font-size:16px}
+.gfield input:focus{outline:none;border-color:var(--brand-fg)}
+.gpw{position:relative;display:block}
+.gpw input{padding-right:48px}
+.gshow{position:absolute;right:4px;top:50%;transform:translateY(-50%);width:40px;height:38px;border:0;background:transparent;border-radius:9px;color:var(--muted);cursor:pointer;display:flex;align-items:center;justify-content:center}
+.gshow svg{width:20px;height:20px}
+.gshow[aria-pressed="true"]{color:var(--brand-fg)}
+.ghint{font-size:12px;color:var(--muted);margin-top:-4px}
+.gsubmit{min-height:48px;border-radius:12px;font-size:15px;font-weight:600;width:100%;justify-content:center}
+.glinks{display:flex;flex-direction:column;align-items:center;gap:2px}
+.glink{border:0;background:transparent;color:var(--brand-fg);font:inherit;font-size:13.5px;padding:7px 6px;cursor:pointer;border-radius:8px;text-align:center}
+.glink:hover{text-decoration:underline}
+.gback{color:var(--muted);align-self:center}
+.gverify{align-items:center;text-align:center}
+.gverify p{margin:0;font-size:14px;line-height:1.45}
+.gvic{width:52px;height:52px;border-radius:16px;display:flex;align-items:center;justify-content:center;color:var(--brand-fg);background:color-mix(in srgb,var(--brand-fg) 14%,transparent)}
+.gvic svg{width:26px;height:26px}
 .gnote2{margin:6px 0 0;font-size:12px;color:var(--muted);max-width:34ch}
 .glang{display:flex;align-items:center;justify-content:center;gap:6px;margin-top:10px;font-size:13px;color:var(--muted)}
 .glang select{background:var(--surface);color:var(--fg);border:1px solid var(--line);border-radius:8px;padding:5px 8px;font:inherit}
@@ -905,9 +931,32 @@ html[lang="en"] .impgrp[open]>summary::after{content:"Hide ▴"!important}
     <div class="sub">Casă și firmă, o lună pe rând.</div>
     <div class="gmsg" id="gmsg" role="status">Se verifică contul…</div>
     <button class="btn gbtn" id="gsign" type="button" hidden><svg viewBox="0 0 48 48" aria-hidden="true"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg><span>Intră cu Google</span></button>
+    <div class="gor" id="gor" hidden><span>sau</span></div>
+    <button class="btn gbtn" id="gmailOpen" type="button" hidden><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="5.5" width="17" height="13" rx="2"/><path d="M4 7l8 6 8-6"/></svg>Intră cu email</button>
+    <form class="gform" id="gform" hidden novalidate>
+      <div class="gtabs" role="tablist" aria-label="Cont">
+        <button type="button" role="tab" data-gm="in" aria-selected="true">Am cont</button>
+        <button type="button" role="tab" data-gm="up" aria-selected="false">Cont nou</button>
+      </div>
+      <label class="gfield"><span>Email</span><input id="gEmail" type="email" inputmode="email" autocomplete="email" autocapitalize="off" spellcheck="false" placeholder="nume@exemplu.ro"></label>
+      <label class="gfield" id="gPassL"><span>Parolă</span><span class="gpw"><input id="gPass" type="password" autocomplete="current-password"><button type="button" class="gshow" id="gShow" aria-label="Arată parola" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 12s3.5-6.5 9.5-6.5 9.5 6.5 9.5 6.5-3.5 6.5-9.5 6.5S2.5 12 2.5 12z"/><circle cx="12" cy="12" r="2.8"/></svg></button></span></label>
+      <small class="ghint" id="gPassHint" hidden>Cel puțin 8 caractere. Îți trimit apoi un email ca să confirmi adresa.</small>
+      <button class="btn pri gsubmit" id="gSubmit" type="submit">Intră</button>
+      <div class="glinks">
+        <button type="button" class="glink" id="gForgot">Am uitat parola</button>
+        <button type="button" class="glink" id="gLinkB">Intră fără parolă, cu un link pe email</button>
+      </div>
+      <button type="button" class="glink gback" id="gBack">← Alte variante</button>
+    </form>
+    <div class="gverify" id="gverify" hidden>
+      <div class="gvic" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="5.5" width="17" height="13" rx="2"/><path d="M4 7l8 6 8-6"/></svg></div>
+      <p id="gvText"></p>
+      <button class="btn pri gsubmit" id="gvDone" type="button">Am confirmat</button>
+      <button class="glink" id="gvResend" type="button">Retrimite emailul</button>
+    </div>
     <button class="btn" id="gout" type="button" hidden>Ieși din cont</button>
     <label class="glang" data-notr>🌐 <select data-lang="1" aria-label="Limba / Language" data-notr><option value="ro">Română</option><option value="en">English</option></select></label>
-    <p class="gnote2">Datele tale stau în contul tău Google (Firebase, Frankfurt). Doar contul tău are acces la ele.</p>
+    <p class="gnote2">Datele tale stau în contul tău (Firebase, Frankfurt). Doar tu ai acces la ele.</p>
   </div>
 </div>
 
@@ -1253,8 +1302,8 @@ This typically indicates that your device does not have a healthy Internet conne
 <script>
 (function(){"use strict";
 var TARGET="web";
-var BUILD_ID="build 2026-11-27 10:10 UTC";
-var WHERE_DB="Datele tale stau în contul tău Google, într-un proiect Firebase (Google Cloud, regiunea Frankfurt). Pe telefon rămâne doar o copie temporară, ca să meargă și fără net.";
+var BUILD_ID="build 2026-11-27 10:25 UTC";
+var WHERE_DB="Datele tale stau în contul tău, într-un proiect Firebase (Google Cloud, regiunea Frankfurt). Pe telefon rămâne doar o copie temporară, ca să meargă și fără net.";
 var MONTHS=["ianuarie","februarie","martie","aprilie","mai","iunie","iulie","august","septembrie","octombrie","noiembrie","decembrie"];
 var GROUPS=["Casă","Firmă"], KINDS=["Plată","Încasare","Transfer","Memento"];
 var TABS=["general","casa","firma","transport","mai"], TAB_ALIAS={luna:"general",extrase:"firma",masina:"transport"};
@@ -1884,7 +1933,22 @@ Object.assign(I18N.en,{"Scuter":"Scooter","Rulotă":"Caravan","Remorcă":"Traile
 /* ================= Versiuni și „Ce e nou” =================
    Versiune mare (2.0) = schimbare importantă; mică (1.3) = funcții noi; reparație (1.3.1) = corectură.
    Cea mai nouă versiune e prima din listă. */
-Object.assign(I18N.en,{"Funcții":"Features","Ții evidența pentru":"You keep track of","Casă și firmă":"Home and business","Mereu":"Always","Pornit":"On","Oprit":"Off",
+Object.assign(I18N.en,{"sau":"or","Intră cu email":"Sign in with email","Am cont":"I have an account","Cont nou":"New account","Parolă":"Password","nume@exemplu.ro":"name@example.com",
+"Cel puțin 8 caractere. Îți trimit apoi un email ca să confirmi adresa.":"At least 8 characters. We'll then email you to confirm the address.","Intră":"Sign in","Creează contul":"Create account","Am uitat parola":"Forgot password",
+"Intră fără parolă, cu un link pe email":"Sign in without a password, with an email link","← Alte variante":"← Other options","Am confirmat":"I've confirmed","Retrimite emailul":"Resend the email","Arată parola":"Show password","Ascunde parola":"Hide password",
+"Datele tale stau în contul tău (Firebase, Frankfurt). Doar tu ai acces la ele.":"Your data lives in your account (Firebase, Frankfurt). Only you can access it.",
+"Adresa de email nu pare corectă.":"That email address doesn't look right.","Email sau parolă greșită. Dacă ți-ai făcut contul cu Google, intră cu Google.":"Wrong email or password. If you made your account with Google, sign in with Google.",
+"Există deja un cont cu adresa asta. Intră cu parola, cu Google sau cu un link pe email.":"There's already an account with this address. Sign in with the password, with Google or with an email link.",
+"Parola e prea slabă: pune cel puțin 8 caractere.":"The password is too weak: use at least 8 characters.","Prea multe încercări. Așteaptă câteva minute și încearcă din nou.":"Too many attempts. Wait a few minutes and try again.",
+"Intrarea cu email nu e pornită încă (Firebase → Authentication → Sign-in method).":"Email sign-in isn't turned on yet (Firebase → Authentication → Sign-in method).","Contul ăsta e oprit.":"This account is disabled.",
+"Linkul a expirat sau a fost deja folosit. Cere unul nou.":"The link has expired or was already used. Ask for a new one.","Scrie parola.":"Enter the password.","Se verifică linkul…":"Checking the link…",
+"Scrie o adresă de email corectă.":"Enter a valid email address.","Parola trebuie să aibă cel puțin 8 caractere.":"The password needs at least 8 characters.","Se creează contul…":"Creating the account…","Se verifică…":"Checking…","Se trimite…":"Sending…",
+"Scrie întâi adresa de email de mai sus, apoi apasă din nou „Am uitat parola”.":"First enter your email address above, then tap “Forgot password” again.",
+"Dacă există un cont cu adresa asta, ți-am trimis un email cu linkul de resetare. Uită-te și în Spam.":"If there's an account with this address, we've sent an email with the reset link. Check Spam too.",
+"Scrie întâi adresa de email de mai sus, apoi apasă din nou.":"First enter your email address above, then tap again.","Încă nu văd confirmarea. Apasă linkul din email, apoi încearcă din nou.":"I can't see the confirmation yet. Tap the link in the email, then try again.",
+"Am retrimis emailul de confirmare.":"The confirmation email was sent again.","Scrie adresa de email la care ai primit linkul, apoi apasă „Intră”.":"Enter the email address the link was sent to, then tap “Sign in”.",
+"Aplicația e privată deocamdată: contul ăsta nu are acces. Ieși și intră cu un cont invitat.":"The app is private for now: this account has no access. Sign out and sign in with an invited account.",
+"Funcții":"Features","Ții evidența pentru":"You keep track of","Casă și firmă":"Home and business","Mereu":"Always","Pornit":"On","Oprit":"Off",
 "Pornește doar ce folosești. Ce oprești se ascunde, dar datele rămân și revin când îl pornești din nou.":"Turn on only what you use. Anything you turn off is hidden, but its data stays and comes back when you turn it on again.",
 "Plățile lunare ale casei, venitul și ce rămâne.":"Monthly home payments, income and what's left.",
 "Alege „Casă” sau „Casă și firmă” sus ca s-o folosești.":"Pick “Home” or “Home and business” above to use it.",
@@ -1921,6 +1985,9 @@ I18N.enP.unshift(
 );
 
 var CHANGELOG=[
+ {v:"2.1",d:"2026-11-27",t:{ro:"Intrare cu email",en:"Email sign-in"},
+  ro:["Pe lângă Google, intri și cu email și parolă: „Am cont” sau „Cont nou”", "La un cont nou, adresa se confirmă printr-un email, înainte de prima intrare", "„Am uitat parola”: primești pe email un link ca s-o schimbi", "Sau intri fără parolă, cu un link trimis pe email"],
+  en:["Besides Google, you can sign in with email and password: “I have an account” or “New account”", "For a new account, the address is confirmed by email before the first sign-in", "“Forgot password”: you get an email link to change it", "Or sign in without a password, with a link sent by email"]},
  {v:"2.0",d:"2026-11-27",t:{ro:"Funcții și deconturi",en:"Features and reimbursements"},
   ro:["Setări → Funcții: alegi ce folosești, pe categorii (Casă, Firmă, Transport, General), fiecare funcție cu comutatorul ei", "Doar Casă, doar Firmă sau amândouă: ce nu folosești dispare din meniu, iar datele rămân", "Sume în euro și la Casă (salariu, chirie, rate), socotite în lei la cursul lunii", "„Firma îți datorează”: ce plătești din banii tăi pentru firmă, apoi „Cere decontul” pune totul într-un singur rând la Firmă", "Decontul se bifează singur când încarci extrasul, chiar dacă firma plătește luna următoare"],
   en:["Settings → Features: pick what you use, by category (Home, Business, Transport, Overview), each feature with its own switch", "Just Home, just Business or both: what you don't use disappears from the menu, and the data stays", "Euro amounts for Home too (salary, rent, loan payments), converted to RON at the month's rate", "“The business owes you”: what you pay from your own money for the business, then “Request reimbursement” puts it all in one Business row", "The reimbursement checks itself when you load the statement, even if the business pays the next month"]},
@@ -4376,15 +4443,51 @@ function webListenErr(err){
   if(err&&err.code==="permission-denied"){
     fbBanner("Firestore nu te lasă să citești datele. În Firebase, la Firestore → Rules, verifică să fie publicate regulile primite de la mine.");
     /* aplicația e privată: un cont fără acces vede un mesaj clar și poate ieși */
-    if(!FB.signingOut){gateShow("Aplicația e privată deocamdată: contul ăsta nu are acces. Intră cu contul principal.",false,true);$("#gout").hidden=false}
+    if(!FB.signingOut){gateShow("Aplicația e privată deocamdată: contul ăsta nu are acces. Ieși și intră cu un cont invitat.",false,true);$("#gout").hidden=false}
   }
 }
 
 /* ---------- poarta de login ---------- */
 function gateShow(text,btn,err){
-  $("#gate").hidden=false;
+  $("#gate").hidden=false;$("#gverify").hidden=true;
   var m=$("#gmsg");m.textContent=text||"";m.className="gmsg"+(err?" err":"");
-  var b=$("#gsign");b.hidden=!btn;b.disabled=false;
+  gOpts(!!btn);$("#gsign").disabled=false;
+}
+/* intrarea: Google sau email (parolă / link pe email) */
+var GM={mode:"in",open:false,link:false}, APP_URL=location.origin+location.pathname;
+function gMsg(t,err){var m=$("#gmsg");m.textContent=t||"";m.className="gmsg"+(err?" err":"")}
+function gOpts(show){
+  $("#gsign").hidden=!show||GM.open;$("#gor").hidden=!show||GM.open;$("#gmailOpen").hidden=!show||GM.open;
+  $("#gform").hidden=!show||!GM.open;
+}
+function gMode(m){
+  GM.mode=m==="up"?"up":"in";var up=GM.mode==="up";
+  document.querySelectorAll("#gform [data-gm]").forEach(function(b){b.setAttribute("aria-selected",b.getAttribute("data-gm")===GM.mode?"true":"false")});
+  $("#gSubmit").textContent=GM.link?"Intră":up?"Creează contul":"Intră";
+  $("#gPass").setAttribute("autocomplete",up?"new-password":"current-password");
+  $("#gPassHint").hidden=!up||GM.link;$("#gForgot").hidden=up||GM.link;$("#gLinkB").hidden=GM.link;
+  $("#gPassL").hidden=GM.link;document.querySelector("#gform .gtabs").hidden=GM.link;
+}
+function gBusy(b){["#gSubmit","#gForgot","#gLinkB","#gvDone","#gvResend"].forEach(function(q){var e=$(q);if(e)e.disabled=b})}
+function emailOk(e){return /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(e)}
+function authErr(e){
+  var c=(e&&e.code)||"";
+  return c==="auth/invalid-email"?"Adresa de email nu pare corectă."
+    :(c==="auth/invalid-credential"||c==="auth/wrong-password"||c==="auth/user-not-found"||c==="auth/invalid-login-credentials")?"Email sau parolă greșită. Dacă ți-ai făcut contul cu Google, intră cu Google."
+    :c==="auth/email-already-in-use"?"Există deja un cont cu adresa asta. Intră cu parola, cu Google sau cu un link pe email."
+    :c==="auth/weak-password"?"Parola e prea slabă: pune cel puțin 8 caractere."
+    :c==="auth/too-many-requests"?"Prea multe încercări. Așteaptă câteva minute și încearcă din nou."
+    :c==="auth/operation-not-allowed"?"Intrarea cu email nu e pornită încă (Firebase → Authentication → Sign-in method)."
+    :c==="auth/user-disabled"?"Contul ăsta e oprit."
+    :(c==="auth/invalid-action-code"||c==="auth/expired-action-code")?"Linkul a expirat sau a fost deja folosit. Cere unul nou."
+    :c==="auth/missing-password"?"Scrie parola."
+    :signInErr(e);
+}
+/* cont cu parolă, adresă neconfirmată: întâi confirmarea (regulile cer email confirmat) */
+function needsVerify(u){return !u.emailVerified&&(u.providerData||[]).some(function(p){return p&&p.providerId==="password"})}
+function showVerify(u){
+  $("#gate").hidden=false;gOpts(false);$("#gverify").hidden=false;$("#gout").hidden=false;$("#gout").disabled=false;gMsg("");
+  $("#gvText").textContent=L("Ți-am trimis un email de confirmare la ","We've sent a confirmation email to ")+(u.email||"")+L(". Apasă linkul din el, apoi revino aici și apasă „Am confirmat”. Dacă nu-l găsești, uită-te și în Spam.",". Tap the link in it, then come back here and tap “I've confirmed”. If you can't find it, check Spam too.");
 }
 function gateHide(){$("#gate").hidden=true}
 function startSession(u){
@@ -4421,8 +4524,10 @@ function signInErr(e){
   var pp;
   try{pp=FB.fs.enablePersistence({synchronizeTabs:true}).catch(function(){})}catch(e){pp=Promise.resolve()}
   var persist=Promise.race([pp,new Promise(function(r){setTimeout(r,4000)})]);
+  try{FB.auth.languageCode=LANG}catch(e){}
   FB.auth.onAuthStateChanged(function(u){
-    if(u){persist.then(function(){startSession(u)});return}
+    if(u&&needsVerify(u)){showVerify(u);return}
+    if(u){$("#gverify").hidden=true;persist.then(function(){startSession(u)});return}
     if(FB.uid){if(!FB.signingOut)location.reload();return}
     gateShow("",true);
   });
@@ -4432,6 +4537,68 @@ function signInErr(e){
     var p=new firebase.auth.GoogleAuthProvider();p.setCustomParameters({prompt:"select_account"});
     FB.auth.signInWithPopup(p).catch(function(e){gateShow(signInErr(e),true,true)});
   });
+  /* ---------- intrarea cu email ---------- */
+  $("#gmailOpen").addEventListener("click",function(){GM.open=true;gOpts(true);gMode(GM.mode);gMsg("");try{$("#gEmail").focus()}catch(e){}});
+  $("#gBack").addEventListener("click",function(){GM.open=false;GM.link=false;gMode("in");gOpts(true);gMsg("")});
+  document.querySelectorAll("#gform [data-gm]").forEach(function(b){b.addEventListener("click",function(){gMode(b.getAttribute("data-gm"));gMsg("")})});
+  $("#gShow").addEventListener("click",function(){var i=$("#gPass"),on=i.type==="password";i.type=on?"text":"password";this.setAttribute("aria-pressed",on?"true":"false");this.setAttribute("aria-label",on?"Ascunde parola":"Arată parola")});
+  function linkDone(){try{localStorage.removeItem("fin_linkEmail")}catch(e){}GM.link=false;try{history.replaceState(null,"",APP_URL+location.hash)}catch(e){}}
+  function doLink(em){
+    gBusy(true);gMsg("Se verifică linkul…");
+    FB.auth.signInWithEmailLink(em,location.href).then(function(){linkDone();gBusy(false)},function(e){gBusy(false);if(/action-code/.test((e&&e.code)||""))linkDone();GM.open=true;gOpts(true);gMode("in");gMsg(authErr(e),true)});
+  }
+  $("#gform").addEventListener("submit",function(e){
+    e.preventDefault();
+    var em=$("#gEmail").value.trim(),pw=$("#gPass").value;
+    if(!emailOk(em)){gMsg("Scrie o adresă de email corectă.",true);$("#gEmail").focus();return}
+    if(GM.link){doLink(em);return}
+    if(!pw){gMsg("Scrie parola.",true);$("#gPass").focus();return}
+    if(GM.mode==="up"&&pw.length<8){gMsg("Parola trebuie să aibă cel puțin 8 caractere.",true);$("#gPass").focus();return}
+    gBusy(true);gMsg(GM.mode==="up"?"Se creează contul…":"Se verifică…");
+    var pr=GM.mode==="up"
+      ?FB.auth.createUserWithEmailAndPassword(em,pw).then(function(c){return c.user.sendEmailVerification({url:APP_URL}).catch(function(){})})
+      :FB.auth.signInWithEmailAndPassword(em,pw);
+    pr.then(function(){gBusy(false);$("#gPass").value=""},function(er){gBusy(false);gMsg(authErr(er),true)});
+  });
+  $("#gForgot").addEventListener("click",function(){
+    var em=$("#gEmail").value.trim();
+    if(!emailOk(em)){gMsg("Scrie întâi adresa de email de mai sus, apoi apasă din nou „Am uitat parola”.",true);$("#gEmail").focus();return}
+    var ok=function(){gBusy(false);gMsg("Dacă există un cont cu adresa asta, ți-am trimis un email cu linkul de resetare. Uită-te și în Spam.")};
+    gBusy(true);gMsg("Se trimite…");
+    FB.auth.sendPasswordResetEmail(em,{url:APP_URL}).then(ok,function(er){if(er&&er.code==="auth/user-not-found")ok();else{gBusy(false);gMsg(authErr(er),true)}});
+  });
+  $("#gLinkB").addEventListener("click",function(){
+    var em=$("#gEmail").value.trim();
+    if(!emailOk(em)){gMsg("Scrie întâi adresa de email de mai sus, apoi apasă din nou.",true);$("#gEmail").focus();return}
+    gBusy(true);gMsg("Se trimite…");
+    FB.auth.sendSignInLinkToEmail(em,{url:APP_URL,handleCodeInApp:true}).then(function(){
+      try{localStorage.setItem("fin_linkEmail",em)}catch(e){}
+      gBusy(false);gMsg(L("Ți-am trimis un link de intrare la ","We've sent a sign-in link to ")+em+L(". Deschide-l pe acest telefon sau calculator. Uită-te și în Spam.",". Open it on this phone or computer. Check Spam too."));
+    },function(er){gBusy(false);gMsg(authErr(er),true)});
+  });
+  $("#gvDone").addEventListener("click",function(){
+    var u=FB.auth.currentUser;if(!u)return;
+    gBusy(true);gMsg("Se verifică…");
+    u.reload().then(function(){
+      var v=FB.auth.currentUser;
+      if(v&&v.emailVerified)return v.getIdToken(true).then(function(){gBusy(false);gMsg("");$("#gverify").hidden=true;$("#gout").hidden=true;persist.then(function(){startSession(v)})});
+      gBusy(false);gMsg("Încă nu văd confirmarea. Apasă linkul din email, apoi încearcă din nou.",true);
+    },function(er){gBusy(false);gMsg(authErr(er),true)});
+  });
+  $("#gvResend").addEventListener("click",function(){
+    var u=FB.auth.currentUser;if(!u)return;
+    gBusy(true);
+    u.sendEmailVerification({url:APP_URL}).then(function(){gBusy(false);gMsg("Am retrimis emailul de confirmare.")},function(er){gBusy(false);gMsg(authErr(er),true)});
+  });
+  /* am venit dintr-un link de intrare primit pe email */
+  try{
+    if(FB.auth.isSignInWithEmailLink(location.href)){
+      var le=null;try{le=localStorage.getItem("fin_linkEmail")}catch(e){}
+      GM.link=true;GM.open=true;
+      if(le)doLink(le);
+      else{gOpts(true);gMode("in");gMsg("Scrie adresa de email la care ai primit linkul, apoi apasă „Intră”.")}
+    }
+  }catch(e){}
   /* aplicația instalabilă: service worker (merge și fără net) + butonul „Instalează” */
   var standalone=function(){try{return matchMedia("(display-mode: standalone)").matches||navigator.standalone===true}catch(e){return false}};
   if("serviceWorker" in navigator&&location.protocol==="https:"){
