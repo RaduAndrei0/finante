@@ -1,211 +1,82 @@
 # Finanțe Lunare — Ce e nou / Changelog
 
-Versiune mare (3.0) = schimbare importantă · mică (2.1) = funcție nouă · reparație (2.1.1) = corectură.
+Versiune mare (2.0) = schimbare importantă · mică (1.3) = funcții noi · reparație (1.3.1) = corectură.
 
-## v3.0 · 27 noiembrie 2026 — Funcții, după cum îți trebuie
+## v2.0 · 27 noiembrie 2026 — Funcții și deconturi
 
-- Setări → Funcții: toate funcțiile aplicației pe categorii (Casă, Firmă, Transport, General), fiecare cu comutatorul ei
-- Ții evidența doar pentru Casă, doar pentru Firmă sau pentru amândouă; ce nu folosești dispare din meniu
-- Comutatoare noi: extrasele firmei, „Firma îți datorează”, vehiculele și scadențele, calendarul lunii
-- Sume în euro și la Casă: salariu, chirie sau rate în EUR, socotite în lei la cursul lunii (același curs ca la Firmă)
-- La prima intrare alegi Casă, Firmă sau amândouă; ce oprești doar se ascunde, datele rămân
+- Setări → Funcții: alegi ce folosești, pe categorii (Casă, Firmă, Transport, General), fiecare funcție cu comutatorul ei
+- Doar Casă, doar Firmă sau amândouă: ce nu folosești dispare din meniu, iar datele rămân
+- Sume în euro și la Casă (salariu, chirie, rate), socotite în lei la cursul lunii
+- „Firma îți datorează”: ce plătești din banii tăi pentru firmă, apoi „Cere decontul” pune totul într-un singur rând la Firmă
+- Decontul se bifează singur când încarci extrasul, chiar dacă firma plătește luna următoare
 
-*Features, the way you need them · 27 November 2026*
+*Features and reimbursements · 27 November 2026*
 
-- Settings → Features: all the app's features by category (Home, Business, Transport, Overview), each with its own switch
-- Track just Home, just Business or both; what you don't use disappears from the menu
-- New switches: business statements, “The business owes you”, vehicles and due dates, the month calendar
-- Euro amounts for Home too: salary, rent or loan payments in EUR, converted to RON at the month's rate (the same rate as Business)
-- On first sign-in you pick Home, Business or both; anything you turn off is only hidden, the data stays
+- Settings → Features: pick what you use, by category (Home, Business, Transport, Overview), each feature with its own switch
+- Just Home, just Business or both: what you don't use disappears from the menu, and the data stays
+- Euro amounts for Home too (salary, rent, loan payments), converted to RON at the month's rate
+- “The business owes you”: what you pay from your own money for the business, then “Request reimbursement” puts it all in one Business row
+- The reimbursement checks itself when you load the statement, even if the business pays the next month
 
-## v2.6 · 27 noiembrie 2026 — Decontul din extras
+## v1.3 · 4 noiembrie 2026 — Pentru toată lumea
 
-- Când încarci extrasul firmei, transferul de decont se bifează singur pe rândul „Decont…”, chiar dacă firma plătește luna următoare
-- Rândul de decont se mută în luna în care s-a plătit, cu suma din extras, ca soldul firmei să se potrivească
-- Merge și din extrasul contului personal (Casă), la banii primiți de la firmă
-- Dacă anulezi importul, rândul revine în luna lui, nebifat
-
-*Reimbursement from the statement · 27 November 2026*
-
-- When you load the business statement, the reimbursement transfer checks the “Reimbursement…” row by itself, even if the business pays the next month
-- The reimbursement row moves to the month it was paid in, with the amount from the statement, so the business balance matches
-- It also works from your personal account statement (Home), for money received from the business
-- If you undo the import, the row goes back to its month, unchecked
-
-## v2.5 · 27 noiembrie 2026 — Cheltuieli pe firmă
-
-- „+ Cheltuială pe firmă” în panoul „Firma îți datorează”: birotică, echipamente, telefon, masă, cazare și altele plătite din banii tăi
-- Atingi un rând din panou ca să-l modifici sau să-l ștergi; cele de transport te duc în Transport
-- Panoul arată și ce a fost deja decontat
-
-*Business expenses · 27 November 2026*
-
-- “+ Business expense” in the “The business owes you” panel: office supplies, equipment, phone, meals, accommodation and more paid from your own money
-- Tap a row in the panel to edit or delete it; transport ones take you to Transport
-- The panel also shows what has already been reimbursed
-
-## v2.4 · 27 noiembrie 2026 — Firma îți datorează
-
-- Transport: la „Plătit din” poți alege „Banii mei, pe firmă”, când plătești tu ceva pentru firmă (de ex. un plin cash, cu factura pe firmă)
-- Firmă: panoul „Firma îți datorează” arată ce ai de recuperat și totalul
-- „Cere decontul” pune la Firmă un rând de Transfer cu suma; când îl bifezi, cheltuielile apar „Decontat”, banii intră la venitul Casei și ies din soldul firmei
-- O cheltuială importată din extras își păstrează legătura cu extrasul și după ce o modifici
-
-*The business owes you · 27 November 2026*
-
-- Transport: under “Paid from” you can pick “My money, for the business”, when you pay for something the business owes you for (e.g. a cash fill-up invoiced to the business)
-- Business: the “The business owes you” panel shows what you have to get back and the total
-- “Request reimbursement” adds a Transfer row on Business with the amount; when you check it, the expenses show “Reimbursed”, the money counts as Home income and leaves the business balance
-- An expense imported from a statement keeps its link to the statement after you edit it
-
-## v2.3 · 4 noiembrie 2026 — Pentru toată lumea
-
-- Luna nouă pornește cu note goale la plăți și încasări; memento-urile își păstrează nota, iar cu 📌 fixezi orice notă
-- Pe rândurile potrivite din extras apare „Din extras”: cine a plătit și ce scrie la plată, separat de nota ta
-- Transport: un singur „+ Vehicul”; scrii tipul (mașină, rulotă, barcă, orice), marca, modelul, anul și numărul de înmatriculare, apoi alegi ce urmărești
-- Fiecare scadență are intervalul ei în luni și/sau km, cu șabloane: revizie, distribuție, AdBlue, frâne, bujii, baterie și altele
-- Kilometrajul e opțional: „Făcută” te întreabă la câți km, poți trece km și la plin, iar aplicația estimează când vine revizia
-- Firmă: soldul apare „estimat” până încarci extrasul lunii și „din extras” după; un avertisment îți amintește dacă lipsește
-- În General, „Urmează” arată și scadențele vehiculelor; atingi și te duce direct la ele
-- Texte generale, potrivite oricui
+- Transport: orice vehicul (mașină, rulotă, barcă), cu număr de înmatriculare și ce vrei să urmărești
+- Scadențe pe luni și/sau km, cu șabloane (revizie, distribuție, AdBlue, frâne…); kilometrajul e opțional
+- Luna nouă pornește cu note curate, iar cu 📌 fixezi o notă; la rândurile din extras vezi „Din extras”
+- Soldul firmei apare „estimat” până încarci extrasul și „din extras” după
+- „Urmează” arată și scadențele vehiculelor; textele sunt generale, potrivite oricui
 
 *For everyone · 4 November 2026*
 
-- A new month starts with empty notes on payments and income; reminders keep their note, and 📌 pins any note
-- Rows matched with the statement show “From the statement”: who paid and the payment details, apart from your note
-- Transport: a single “+ Vehicle”; write the type (car, caravan, boat, anything), make, model, year and registration number, then choose what to track
-- Each due item has its own interval in months and/or km, with templates: service, timing belt, AdBlue, brakes, spark plugs, battery and more
-- Mileage is optional: “Done” asks at what km, you can enter km when filling up, and the app estimates when the service is due
-- Business: the balance shows “estimated” until you load the month's statement and “from statement” after; a notice reminds you if it's missing
-- On Overview, “Coming up” also shows vehicle due items; tap one to jump straight to it
-- General wording that fits anyone
+- Transport: any vehicle (car, caravan, boat), with registration number and what you want to track
+- Due items by months and/or km, with templates (service, timing belt, AdBlue, brakes…); mileage is optional
+- A new month starts with clean notes, and 📌 pins a note; statement rows show “From the statement”
+- The business balance shows “estimated” until you load the statement and “from statement” after
+- “Coming up” also shows vehicle due items; the wording fits anyone
 
-## v2.2.1 · 3 noiembrie 2026 — Corecturi
+## v1.2 · 3 noiembrie 2026 — Mai simplu, în engleză, cu temă
 
-- În engleză, butonul „Șterge rândul” și „Arată / Ascunde” apar acum în engleză
+- Rânduri curate, care se deschid la atingere; memento-urile separat, la „De nu uitat”
+- Aplicația merge și în engleză (Setări sau 🌐 la intrare), iar limba se ține minte în cont
+- Temă luminoasă, întunecată sau după sistem; fiecare tab are stilul lui
+- Soldul Casei și al Firmei se reportă de la o lună la alta; luna nouă pornește fără sume
+- „Anulează” după o ștergere și „Ce e nou” pentru fiecare versiune
 
-*Fixes · 3 November 2026*
+*Simpler, in English, themed · 3 November 2026*
 
-- In English, the “Delete row” button and “Show / Hide” now appear in English
+- Clean rows that open when tapped; reminders listed apart, under “Don't forget”
+- The app works in English too (Settings or 🌐 at sign-in), and the language is saved in your account
+- Light, dark or match-system theme; every tab has its own style
+- The Home and Business balances carry over month to month; a new month starts without amounts
+- “Undo” after deleting and “What's new” for every version
 
-## v2.2 · 3 noiembrie 2026 — Aspect nou și temă
+## v1.1 · 28 octombrie 2026 — Extrase de cont
 
-- Temă luminoasă, întunecată sau după sistem: Mai mult → Aspect și limbă
-- Fiecare tab are stilul lui: Casă cald și rotund, Firmă drept ca un registru, Transport ca un drum
-- Setările sunt acum un meniu: alegi ce vrei să schimbi și intri pe pagina lui
-- Traduceri reparate în engleză la Casă și Firmă
-- În engleză, sumele în lei apar ca RON
+- Extrase: ING Business la Firmă, Salt Bank la Casă și CSV de la orice bancă
+- Cumpărăturile din extras se pun pe categorii, iar „Mută în…” ține minte alegerea
+- La benzinărie, peste prag e plin (apare și în Transport), sub prag mărunțișuri
+- Plățile lunare stau separat de cumpărături; un rând din extras poate deveni plată lunară
+- Se instalează pe telefon și merge și fără net; memento zilnic pentru scadențe
 
-*New look and theme · 3 November 2026*
+*Bank statements · 28 October 2026*
 
-- Light, dark or match-system theme: More → Appearance and language
-- Every tab has its own style: Home warm and rounded, Business straight like a ledger, Transport like a road
-- Settings are now a menu: pick what to change and open its page
-- Fixed English translations on Home and Business
-- In English, lei amounts show as RON
+- Statements: ING Business for Business, Salt Bank for Home and CSV from any bank
+- Shopping from the statement is sorted into categories, and “Move to…” remembers your choice
+- At petrol stations, over the threshold is a full tank (also in Transport), under it small items
+- Monthly payments are kept apart from shopping; a statement row can become a monthly payment
+- Installs on your phone and works offline; a daily reminder for due dates
 
-## v2.1 · 2 noiembrie 2026 — Ce e nou și anulare
+## v1.0 · 27 octombrie 2026 — Aplicația pe web
 
-- Versiuni și „Ce e nou”: vezi aici ce s-a schimbat la fiecare versiune
-- „Anulează” după ștergere: un rând, o cheltuială sau o scadență ștearsă din greșeală revine dintr-o atingere
-- Dacă intră un cont Google fără acces, aplicația îi spune clar că e privată
-
-*What's new and undo · 2 November 2026*
-
-- Versions and “What's new”: see here what changed in each version
-- “Undo” after deleting: a row, expense or due date deleted by mistake comes back with one tap
-- If a Google account without access signs in, the app clearly says it's private
-
-## v2.0 · 2 noiembrie 2026 — English
-
-- Aplicația merge și în engleză: Mai mult → Setări → „Limba / Language” sau 🌐 pe ecranul de login
-- Limba se ține minte în cont, pe toate dispozitivele
-- Sumele și datele în formatul limbii alese
-
-*English · 2 November 2026*
-
-- The app now works in English: More → Settings → “Limba / Language” or 🌐 on the sign-in screen
-- The language is saved in your account, on every device
-- Amounts and dates in the chosen language's format
-
-## v1.5 · 2 noiembrie 2026 — Simplificare
-
-- Rânduri curate și pe calculator: o linie scurtă, se deschid la atingere
-- Memento-urile separat, la „De nu uitat”
-- Moneda apare doar unde contează (Firmă cu euro)
-- La Casă, fără extras: doar plățile lunare și ce rămâne; cu extras: venit, cheltuieli și soldul din cont
-- Soldul de la Casă se preia singur lună de lună
-- Luna nouă pornește fără sume; comisioanele băncii vin doar din extras
-- Soldul firmei se mișcă doar din ce e bifat
-
-*Simpler · 2 November 2026*
-
-- Clean rows on desktop too: one short line, they open when tapped
-- Reminders listed separately, under “Don't forget”
-- Currency only shows where it matters (Business paid in euro)
-- Home without a statement: just monthly payments and what's left; with a statement: income, spending and the account balance
-- The Home balance carries over month to month
-- A new month starts without amounts; bank fees come only from the statement
-- The business balance only moves with checked rows
-
-## v1.4 · 28 octombrie 2026 — Plăți lunare separat
-
-- Cercul arată doar facturile lunii, nu și cumpărăturile
-- „Fă-l plată lunară” pentru un rând din extras
-- Rândurile din extras sunt plătite: fără butoane de status
-- Extrasele la Casă sunt opționale (Setări)
-
-*Monthly payments apart · 28 October 2026*
-
-- The chart shows only the month's bills, not shopping
-- “Make it a monthly payment” for a statement row
-- Statement rows are already paid: no status buttons
-- Statements for Home are optional (Settings)
-
-## v1.3 · 28 octombrie 2026 — Extrase mai deștepte
-
-- Benzinăria: peste prag e plin (și apare în Transport), sub prag mărunțișuri
-- Detalii pe fiecare rând din extras: ce, unde, cât
-- „Mută în…” alt magazin, ține minte alegerea
-- Aplicația se poate instala pe telefon și merge și fără net
-- Import CSV de la orice bancă
-
-*Smarter statements · 28 October 2026*
-
-- Petrol stations: over the threshold is a full tank (also in Transport), under it small items
-- Details on every statement row: what, where, how much
-- “Move to…” another category, remembered for next time
-- The app can be installed on your phone and works offline
-- CSV import from any bank
-
-## v1.2 · 27 octombrie 2026 — Extrase Salt
-
-- Import extras Salt Bank la Casă, pe categorii
-- Memento zilnic pe telefon pentru scadențe
-
-*Salt statements · 27 October 2026*
-
-- Salt Bank statement import for Home, by category
-- Daily phone reminder for due dates
-
-## v1.1 · 27 octombrie 2026 — Setări și Transport
-
-- Module pe care le pornești sau oprești
-- Tabul Transport: vehicule, scadențe, revizii, cheltuieli, „plătit din”
+- Intri cu Google, iar datele stau în contul tău (Firebase), cu copie de siguranță JSON
+- Casă și Firmă, lună de lună: plăți, încasări și memento-uri
+- Module pe care le pornești sau oprești; Transport cu vehicule, scadențe și cheltuieli
 - Ghid la prima intrare
 
-*Settings and Transport · 27 October 2026*
+*The app on the web · 27 October 2026*
 
-- Modules you can turn on or off
-- Transport tab: vehicles, due dates, services, expenses, “paid from”
+- Sign in with Google, with your data in your own account (Firebase) and a JSON backup copy
+- Home and Business, month by month: payments, income and reminders
+- Modules you turn on or off; Transport with vehicles, due dates and expenses
 - A guide on first sign-in
 
-## v1.0 · 26 octombrie 2026 — Aplicația pe web
-
-- Login cu Google, datele în contul tău (Firebase)
-- Datele vechi mutate, copie de siguranță JSON
-
-*The app on the web · 26 October 2026*
-
-- Google sign-in, data in your own account (Firebase)
-- Old data moved over, JSON backup copy
