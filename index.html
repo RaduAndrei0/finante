@@ -639,8 +639,9 @@ details.fold[open]>summary{margin-bottom:10px}
 .gor{display:flex;align-items:center;gap:10px;width:100%;color:var(--muted);font-size:12px;text-transform:uppercase;letter-spacing:.08em;margin:2px 0}
 .gor::before,.gor::after{content:"";flex:1;height:1px;background:var(--line)}
 .gbtn svg[fill="none"]{color:var(--fg)}
-.gform,.gverify{width:100%;display:flex;flex-direction:column;gap:10px;text-align:left}
-.gatecard .gform{border:0;padding:0;margin:4px 0 0;background:none}
+/* formularele de intrare (nu „.gform”: acela e editorul rândurilor din tabel) */
+.aform,.gverify{width:100%;display:flex;flex-direction:column;gap:10px;text-align:left}
+.gatecard .aform{border:0;padding:0;margin:4px 0 0;background:none}
 .gtabs{display:grid;grid-template-columns:1fr 1fr;gap:4px;padding:4px;border-radius:12px;background:var(--surface2);border:1px solid var(--line)}
 .gtabs button{border:0;background:transparent;border-radius:9px;padding:9px 6px;font:inherit;font-size:14px;font-weight:500;color:var(--muted);cursor:pointer}
 .gtabs button[aria-selected="true"]{background:var(--surface);color:var(--fg);box-shadow:0 1px 3px rgba(0,0,0,.12),0 0 0 1px var(--line)}
@@ -943,7 +944,7 @@ html[lang="en"] .impgrp[open]>summary::after{content:"Hide ▴"!important}
     <button class="btn gbtn" id="gsign" type="button" hidden><svg viewBox="0 0 48 48" aria-hidden="true"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg><span>Intră cu Google</span></button>
     <div class="gor" id="gor" hidden><span>sau</span></div>
     <button class="btn gbtn" id="gmailOpen" type="button" hidden><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="5.5" width="17" height="13" rx="2"/><path d="M4 7l8 6 8-6"/></svg>Intră cu email</button>
-    <form class="gform" id="gform" hidden novalidate>
+    <form class="aform" id="gform" hidden novalidate>
       <div class="gtabs" role="tablist" aria-label="Cont">
         <button type="button" role="tab" data-gm="in" aria-selected="true">Am cont</button>
         <button type="button" role="tab" data-gm="up" aria-selected="false">Cont nou</button>
@@ -960,7 +961,7 @@ html[lang="en"] .impgrp[open]>summary::after{content:"Hide ▴"!important}
       </div>
       <button type="button" class="glink gback" id="gBack">← Alte variante</button>
     </form>
-    <form class="gform greset" id="greset" hidden novalidate>
+    <form class="aform greset" id="greset" hidden novalidate>
       <div class="gvic" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="15" r="4"/><path d="M11 12l8.5-8.5M16 7l2.5 2.5M14 9l2 2"/></svg></div>
       <p class="grfor">Parolă nouă pentru <b id="grFor"></b></p>
       <label class="gfield"><span>Parolă nouă</span><span class="gpw"><input id="grPass" type="password" autocomplete="new-password"><button type="button" class="gshow" data-eye="grPass" aria-label="Arată parola" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 12s3.5-6.5 9.5-6.5 9.5 6.5 9.5 6.5-3.5 6.5-9.5 6.5S2.5 12 2.5 12z"/><circle cx="12" cy="12" r="2.8"/></svg></button></span></label>
@@ -1323,7 +1324,7 @@ This typically indicates that your device does not have a healthy Internet conne
 <script>
 (function(){"use strict";
 var TARGET="web";
-var BUILD_ID="build 2026-11-27 11:00 UTC";
+var BUILD_ID="build 2026-11-27 11:00 UTC · fix 13:00";
 var WHERE_DB="Datele tale stau în contul tău, într-un proiect Firebase (Google Cloud, regiunea Frankfurt). Pe telefon rămâne doar o copie temporară, ca să meargă și fără net.";
 var MONTHS=["ianuarie","februarie","martie","aprilie","mai","iunie","iulie","august","septembrie","octombrie","noiembrie","decembrie"];
 var GROUPS=["Casă","Firmă"], KINDS=["Plată","Încasare","Transfer","Memento"];
