@@ -662,6 +662,16 @@ details.fold[open]>summary{margin-bottom:10px}
 .gverify p{margin:0;font-size:14px;line-height:1.45}
 .gvic{width:52px;height:52px;border-radius:16px;display:flex;align-items:center;justify-content:center;color:var(--brand-fg);background:color-mix(in srgb,var(--brand-fg) 14%,transparent)}
 .gvic svg{width:26px;height:26px}
+.prules{list-style:none;margin:-2px 0 2px;padding:10px 12px;border-radius:12px;background:var(--surface2);display:grid;gap:5px;font-size:12.5px;color:var(--muted)}
+.prules li{display:flex;align-items:center;gap:8px;transition:color .15s}
+.prules li::before{content:"";flex:none;width:16px;height:16px;border-radius:50%;border:1.5px solid var(--line);box-sizing:border-box;transition:all .15s}
+.prules li.ok{color:var(--fg)}
+.prules li.ok::before{border-color:var(--ok);background:var(--ok) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M4 8.5l2.6 2.6L12 5.5' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/12px no-repeat}
+.prules li.bad{color:var(--bad)}
+.prules li.bad::before{border-color:var(--bad)}
+.greset{align-items:stretch}
+.greset .gvic{align-self:center}
+.grfor{margin:0;text-align:center;font-size:14px;overflow-wrap:anywhere}
 .gnote2{margin:6px 0 0;font-size:12px;color:var(--muted);max-width:34ch}
 .glang{display:flex;align-items:center;justify-content:center;gap:6px;margin-top:10px;font-size:13px;color:var(--muted)}
 .glang select{background:var(--surface);color:var(--fg);border:1px solid var(--line);border-radius:8px;padding:5px 8px;font:inherit}
@@ -939,14 +949,25 @@ html[lang="en"] .impgrp[open]>summary::after{content:"Hide ▴"!important}
         <button type="button" role="tab" data-gm="up" aria-selected="false">Cont nou</button>
       </div>
       <label class="gfield"><span>Email</span><input id="gEmail" type="email" inputmode="email" autocomplete="email" autocapitalize="off" spellcheck="false" placeholder="nume@exemplu.ro"></label>
-      <label class="gfield" id="gPassL"><span>Parolă</span><span class="gpw"><input id="gPass" type="password" autocomplete="current-password"><button type="button" class="gshow" id="gShow" aria-label="Arată parola" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 12s3.5-6.5 9.5-6.5 9.5 6.5 9.5 6.5-3.5 6.5-9.5 6.5S2.5 12 2.5 12z"/><circle cx="12" cy="12" r="2.8"/></svg></button></span></label>
-      <small class="ghint" id="gPassHint" hidden>Cel puțin 8 caractere. Îți trimit apoi un email ca să confirmi adresa.</small>
+<label class="gfield" id="gPassL"><span>Parolă</span><span class="gpw"><input id="gPass" type="password" autocomplete="current-password"><button type="button" class="gshow" data-eye="gPass" aria-label="Arată parola" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 12s3.5-6.5 9.5-6.5 9.5 6.5 9.5 6.5-3.5 6.5-9.5 6.5S2.5 12 2.5 12z"/><circle cx="12" cy="12" r="2.8"/></svg></button></span></label>
+      <label class="gfield" id="gPass2L" hidden><span>Scrie parola încă o dată</span><span class="gpw"><input id="gPass2" type="password" autocomplete="new-password"><button type="button" class="gshow" data-eye="gPass2" aria-label="Arată parola" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 12s3.5-6.5 9.5-6.5 9.5 6.5 9.5 6.5-3.5 6.5-9.5 6.5S2.5 12 2.5 12z"/><circle cx="12" cy="12" r="2.8"/></svg></button></span></label>
+      <ul class="prules" hidden id="gRules" aria-live="polite"><li data-r="len">Cel puțin 8 caractere</li><li data-r="low">O literă mică</li><li data-r="up">O literă mare</li><li data-r="num">O cifră</li><li data-r="sp">Un caracter special (! @ # ? - _ …)</li><li data-r="eq">Parolele se potrivesc</li></ul>
+      <small class="ghint" id="gPassHint" hidden>După ce îți faci contul, îți trimit un email ca să confirmi adresa.</small>
       <button class="btn pri gsubmit" id="gSubmit" type="submit">Intră</button>
       <div class="glinks">
         <button type="button" class="glink" id="gForgot">Am uitat parola</button>
         <button type="button" class="glink" id="gLinkB">Intră fără parolă, cu un link pe email</button>
       </div>
       <button type="button" class="glink gback" id="gBack">← Alte variante</button>
+    </form>
+    <form class="gform greset" id="greset" hidden novalidate>
+      <div class="gvic" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="15" r="4"/><path d="M11 12l8.5-8.5M16 7l2.5 2.5M14 9l2 2"/></svg></div>
+      <p class="grfor">Parolă nouă pentru <b id="grFor"></b></p>
+      <label class="gfield"><span>Parolă nouă</span><span class="gpw"><input id="grPass" type="password" autocomplete="new-password"><button type="button" class="gshow" data-eye="grPass" aria-label="Arată parola" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 12s3.5-6.5 9.5-6.5 9.5 6.5 9.5 6.5-3.5 6.5-9.5 6.5S2.5 12 2.5 12z"/><circle cx="12" cy="12" r="2.8"/></svg></button></span></label>
+      <label class="gfield"><span>Scrie parola încă o dată</span><span class="gpw"><input id="grPass2" type="password" autocomplete="new-password"><button type="button" class="gshow" data-eye="grPass2" aria-label="Arată parola" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 12s3.5-6.5 9.5-6.5 9.5 6.5 9.5 6.5-3.5 6.5-9.5 6.5S2.5 12 2.5 12z"/><circle cx="12" cy="12" r="2.8"/></svg></button></span></label>
+      <ul class="prules" id="grRules" aria-live="polite"><li data-r="len">Cel puțin 8 caractere</li><li data-r="low">O literă mică</li><li data-r="up">O literă mare</li><li data-r="num">O cifră</li><li data-r="sp">Un caracter special (! @ # ? - _ …)</li><li data-r="eq">Parolele se potrivesc</li></ul>
+      <button class="btn pri gsubmit" id="grSave" type="submit">Salvează parola</button>
+      <button type="button" class="glink gback" id="grCancel">Renunță</button>
     </form>
     <div class="gverify" id="gverify" hidden>
       <div class="gvic" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="5.5" width="17" height="13" rx="2"/><path d="M4 7l8 6 8-6"/></svg></div>
@@ -1302,7 +1323,7 @@ This typically indicates that your device does not have a healthy Internet conne
 <script>
 (function(){"use strict";
 var TARGET="web";
-var BUILD_ID="build 2026-11-27 10:25 UTC";
+var BUILD_ID="build 2026-11-27 10:45 UTC";
 var WHERE_DB="Datele tale stau în contul tău, într-un proiect Firebase (Google Cloud, regiunea Frankfurt). Pe telefon rămâne doar o copie temporară, ca să meargă și fără net.";
 var MONTHS=["ianuarie","februarie","martie","aprilie","mai","iunie","iulie","august","septembrie","octombrie","noiembrie","decembrie"];
 var GROUPS=["Casă","Firmă"], KINDS=["Plată","Încasare","Transfer","Memento"];
@@ -1934,7 +1955,13 @@ Object.assign(I18N.en,{"Scuter":"Scooter","Rulotă":"Caravan","Remorcă":"Traile
    Versiune mare (2.0) = schimbare importantă; mică (1.3) = funcții noi; reparație (1.3.1) = corectură.
    Cea mai nouă versiune e prima din listă. */
 Object.assign(I18N.en,{"sau":"or","Intră cu email":"Sign in with email","Am cont":"I have an account","Cont nou":"New account","Parolă":"Password","nume@exemplu.ro":"name@example.com",
-"Cel puțin 8 caractere. Îți trimit apoi un email ca să confirmi adresa.":"At least 8 characters. We'll then email you to confirm the address.","Intră":"Sign in","Creează contul":"Create account","Am uitat parola":"Forgot password",
+"După ce îți faci contul, îți trimit un email ca să confirmi adresa.":"Once your account is made, we'll email you to confirm the address.",
+"Scrie parola încă o dată":"Type the password again","Cel puțin 8 caractere":"At least 8 characters","O literă mică":"A lowercase letter","O literă mare":"An uppercase letter","O cifră":"A number","Un caracter special (! @ # ? - _ …)":"A special character (! @ # ? - _ …)","Parolele se potrivesc":"The passwords match",
+"Parolă nouă pentru":"New password for","Parolă nouă":"New password","Salvează parola":"Save password","Renunță":"Cancel",
+"Parola nu respectă încă toate regulile de mai jos.":"The password doesn't meet all the rules below yet.","Parolele nu se potrivesc sau nu respectă încă regulile de mai jos.":"The passwords don't match or don't meet the rules below yet.",
+"Parola nu respectă regulile: litere mici și mari, o cifră, un caracter special și cel puțin 8 caractere.":"The password doesn't meet the rules: lowercase and uppercase letters, a number, a special character and at least 8 characters.",
+"Se confirmă adresa…":"Confirming the address…","Adresa e confirmată. Acum intră cu parola.":"The address is confirmed. Now sign in with your password.","Adresa de email a fost refăcută.":"The email address has been restored.","Se salvează…":"Saving…",
+"Gata, parola e schimbată. Intră cu parola nouă.":"Done, the password is changed. Sign in with the new password.","Intră":"Sign in","Creează contul":"Create account","Am uitat parola":"Forgot password",
 "Intră fără parolă, cu un link pe email":"Sign in without a password, with an email link","← Alte variante":"← Other options","Am confirmat":"I've confirmed","Retrimite emailul":"Resend the email","Arată parola":"Show password","Ascunde parola":"Hide password",
 "Datele tale stau în contul tău (Firebase, Frankfurt). Doar tu ai acces la ele.":"Your data lives in your account (Firebase, Frankfurt). Only you can access it.",
 "Adresa de email nu pare corectă.":"That email address doesn't look right.","Email sau parolă greșită. Dacă ți-ai făcut contul cu Google, intră cu Google.":"Wrong email or password. If you made your account with Google, sign in with Google.",
@@ -4451,10 +4478,11 @@ function webListenErr(err){
 function gateShow(text,btn,err){
   $("#gate").hidden=false;$("#gverify").hidden=true;
   var m=$("#gmsg");m.textContent=text||"";m.className="gmsg"+(err?" err":"");
+  if(GM.reset){gOpts(false);$("#greset").hidden=false;return}
   gOpts(!!btn);$("#gsign").disabled=false;
 }
 /* intrarea: Google sau email (parolă / link pe email) */
-var GM={mode:"in",open:false,link:false}, APP_URL=location.origin+location.pathname;
+var GM={mode:"in",open:false,link:false,reset:null}, APP_URL=location.origin+location.pathname;
 function gMsg(t,err){var m=$("#gmsg");m.textContent=t||"";m.className="gmsg"+(err?" err":"")}
 function gOpts(show){
   $("#gsign").hidden=!show||GM.open;$("#gor").hidden=!show||GM.open;$("#gmailOpen").hidden=!show||GM.open;
@@ -4465,10 +4493,19 @@ function gMode(m){
   document.querySelectorAll("#gform [data-gm]").forEach(function(b){b.setAttribute("aria-selected",b.getAttribute("data-gm")===GM.mode?"true":"false")});
   $("#gSubmit").textContent=GM.link?"Intră":up?"Creează contul":"Intră";
   $("#gPass").setAttribute("autocomplete",up?"new-password":"current-password");
-  $("#gPassHint").hidden=!up||GM.link;$("#gForgot").hidden=up||GM.link;$("#gLinkB").hidden=GM.link;
+  $("#gPassHint").hidden=!up||GM.link;$("#gPass2L").hidden=!up||GM.link;$("#gRules").hidden=!up||GM.link;
+  if(up)pwPaint($("#gRules"),$("#gPass").value,$("#gPass2").value,false);$("#gForgot").hidden=up||GM.link;$("#gLinkB").hidden=GM.link;
   $("#gPassL").hidden=GM.link;document.querySelector("#gform .gtabs").hidden=GM.link;
 }
-function gBusy(b){["#gSubmit","#gForgot","#gLinkB","#gvDone","#gvResend"].forEach(function(q){var e=$(q);if(e)e.disabled=b})}
+function gBusy(b){["#gSubmit","#gForgot","#gLinkB","#gvDone","#gvResend","#grSave"].forEach(function(q){var e=$(q);if(e)e.disabled=b})}
+/* parola: aceleași reguli ca în Firebase (Authentication → Settings → Password policy) */
+var PW_SP=/[\^$*.\[\]{}()?"!@#%&\/\\,><':;|_~`=+\-]/;
+function pwChecks(p,q){return {len:p.length>=8,low:/[a-z]/.test(p),up:/[A-Z]/.test(p),num:/[0-9]/.test(p),sp:PW_SP.test(p),eq:!!p&&p===q}}
+function pwGood(p,q){var c=pwChecks(p,q);return c.len&&c.low&&c.up&&c.num&&c.sp&&c.eq}
+function pwPaint(ul,p,q,strict){
+  var c=pwChecks(p,q);
+  ul.querySelectorAll("li").forEach(function(li){var k=li.getAttribute("data-r"),ok=c[k];li.classList.toggle("ok",ok);li.classList.toggle("bad",!ok&&!!strict&&(k!=="eq"||!!q||strict))});
+}
 function emailOk(e){return /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(e)}
 function authErr(e){
   var c=(e&&e.code)||"";
@@ -4481,6 +4518,7 @@ function authErr(e){
     :c==="auth/user-disabled"?"Contul ăsta e oprit."
     :(c==="auth/invalid-action-code"||c==="auth/expired-action-code")?"Linkul a expirat sau a fost deja folosit. Cere unul nou."
     :c==="auth/missing-password"?"Scrie parola."
+    :c==="auth/password-does-not-meet-requirements"?"Parola nu respectă regulile: litere mici și mari, o cifră, un caracter special și cel puțin 8 caractere."
     :signInErr(e);
 }
 /* cont cu parolă, adresă neconfirmată: întâi confirmarea (regulile cer email confirmat) */
@@ -4526,6 +4564,7 @@ function signInErr(e){
   var persist=Promise.race([pp,new Promise(function(r){setTimeout(r,4000)})]);
   try{FB.auth.languageCode=LANG}catch(e){}
   FB.auth.onAuthStateChanged(function(u){
+    if(GM.reset)return;
     if(u&&needsVerify(u)){showVerify(u);return}
     if(u){$("#gverify").hidden=true;persist.then(function(){startSession(u)});return}
     if(FB.uid){if(!FB.signingOut)location.reload();return}
@@ -4541,7 +4580,9 @@ function signInErr(e){
   $("#gmailOpen").addEventListener("click",function(){GM.open=true;gOpts(true);gMode(GM.mode);gMsg("");try{$("#gEmail").focus()}catch(e){}});
   $("#gBack").addEventListener("click",function(){GM.open=false;GM.link=false;gMode("in");gOpts(true);gMsg("")});
   document.querySelectorAll("#gform [data-gm]").forEach(function(b){b.addEventListener("click",function(){gMode(b.getAttribute("data-gm"));gMsg("")})});
-  $("#gShow").addEventListener("click",function(){var i=$("#gPass"),on=i.type==="password";i.type=on?"text":"password";this.setAttribute("aria-pressed",on?"true":"false");this.setAttribute("aria-label",on?"Ascunde parola":"Arată parola")});
+  document.querySelectorAll("#gate [data-eye]").forEach(function(btn){btn.addEventListener("click",function(){var i=document.getElementById(btn.getAttribute("data-eye")),on=i.type==="password";i.type=on?"text":"password";btn.setAttribute("aria-pressed",on?"true":"false");btn.setAttribute("aria-label",on?"Ascunde parola":"Arată parola")})});
+  ["#gPass","#gPass2"].forEach(function(q){$(q).addEventListener("input",function(){if(GM.mode==="up"&&!GM.link)pwPaint($("#gRules"),$("#gPass").value,$("#gPass2").value,false)})});
+  ["#grPass","#grPass2"].forEach(function(q){$(q).addEventListener("input",function(){pwPaint($("#grRules"),$("#grPass").value,$("#grPass2").value,false)})});
   function linkDone(){try{localStorage.removeItem("fin_linkEmail")}catch(e){}GM.link=false;try{history.replaceState(null,"",APP_URL+location.hash)}catch(e){}}
   function doLink(em){
     gBusy(true);gMsg("Se verifică linkul…");
@@ -4553,12 +4594,12 @@ function signInErr(e){
     if(!emailOk(em)){gMsg("Scrie o adresă de email corectă.",true);$("#gEmail").focus();return}
     if(GM.link){doLink(em);return}
     if(!pw){gMsg("Scrie parola.",true);$("#gPass").focus();return}
-    if(GM.mode==="up"&&pw.length<8){gMsg("Parola trebuie să aibă cel puțin 8 caractere.",true);$("#gPass").focus();return}
+    if(GM.mode==="up"&&!pwGood(pw,$("#gPass2").value)){pwPaint($("#gRules"),pw,$("#gPass2").value,true);gMsg(pw===$("#gPass2").value?"Parola nu respectă încă toate regulile de mai jos.":"Parolele nu se potrivesc sau nu respectă încă regulile de mai jos.",true);return}
     gBusy(true);gMsg(GM.mode==="up"?"Se creează contul…":"Se verifică…");
     var pr=GM.mode==="up"
       ?FB.auth.createUserWithEmailAndPassword(em,pw).then(function(c){return c.user.sendEmailVerification({url:APP_URL}).catch(function(){})})
       :FB.auth.signInWithEmailAndPassword(em,pw);
-    pr.then(function(){gBusy(false);$("#gPass").value=""},function(er){gBusy(false);gMsg(authErr(er),true)});
+    pr.then(function(){gBusy(false);$("#gPass").value="";$("#gPass2").value=""},function(er){gBusy(false);gMsg(authErr(er),true)});
   });
   $("#gForgot").addEventListener("click",function(){
     var em=$("#gEmail").value.trim();
@@ -4590,6 +4631,40 @@ function signInErr(e){
     gBusy(true);
     u.sendEmailVerification({url:APP_URL}).then(function(){gBusy(false);gMsg("Am retrimis emailul de confirmare.")},function(er){gBusy(false);gMsg(authErr(er),true)});
   });
+  /* linkurile din emailuri (resetare parolă, confirmare adresă) se deschid în aplicație:
+     în Firebase → Authentication → Templates → „Customize action URL” = adresa aplicației */
+  function cleanUrl(){try{history.replaceState(null,"",APP_URL+location.hash)}catch(e){}}
+  function toSignIn(em,msg){GM.reset=null;$("#greset").hidden=true;GM.open=true;GM.link=false;gMode("in");gOpts(true);if(em)$("#gEmail").value=em;gMsg(msg)}
+  var aq=null;try{aq=new URLSearchParams(location.search)}catch(e){}
+  var am=aq&&aq.get("mode"),ac=aq&&aq.get("oobCode");
+  if(am&&ac&&am!=="signIn"){
+    if(am==="resetPassword"){
+      GM.reset={code:ac,email:""};$("#gate").hidden=false;gOpts(false);$("#greset").hidden=false;gMsg("Se verifică linkul…");
+      FB.auth.verifyPasswordResetCode(ac).then(function(em){GM.reset.email=em;$("#grFor").textContent=em;gMsg("");pwPaint($("#grRules"),"","",false);try{$("#grPass").focus()}catch(e){}},
+        function(e){cleanUrl();GM.reset=null;$("#greset").hidden=true;gateShow(authErr(e),true,true)});
+    }else if(am==="verifyEmail"||am==="recoverEmail"){
+      gMsg("Se confirmă adresa…");
+      FB.auth.checkActionCode(ac).then(function(info){return FB.auth.applyActionCode(ac).then(function(){return info&&info.data&&info.data.email||""})}).then(function(em){
+        cleanUrl();
+        var u=FB.auth.currentUser;
+        if(u)u.reload().then(function(){var v=FB.auth.currentUser;if(v&&v.emailVerified)v.getIdToken(true).then(function(){$("#gverify").hidden=true;$("#gout").hidden=true;persist.then(function(){startSession(v)})})});
+        else toSignIn(em,am==="verifyEmail"?"Adresa e confirmată. Acum intră cu parola.":"Adresa de email a fost refăcută.");
+      },function(e){cleanUrl();gateShow(authErr(e),true,true)});
+    }
+  }
+  $("#greset").addEventListener("submit",function(e){
+    e.preventDefault();if(!GM.reset)return;
+    var p1=$("#grPass").value,p2=$("#grPass2").value;
+    if(!pwGood(p1,p2)){pwPaint($("#grRules"),p1,p2,true);gMsg(p1===p2?"Parola nu respectă încă toate regulile de mai jos.":"Parolele nu se potrivesc sau nu respectă încă regulile de mai jos.",true);return}
+    gBusy(true);gMsg("Se salvează…");
+    var em=GM.reset.email;
+    FB.auth.confirmPasswordReset(GM.reset.code,p1).then(function(){
+      gBusy(false);cleanUrl();$("#grPass").value="";$("#grPass2").value="";
+      if(FB.auth.currentUser){location.replace(APP_URL);return}
+      toSignIn(em,"Gata, parola e schimbată. Intră cu parola nouă.");
+    },function(er){gBusy(false);gMsg(authErr(er),true)});
+  });
+  $("#grCancel").addEventListener("click",function(){cleanUrl();toSignIn(GM.reset&&GM.reset.email,"")});
   /* am venit dintr-un link de intrare primit pe email */
   try{
     if(FB.auth.isSignInWithEmailLink(location.href)){
