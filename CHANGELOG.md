@@ -2,6 +2,20 @@
 
 Versiune mare (3.0) = schimbare importantă · mică (2.1) = funcție nouă · reparație (2.1.1) = corectură.
 
+## v2.4 · 27 noiembrie 2026 — Firma îți datorează
+
+- Transport: la „Plătit din” poți alege „Banii mei, pe firmă”, când plătești tu ceva pentru firmă (de ex. un plin cash, cu factura pe firmă)
+- Firmă: panoul „Firma îți datorează” arată ce ai de recuperat și totalul
+- „Cere decontul” pune la Firmă un rând de Transfer cu suma; când îl bifezi, cheltuielile apar „Decontat”, banii intră la venitul Casei și ies din soldul firmei
+- O cheltuială importată din extras își păstrează legătura cu extrasul și după ce o modifici
+
+*The business owes you · 27 November 2026*
+
+- Transport: under “Paid from” you can pick “My money, for the business”, when you pay for something the business owes you for (e.g. a cash fill-up invoiced to the business)
+- Business: the “The business owes you” panel shows what you have to get back and the total
+- “Request reimbursement” adds a Transfer row on Business with the amount; when you check it, the expenses show “Reimbursed”, the money counts as Home income and leaves the business balance
+- An expense imported from a statement keeps its link to the statement after you edit it
+
 ## v2.3 · 4 noiembrie 2026 — Pentru toată lumea
 
 - Luna nouă pornește cu note goale la plăți și încasări; memento-urile își păstrează nota, iar cu 📌 fixezi orice notă

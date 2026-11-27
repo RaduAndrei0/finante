@@ -459,6 +459,14 @@ details.fold[open]>summary{margin-bottom:10px}
 .xtag{font-style:normal;font-weight:600;font-size:10.5px;letter-spacing:.03em;text-transform:uppercase;border-radius:6px;padding:1px 6px;margin-left:8px;vertical-align:2px}
 .xtag.c{color:var(--casa);background:color-mix(in srgb,var(--casa) 14%,transparent)}
 .xtag.f{color:var(--firma);background:color-mix(in srgb,var(--firma) 14%,transparent)}
+.xtag.o{color:var(--bad);background:var(--badbg)}
+.xtag.oa{color:var(--firma);background:color-mix(in srgb,var(--firma) 14%,transparent)}
+.xtag.od{color:var(--muted);background:var(--surface2)}
+#owePanel .hrow .a{font-variant-numeric:tabular-nums;font-weight:600;white-space:nowrap}
+#owePanel .owetot{display:flex;flex-wrap:wrap;gap:8px 16px;align-items:center;justify-content:space-between;border-top:2px solid var(--line);padding-top:12px;margin-top:4px}
+#owePanel .owetot b{font-size:18px}
+#owePanel .owesub{font-size:11.5px;color:var(--muted);text-transform:uppercase;letter-spacing:.07em;font-weight:600;margin:14px 0 2px}
+#owePanel .xd{color:var(--muted);font-size:12px;margin-right:8px}
 @media (max-width:899px){
   .car-h{display:none}
   .car-r{grid-template-columns:minmax(0,1fr) minmax(0,1fr);row-gap:6px;padding:12px 0}
@@ -971,6 +979,7 @@ html[lang="en"] .impgrp[open]>summary::after{content:"Hide ▴"!important}
         <div class="hintline" id="autonote" style="margin-top:8px"></div>
       </section>
       <div class="kpis" id="kpisF"></div>
+      <section class="panel" id="owePanel" aria-labelledby="howe" hidden></section>
       <details class="panel fold" id="foldX">
         <summary><h2>Curs și EUR schimbați</h2></summary>
         <div class="hint">Pe luni: cât ai încasat în EUR, cât era necesar de schimbat, cât ai schimbat efectiv (îl treci sus, la „EUR schimbați luna asta”) și diferența lunii. Un minus la diferență înseamnă că ai schimbat mai mult decât a intrat luna asta, iar restul s-a luat din soldul reportat, deci nu e greșeală. Se face roșu doar dacă soldul total în EUR ajunge sub zero. Dacă nu treci nimic, se socotește cât era necesar.</div>
@@ -1020,7 +1029,7 @@ html[lang="en"] .impgrp[open]>summary::after{content:"Hide ▴"!important}
           <label>Data <input id="xpDate" type="date"></label>
           <label id="xpVehL">Vehicul <select id="xpVeh"></select></label>
           <label id="xpKmL">Km la bord (opțional) <input id="xpKm" class="num" inputmode="numeric" placeholder="ex. 148000" autocomplete="off"></label>
-          <label id="xpFromL">Plătit din <select id="xpFrom"><option value="casa">Casă</option><option value="firma">Firmă</option></select></label>
+          <label id="xpFromL">Plătit din <select id="xpFrom"><option value="casa">Casă</option><option value="firma">Firmă</option><option value="owe">Banii mei, pe firmă</option></select></label>
           <label class="wide">Notă <input id="xpNote" placeholder="opțional, de ex. plin la OMV" autocomplete="off"></label>
           <div class="xpbtns"><button class="btn auto" type="submit" id="xpSave">Salvează</button><button class="btn" type="button" id="xpCancel">Renunță</button><span class="xpmsg" id="xpMsg" role="status"></span></div>
         </form>
@@ -1169,7 +1178,7 @@ This typically indicates that your device does not have a healthy Internet conne
 <script>
 (function(){"use strict";
 var TARGET="web";
-var BUILD_ID="build 2026-11-04 10:12 UTC";
+var BUILD_ID="build 2026-11-27 08:30 UTC";
 var WHERE_DB="Datele tale stau în contul tău Google, într-un proiect Firebase (Google Cloud, regiunea Frankfurt). Pe telefon rămâne doar o copie temporară, ca să meargă și fără net.";
 var MONTHS=["ianuarie","februarie","martie","aprilie","mai","iunie","iulie","august","septembrie","octombrie","noiembrie","decembrie"];
 var GROUPS=["Casă","Firmă"], KINDS=["Plată","Încasare","Transfer","Memento"];
@@ -1441,7 +1450,7 @@ function buildMonth(target){
   items.forEach(function(x){if(x.ym<target&&!x.src&&(!prevYm||x.ym>prevYm))prevYm=x.ym});
   var tpl=mods.tpl>=2,model=tpl?tplRows():DEFAULTS;
   /* comisioanele băncii nu se mai pun dinainte: apar doar din extras, cu suma reală */
-  var src=prevYm?monthItems(prevYm).filter(function(x){return !x.src&&!AUTOPAID[x.key]}).sort(function(a,b){return (a.order||0)-(b.order||0)}):model.filter(function(d){return !AUTOPAID[d.key]}).map(function(d,i){return {key:d.key,group:d.group,name:d.name,kind:d.kind,day:d.day==null?null:d.day,note:"",order:i,cur:d.cur||null}});
+  var src=prevYm?monthItems(prevYm).filter(function(x){return !x.src&&!AUTOPAID[x.key]&&!isDecKey(x.key)}).sort(function(a,b){return (a.order||0)-(b.order||0)}):model.filter(function(d){return !AUTOPAID[d.key]}).map(function(d,i){return {key:d.key,group:d.group,name:d.name,kind:d.kind,day:d.day==null?null:d.day,note:"",order:i,cur:d.cur||null}});
   return src.map(function(s,i){var key=s.key||("x"+rid());var fee=BANKFEE[key];return {id:target+"_"+key,key:key,ym:target,group:s.group,name:s.name,kind:s.kind,day:s.day==null?null:s.day,amount:null,status:AUTOPAID[key]?"Așteaptă":"De făcut",note:keepNote(s)?(s.note||""):"",pin:s.pin?true:null,order:i,cur:s.cur||(fee?fee.cur:null)}});
 }
 function createMonth(target){
@@ -1792,7 +1801,20 @@ Object.assign(I18N.en,{"Scuter":"Scooter","Rulotă":"Caravan","Remorcă":"Traile
 /* ================= Versiuni și „Ce e nou” =================
    Versiune mare (3.0) = schimbare importantă; mică (2.1) = funcție nouă; reparație (2.1.1) = corectură.
    Cea mai nouă versiune e prima din listă. */
+Object.assign(I18N.en,{"Banii mei, pe firmă":"My money, for the business","De recuperat":"To get back","Decont cerut":"Requested","Decontat":"Reimbursed",
+"Firma îți datorează":"The business owes you","Cere decontul":"Request reimbursement","Decont cerut, nebifat încă":"Reimbursement requested, not checked yet","Mergi la rând":"Go to row",
+"Ce ai plătit din banii tăi pentru firmă (la Transport, „Plătit din: Banii mei, pe firmă”). Stă aici până îți dă firma banii înapoi.":"What you paid from your own money for the business (in Transport, “Paid from: My money, for the business”). It stays here until the business pays you back.",
+"Aștept răspunsul bazei de date. Încearcă din nou peste câteva secunde.":"Waiting for the database. Try again in a few seconds."});
+I18N.enP.unshift(
+ [/^(\d+) (cheltuială|cheltuieli) · bifează rândul „(.+)” când primești banii$/,function(m,a,b,c){return a+" expense"+(b==="cheltuială"?"":"s")+" · check the “"+c+"” row when you get the money"}],
+ [/^Creează întâi luna (.+), apoi cere decontul\.$/,"Create $1 first, then request the reimbursement."],
+ [/^Decont de (.+) pus la Firmă, în (.+)\. Bifează-l când primești banii\.$/,function(m,a,b){return "Reimbursement of "+a.replace(/\blei\b/g,"RON")+" added on Business, in "+b+". Check it when you get the money."}]
+);
+
 var CHANGELOG=[
+ {v:"2.4",d:"2026-11-27",t:{ro:"Firma îți datorează",en:"The business owes you"},
+  ro:["Transport: la „Plătit din” poți alege „Banii mei, pe firmă”, când plătești tu ceva pentru firmă (de ex. un plin cash, cu factura pe firmă)","Firmă: panoul „Firma îți datorează” arată ce ai de recuperat și totalul","„Cere decontul” pune la Firmă un rând de Transfer cu suma; când îl bifezi, cheltuielile apar „Decontat”, banii intră la venitul Casei și ies din soldul firmei","O cheltuială importată din extras își păstrează legătura cu extrasul și după ce o modifici"],
+  en:["Transport: under “Paid from” you can pick “My money, for the business”, when you pay for something the business owes you for (e.g. a cash fill-up invoiced to the business)","Business: the “The business owes you” panel shows what you have to get back and the total","“Request reimbursement” adds a Transfer row on Business with the amount; when you check it, the expenses show “Reimbursed”, the money counts as Home income and leaves the business balance","An expense imported from a statement keeps its link to the statement after you edit it"]},
  {v:"2.3",d:"2026-11-04",t:{ro:"Pentru toată lumea",en:"For everyone"},
   ro:["Luna nouă pornește cu note goale la plăți și încasări; memento-urile își păstrează nota, iar cu 📌 fixezi orice notă","Pe rândurile potrivite din extras apare „Din extras”: cine a plătit și ce scrie la plată, separat de nota ta","Transport: un singur „+ Vehicul”; scrii tipul (mașină, rulotă, barcă, orice), marca, modelul, anul și numărul de înmatriculare, apoi alegi ce urmărești","Fiecare scadență are intervalul ei în luni și/sau km, cu șabloane: revizie, distribuție, AdBlue, frâne, bujii, baterie și altele","Kilometrajul e opțional: „Făcută” te întreabă la câți km, poți trece km și la plin, iar aplicația estimează când vine revizia","Firmă: soldul apare „estimat” până încarci extrasul lunii și „din extras” după; un avertisment îți amintește dacă lipsește","În General, „Urmează” arată și scadențele vehiculelor; atingi și te duce direct la ele","Texte generale, potrivite oricui"],
   en:["A new month starts with empty notes on payments and income; reminders keep their note, and 📌 pins any note","Rows matched with the statement show “From the statement”: who paid and the payment details, apart from your note","Transport: a single “+ Vehicle”; write the type (car, caravan, boat, anything), make, model, year and registration number, then choose what to track","Each due item has its own interval in months and/or km, with templates: service, timing belt, AdBlue, brakes, spark plugs, battery and more","Mileage is optional: “Done” asks at what km, you can enter km when filling up, and the app estimates when the service is due","Business: the balance shows “estimated” until you load the month's statement and “from statement” after; a notice reminds you if it's missing","On Overview, “Coming up” also shows vehicle due items; tap one to jump straight to it","General wording that fits anyone"]},
@@ -1827,7 +1849,7 @@ var CHANGELOG=[
   ro:["Login cu Google, datele în contul tău (Firebase)","Datele vechi mutate, copie de siguranță JSON"],
   en:["Google sign-in, data in your own account (Firebase)","Old data moved over, JSON backup copy"]}
 ];
-CHANGELOG[1].t={ro:"Ce e nou și anulare",en:"What's new and undo"};
+CHANGELOG.forEach(function(c){if(c.v==="2.1"&&!c.t)c.t={ro:"Ce e nou și anulare",en:"What's new and undo"}});
 var APP_VER=CHANGELOG[0].v;
 function verLabel(){return "v"+APP_VER+" · "+fmtD(CHANGELOG[0].d)}
 function renderNews(){
@@ -2747,7 +2769,7 @@ function renderFirmaRon(m,f){
 function renderFirma(){
   var m=monthItems(ym),r=rateFor(ym),f=firmMonth(ym),ro=fxRon();
   $("#ratePanel").hidden=ro;$("#foldX").hidden=ro;$("#bnrLink").hidden=ro;
-  $("#firmaFoot").textContent=FIRMA_FOOT;renderFirmSt();
+  $("#firmaFoot").textContent=FIRMA_FOOT;renderFirmSt();renderOwe();
   if(ro){renderFirmaRon(m,f);renderFilters("Firmă");renderGrid("Firmă");return}
   /* cursul și schimbul apar doar în lunile cu euro */
   var hasEur=m.some(function(x){return x.group==="Firmă"&&curOf(x)==="EUR"})||!!ownRate(ym)||!!(meta[ym]&&meta[ym].exch!=null);
@@ -3403,7 +3425,7 @@ $("#vehs").addEventListener("focusout",function(){setTimeout(function(){if(pendi
 var XCAT=[["fuel","Combustibil"],["ride","Taxi / Uber / Bolt"],["pub","Transport public"],["park","Parcare"],["toll","Taxe de drum, peaj"],["wash","Spălătorie"],["serv","Service și piese"],["other","Altele"]];
 var xps=[],xpEdit=null,xpDelArm=null,xpDelT=null,xpLastCat="fuel",xpLastFrom="casa";
 try{var lx=JSON.parse(localStorage.getItem("fin_car")||"null");if(lx&&Array.isArray(lx.xps))xps=lx.xps}catch(e){}
-function cleanX(x){return {date:x.date,amount:x.amount,cur:x.cur==="EUR"?"EUR":"RON",cat:x.cat||"other",note:x.note||"",veh:x.veh||null,from:x.from==="firma"?"firma":"casa",hs:Array.isArray(x.hs)?x.hs:null}}
+function cleanX(x){return {date:x.date,amount:x.amount,cur:x.cur==="EUR"?"EUR":"RON",cat:x.cat||"other",note:x.note||"",veh:x.veh||null,from:x.from==="firma"?"firma":"casa",hs:Array.isArray(x.hs)?x.hs:null,owe:x.owe===true?true:null,dec:x.owe===true&&x.dec?x.dec:null}}
 /* scrieri în bloc (importul de extras): așteptabile, ca importul să știe când s-a terminat */
 function putXs(list){
   list.forEach(function(x){var i=xps.findIndex(function(o){return o.id===x.id});if(i>=0)xps[i]=x;else xps.push(x)});
@@ -3418,6 +3440,14 @@ function delXs(ids){
 }
 /* „plătit din”: informativ (nu schimbă totalurile Casă/Firmă, ca să nu se numere de două ori cu extrasele) */
 function xFrom(x){return x.from==="firma"?"firma":"casa"}
+/* ---------- „Banii mei, pe firmă”: firma îți datorează ----------
+   O cheltuială plătită din banii tăi pentru firmă are owe:true. „Cere decontul” pune la Firmă un rând de Transfer (cheie dec_…)
+   și leagă cheltuielile de el (dec = id-ul rândului). Starea vine din rând: lipsește → de recuperat; nebifat → cerut; bifat → decontat. */
+function oweOn(){return mods.firma!==false}
+function oweRow(x){return x.dec?items.find(function(i){return i.id===x.dec}):null}
+function oweState(x){if(!x.owe)return null;var r=oweRow(x);return !r?"open":r.status==="Gata"?"done":"asked"}
+function oweTag(x){var s=oweState(x);return s==="open"?'<i class="xtag o">De recuperat</i>':s==="asked"?'<i class="xtag oa">Decont cerut</i>':'<i class="xtag od">Decontat</i>'}
+function isDecKey(k){return String(k||"").indexOf("dec_")===0}
 function vehPay(id){var v=id?vehById(id):null;return v&&v.pay==="firma"?"firma":v&&v.pay==="casa"?"casa":null}
 function catName(c){var f=XCAT.find(function(k){return k[0]===c});return f?f[1]:"Altele"}
 function xpOfMonth(m){return xps.filter(function(x){return isoOk(x.date)&&x.date.slice(0,7)===m}).sort(function(a,b){return b.date.localeCompare(a.date)||String(b.id).localeCompare(String(a.id))})}
@@ -3445,7 +3475,7 @@ function renderXp(){
   $("#xpList").innerHTML=list.length?list.map(function(x){
     var sub=[x.veh&&vn[x.veh]?vn[x.veh]:"",x.note||""].filter(Boolean).join(" · ");
     var armed=xpDelArm===x.id;
-    var tag=fo?'<i class="xtag '+(xFrom(x)==="firma"?"f":"c")+'">'+(xFrom(x)==="firma"?"Firmă":"Casă")+'</i>':'';
+    var tag=!fo?'':x.owe?oweTag(x):'<i class="xtag '+(xFrom(x)==="firma"?"f":"c")+'">'+(xFrom(x)==="firma"?"Firmă":"Casă")+'</i>';
     return '<li class="xr" data-x="'+esc(x.id)+'" tabindex="0"><span class="xd">'+esc(shortD(x.date))+'</span><span class="xt"><b>'+esc(catName(x.cat))+tag+'</b>'+(sub?'<small>'+esc(sub)+'</small>':'')+'</span><span class="xa num">'+money(x.amount)+(x.cur==="EUR"?" €":" lei")+'</span><button class="x'+(armed?" armed":"")+'" type="button" data-xdel="1" aria-label="Șterge cheltuiala">'+(armed?"Sigur?":"×")+'</button></li>';
   }).join(""):'<li class="empty">Nicio cheltuială în '+esc(label(ym))+'. Apasă „+ Cheltuială” când alimentezi sau iei un Uber.</li>';
   $("#xpAdd").disabled=!canWrite;
@@ -3464,7 +3494,7 @@ function openXp(x){
   $("#xpNote").value=x?(x.note||""):"";
   $("#xpKm").value="";xpKmVis();
   $("#xpFromL").hidden=mods.firma===false;
-  $("#xpFrom").value=x?xFrom(x):(vehPay($("#xpVeh").value)||xpLastFrom);
+  $("#xpFrom").value=x?(x.owe?"owe":xFrom(x)):(vehPay($("#xpVeh").value)||xpLastFrom);
   $("#xpSave").textContent=x?"Salvează modificarea":"Salvează";
   xpMsg("");f.hidden=false;
   try{f.scrollIntoView({block:"nearest"})}catch(e){}
@@ -3490,7 +3520,10 @@ $("#xpForm").addEventListener("submit",function(e){
   if(!(a>0)){xpMsg("Scrie suma (de ex. 250).");$("#xpAmt").focus();return}
   if(!isoOk(d)){xpMsg("Alege data.");$("#xpDate").focus();return}
   var x={id:xpEdit?xpEdit.id:"x_"+rid()+rid(),date:d,amount:Math.round(a*100)/100,cur:$("#xpCur").value==="EUR"?"EUR":"RON",cat:$("#xpCat").value,note:$("#xpNote").value.trim(),veh:$("#xpVeh").value||null,from:mods.firma===false?"casa":($("#xpFrom").value==="firma"?"firma":"casa")};
-  xpLastCat=x.cat;if(!vehPay(x.veh))xpLastFrom=x.from;
+  var fv=mods.firma===false?"casa":$("#xpFrom").value;
+  if(fv==="owe"){x.owe=true;if(xpEdit&&xpEdit.owe&&xpEdit.dec)x.dec=xpEdit.dec}
+  if(xpEdit&&xpEdit.hs)x.hs=xpEdit.hs;
+  xpLastCat=x.cat;if(!vehPay(x.veh))xpLastFrom=fv==="firma"||fv==="owe"?fv:"casa";
   var km=Math.round(parseAmt($("#xpKm").value)||0),kv=x.veh?vehById(x.veh):null;
   closeXp();putX(x);
   if(kv&&km>0&&!(kv.km>=km))putKm(x.veh,km);
@@ -3507,6 +3540,60 @@ $("#xpList").addEventListener("click",function(e){
   if(canWrite)openXp(x);
 });
 $("#xpList").addEventListener("keydown",function(e){if((e.key==="Enter"||e.key===" ")&&e.target.classList.contains("xr")){e.preventDefault();e.target.click()}});
+
+/* ================= Firma îți datorează (decont) ================= */
+function renderOwe(){
+  var el=$("#owePanel");if(!el)return;
+  if(!oweOn()||(mode==="db"&&(!firstDefinitive||!carLoaded))){el.hidden=true;return}
+  var all=xps.filter(function(x){return x.owe&&isoOk(x.date)});
+  var open=all.filter(function(x){return oweState(x)==="open"}).sort(function(a,b){return a.date.localeCompare(b.date)});
+  var asked={};all.forEach(function(x){if(oweState(x)==="asked")asked[x.dec]=(asked[x.dec]||0)+1});
+  var rows=Object.keys(asked).map(function(id){return items.find(function(i){return i.id===id})}).filter(Boolean).sort(function(a,b){return a.ym.localeCompare(b.ym)});
+  if(!open.length&&!rows.length){el.hidden=true;return}
+  var vn={};vehicles().forEach(function(v){vn[v.id]=vehName(v)});
+  var tr=0,te=0;open.forEach(function(x){if(x.cur==="EUR")te+=+x.amount||0;else tr+=+x.amount||0});
+  var h='<h2 id="howe">Firma îți datorează</h2><div class="hint">Ce ai plătit din banii tăi pentru firmă (la Transport, „Plătit din: Banii mei, pe firmă”). Stă aici până îți dă firma banii înapoi.</div>';
+  if(open.length){
+    h+='<div class="owesub">De recuperat</div>';
+    h+=open.map(function(x){
+      var sub=[x.veh&&vn[x.veh]?vn[x.veh]:"",x.note||""].filter(Boolean).join(" · ");
+      return '<div class="hrow"><div class="t"><span class="xd">'+esc(shortD(x.date))+'</span><b>'+esc(catName(x.cat))+'</b>'+(sub?'<small>'+esc(sub)+'</small>':'')+'</div><span class="a">'+money(x.amount)+(x.cur==="EUR"?" €":" lei")+'</span></div>';
+    }).join("");
+    h+='<div class="owetot"><span>Total <b class="num">'+(tr>0||!te?lei(r2(tr)):'')+(tr>0&&te>0?' + ':'')+(te>0?eur(r2(te)):'')+'</b></span>'+(canWrite?'<button type="button" class="btn pri" data-owereq="1">Cere decontul</button>':'')+'</div>';
+  }
+  if(rows.length){
+    h+='<div class="owesub">Decont cerut, nebifat încă</div>';
+    h+=rows.map(function(r){
+      return '<div class="hrow"><div class="t"><b>'+esc(label(r.ym))+'</b><small>'+plural(asked[r.id],"cheltuială","cheltuieli")+' · bifează rândul „'+esc(r.name)+'” când primești banii</small></div><span class="a">'+money(r.amount)+(curOf(r)==="EUR"?" €":" lei")+'</span>'+(r.ym!==ym?'<button type="button" class="btn" data-owego="'+esc(r.id)+'">Mergi la rând</button>':'')+'</div>';
+    }).join("");
+  }
+  el.innerHTML=h;el.hidden=false;
+}
+function requestDecont(){
+  if(!canWrite)return;
+  if(mode==="db"&&(!firstDefinitive||!carLoaded)){toast("Aștept răspunsul bazei de date. Încearcă din nou peste câteva secunde.");return}
+  var now=ymNow();
+  if(!monthItems(now).length){toast("Creează întâi luna "+label(now)+", apoi cere decontul.");return}
+  var open=xps.filter(function(x){return x.owe&&isoOk(x.date)&&oweState(x)==="open"});if(!open.length)return;
+  var by={};open.forEach(function(x){var c=x.cur==="EUR"?"EUR":"RON";(by[c]=by[c]||[]).push(x)});
+  var ord=monthItems(now).reduce(function(a,x){return Math.max(a,x.order||0)},0),rows=[],upd=[],before=open.map(function(x){return Object.assign({},x)});
+  Object.keys(by).forEach(function(c){
+    var l=by[c].sort(function(a,b){return a.date.localeCompare(b.date)}),key="dec_"+rid()+rid(),id=now+"_"+key;
+    var tot=r2(l.reduce(function(a,x){return a+(+x.amount||0)},0));
+    var span=l[0].date===l[l.length-1].date?shortD(l[0].date):shortD(l[0].date)+" – "+shortD(l[l.length-1].date);
+    rows.push({id:id,key:key,ym:now,group:"Firmă",name:L("Decont: cheltuieli plătite de tine","Reimbursement: expenses you paid"),kind:"Transfer",day:new Date().getDate(),amount:tot,status:"De făcut",note:l.length+" "+(l.length===1?L("cheltuială","expense"):L("cheltuieli","expenses"))+", "+span,order:++ord,cur:c==="EUR"?"EUR":null});
+    l.forEach(function(x){upd.push(Object.assign({},x,{dec:id}))});
+  });
+  putMany(rows);putXs(upd);
+  if(ym!==now)setYm(now);
+  var txt=rows.map(function(r){return money(r.amount)+(r.cur==="EUR"?" €":" lei")}).join(" + ");
+  toastUndo("Decont de "+txt+" pus la Firmă, în "+label(now)+". Bifează-l când primești banii.",function(){delMany(rows.map(function(r){return r.id}));putXs(before)});
+}
+$("#owePanel").addEventListener("click",function(e){
+  if(e.target.closest("[data-owereq]")){requestDecont();return}
+  var g=e.target.closest("[data-owego]");
+  if(g){var r=items.find(function(i){return i.id===g.getAttribute("data-owego")});if(r){setYm(r.ym);var el=document.querySelector('#gridF .gr[data-id="'+r.id+'"]');if(el)try{el.scrollIntoView({block:"center"})}catch(er){}}}
+});
 
 /* ================= Extrase: ecranul de import ================= */
 var PDF_URL="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js", PDF_WORKER="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
